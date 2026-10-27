@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { formatPesewas } from "@/lib/money";
 import { cn } from "@/lib/utils";
+import { OwnerOnboardingChecklist } from "@/components/dashboard/onboarding-checklist";
 
 interface DashboardData {
   user: {
@@ -299,6 +300,9 @@ export default function DashboardOverviewPage() {
             </button>
           </div>
         )}
+
+        {/* Owner Onboarding Checklist */}
+        {data?.user?.role === "OWNER_ADMIN" && <OwnerOnboardingChecklist />}
 
         {/* =========================================================================
             ROW 1: OVERALL INFORMATION (1), WEEKLY PROGRESS (2), MONTH PROGRESS (3)

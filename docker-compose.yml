@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: aura_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-aura_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-AuraStudio2026_SecureDb}
+      POSTGRES_DB: ${POSTGRES_DB:-booking_system_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aura_user} -d ${POSTGRES_DB:-booking_system_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aura_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-aura_user}:${POSTGRES_PASSWORD:-AuraStudio2026_SecureDb}@db:5432/${POSTGRES_DB:-booking_system_db}?schema=public
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      PAYSTACK_PUBLIC_KEY: ${PAYSTACK_PUBLIC_KEY}
+      PAYSTACK_SECRET_KEY: ${PAYSTACK_SECRET_KEY}
+      ARKESEL_API_KEY: ${ARKESEL_API_KEY}
+      ARKESEL_SENDER_ID: ${ARKESEL_SENDER_ID:-AuraStudio}
+      NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY}
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
+      SENTRY_DSN: ${SENTRY_DSN}
+    volumes:
+      - ./backups:/app/backups
+
+volumes:
+  pgdata:
+    driver: local

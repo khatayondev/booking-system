@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { logger } from "./logger";
+import { sentry } from "./sentry";
 
 export type ApiSuccessResponse<T> = {
   success: true;
@@ -85,6 +86,8 @@ export function handleRouteError(err: unknown) {
   }
 
   logger.error("Unhandled API error", err);
+  sentry.captureException(err);
+
   return errorResponse(
     process.env.NODE_ENV === "production" ? "Internal server error" : String(err),
     "INTERNAL_SERVER_ERROR",
