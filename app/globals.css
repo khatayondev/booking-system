@@ -1,26 +1,103 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --near-black: #1E1E1E;
+  --soft-grey-50: #FAFAFB;
+  --soft-grey-100: #F4F4F6;
+  --soft-grey-200: #E4E4E7;
+  --soft-grey-300: #D4D4D8;
+  --soft-grey-400: #A1A1AA;
+  --soft-grey-500: #71717A;
+  --pure-white: #FFFFFF;
+
+  /* Subtle status chip tints */
+  --status-green-bg: #F0FDF4;
+  --status-green-text: #166534;
+  --status-green-dot: #22C55E;
+
+  --status-amber-bg: #FFFBEB;
+  --status-amber-text: #92400E;
+  --status-amber-dot: #F59E0B;
+
+  --status-red-bg: #FEF2F2;
+  --status-red-text: #991B1B;
+  --status-red-dot: #EF4444;
+
+  --status-grey-bg: #F4F4F5;
+  --status-grey-text: #3F3F46;
+  --status-grey-dot: #71717A;
+
+  /* App frame tokens */
+  --frame-radius: 32px;
+  --card-radius: 26px;
+  --pill-radius: 9999px;
+
+  /* Base color mapping */
+  --background: #ECECF0;
+  --foreground: #1E1E1E;
+  --card: #FFFFFF;
+  --card-foreground: #1E1E1E;
+  --border: #E4E4E7;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Abstract soft light-grey swirl background */
+.bg-swirl {
+  background-color: #ECECF0;
+  background-image: 
+    radial-gradient(at 15% 15%, rgba(255, 255, 255, 0.95) 0px, transparent 55%),
+    radial-gradient(at 85% 10%, rgba(228, 228, 235, 0.9) 0px, transparent 50%),
+    radial-gradient(at 45% 45%, rgba(244, 244, 248, 0.9) 0px, transparent 65%),
+    radial-gradient(at 80% 85%, rgba(220, 220, 230, 0.75) 0px, transparent 50%),
+    radial-gradient(at 10% 90%, rgba(255, 255, 255, 0.9) 0px, transparent 55%);
+  background-attachment: fixed;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Master frosted-glass app frame */
+.frosted-frame {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--frame-radius);
+  box-shadow: 
+    0 24px 64px -12px rgba(0, 0, 0, 0.06),
+    0 4px 16px rgba(0, 0, 0, 0.02),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+/* Glass card */
+.card-glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--card-radius);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+}
+
+/* Solid dark card */
+.card-dark {
+  background: var(--near-black);
+  color: #FFFFFF;
+  border-radius: var(--card-radius);
+  box-shadow: 0 12px 32px -8px rgba(30, 30, 30, 0.18);
+}
+
+/* Solid white card */
+.card-white {
+  background: #FFFFFF;
+  border: 1px solid var(--soft-grey-200);
+  border-radius: var(--card-radius);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.03);
+}
+
+/* Respect user's reduced motion settings */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

@@ -1,0 +1,623 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ----------------------------------------------------
+// ENUMS
+// ----------------------------------------------------
+
+enum BookingStatus {
+  HELD
+  PENDING_PAYMENT
+  CONFIRMED
+  CHECKED_IN
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum BookingSource {
+  WEB
+  POS
+  WALK_IN
+}
+
+enum DepositType {
+  NONE
+  FULL
+  PERCENTAGE
+  FIXED
+}
+
+enum PaymentRequestStatus {
+  PENDING
+  SENT
+  VIEWED
+  PAID
+  FAILED
+  EXPIRED
+  CANCELLED
+}
+
+// ----------------------------------------------------
+// RBAC & USERS
+// ----------------------------------------------------
+
+model Role {
+  id              String           @id @default(uuid())
+  name            String           @unique
+  description     String?
+  rolePermissions RolePermission[]
+  users           User[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model Permission {
+  id              String           @id @default(uuid())
+  name            String           @unique
+  description     String?
+  rolePermissions RolePermission[]
+  createdAt       DateTime         @default(now())
+}
+
+model RolePermission {
+  id           String     @id @default(uuid())
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@unique([roleId, permissionId])
+}
+
+model User {
+  id                  String               @id @default(uuid())
+  email               String               @unique
+  phone               String?              @unique
+  passwordHash        String
+  name                String
+  roleId              String
+  role                Role                 @relation(fields: [roleId], references: [id])
+  staff               Staff?
+  sessions            Session[]
+  passwordResetTokens PasswordResetToken[]
+  auditLogs           AuditLog[]
+  receiptsCashiered      Receipt[]            @relation("ReceiptCashier")
+  receiptsVoided         Receipt[]            @relation("ReceiptVoider")
+  paymentRequestsCreated PaymentRequest[]     @relation("PaymentRequestCreator")
+  mustChangePassword  Boolean              @default(false)
+  failedLoginAttempts Int                  @default(0)
+  lockedUntil         DateTime?
+  totpSecret          String?
+  totpEnabled         Boolean              @default(false)
+  active              Boolean              @default(true)
+  deletedAt           DateTime?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash    String   @unique
+  expiresAt    DateTime // Absolute expiration
+  lastActiveAt DateTime @default(now()) // Idle timeout check
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime @default(now())
+
+  @@index([tokenHash])
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([tokenHash])
+  @@index([userId])
+}
+
+// ----------------------------------------------------
+// CUSTOMERS
+// ----------------------------------------------------
+
+model Customer {
+  id                 String    @id @default(uuid())
+  phone              String    @unique // Normalised +233 format
+  name               String
+  email              String?
+  notes              String?
+  allergies          String?   // Allergy or sensitivity notes (e.g. lash glue sensitivity)
+  preferences        String?   // Client preferences (e.g. stylist preference, favorite tea, styling history)
+  tags               String[]  @default([]) // e.g. ["VIP", "Bridal"]
+  marketingConsent   Boolean   @default(false)
+  marketingConsentAt DateTime?
+  isAnonymized       Boolean   @default(false)
+  anonymizedAt       DateTime?
+  bookings           Booking[]
+  receipts           Receipt[]
+  deletedAt          DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([phone])
+  @@index([isAnonymized])
+  @@index([deletedAt])
+}
+
+// ----------------------------------------------------
+// SERVICES & ADDONS
+// ----------------------------------------------------
+
+model ServiceCategory {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  order       Int       @default(0)
+  services    Service[]
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Service {
+  id            String          @id @default(uuid())
+  categoryId    String
+  category      ServiceCategory @relation(fields: [categoryId], references: [id])
+  name          String
+  description   String?
+  imageUrl      String?
+  durationMin   Int
+  bufferMin     Int             @default(0)
+  pricePesewas  Int             // Stored in integer pesewas
+  depositType   DepositType     @default(PERCENTAGE)
+  depositValue  Int             @default(50) // e.g. 50% or fixed pesewas
+  active        Boolean         @default(true)
+  order         Int             @default(0)
+  deletedAt     DateTime?
+  addons        ServiceAddon[]
+  staffServices StaffService[]
+  bookingItems  BookingItem[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model ServiceAddon {
+  id           String   @id @default(uuid())
+  serviceId    String
+  service      Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  name         String
+  durationMin  Int      @default(0)
+  pricePesewas Int
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ----------------------------------------------------
+// STAFF, SCHEDULES & AVAILABILITY
+// ----------------------------------------------------
+
+model Staff {
+  id            String          @id @default(uuid())
+  userId        String?         @unique
+  user          User?           @relation(fields: [userId], references: [id])
+  name          String
+  phone         String?
+  bio           String?
+  photoUrl      String?
+  specialties   String[]        @default([])
+  active        Boolean         @default(true)
+  deletedAt     DateTime?
+  staffServices StaffService[]
+  schedules     StaffSchedule[]
+  timeOffs      TimeOff[]
+  blockedTimes  BlockedTime[]
+  bookings      Booking[]
+  slotHolds     SlotHold[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model StaffService {
+  id        String   @id @default(uuid())
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([staffId, serviceId])
+}
+
+model StaffSchedule {
+  id         String   @id @default(uuid())
+  staffId    String
+  staff      Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  weekday    Int      // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime  String   // e.g. "09:00"
+  endTime    String   // e.g. "17:00"
+  breakStart String?  // e.g. "13:00"
+  breakEnd   String?  // e.g. "14:00"
+  label      String?  // e.g. "Morning", "Afternoon", "Regular"
+  isDayOff   Boolean  @default(false)
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([staffId, weekday])
+}
+
+model TimeOff {
+  id        String   @id @default(uuid())
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  startUtc  DateTime
+  endUtc    DateTime
+  reason    String?
+  approved  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([staffId, startUtc, endUtc])
+}
+
+model BlockedTime {
+  id        String   @id @default(uuid())
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  startUtc  DateTime
+  endUtc    DateTime
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@index([staffId, startUtc, endUtc])
+}
+
+// ----------------------------------------------------
+// BOOKINGS & SLOTS
+// ----------------------------------------------------
+
+model Booking {
+  id                      String        @id @default(uuid())
+  reference               String        @unique
+  status                  BookingStatus @default(PENDING_PAYMENT)
+  source                  BookingSource @default(WEB)
+  startUtc                DateTime
+  endUtc                  DateTime
+  staffId                 String
+  staff                   Staff         @relation(fields: [staffId], references: [id])
+  customerId              String
+  customer                Customer      @relation(fields: [customerId], references: [id])
+  subtotalPesewas         Int
+  discountPesewas         Int           @default(0)
+  totalPesewas            Int
+  depositRequiredPesewas  Int           @default(0)
+  amountPaidPesewas       Int           @default(0)
+  notes                   String?
+  manageTokenHash         String        @unique
+  deletedAt               DateTime?
+  items                   BookingItem[]
+  payments                Payment[]
+  receipts                Receipt[]
+  paymentRequests         PaymentRequest[]
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+
+  @@index([reference])
+  @@index([customerId])
+  @@index([staffId])
+  @@index([startUtc, endUtc])
+  @@index([status])
+}
+
+model BookingItem {
+  id           String   @id @default(uuid())
+  bookingId    String
+  booking      Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  serviceId    String
+  service      Service  @relation(fields: [serviceId], references: [id])
+  pricePesewas Int
+  durationMin  Int
+  createdAt    DateTime @default(now())
+}
+
+model SlotHold {
+  id            String   @id @default(uuid())
+  token         String   @unique
+  staffId       String
+  staff         Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  serviceId     String
+  serviceIds    String[] @default([])
+  addonIds      String[] @default([])
+  extendedCount Int      @default(0)
+  startUtc      DateTime
+  endUtc        DateTime
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+
+  @@index([staffId, startUtc, endUtc])
+  @@index([expiresAt])
+}
+
+// ----------------------------------------------------
+// PAYMENTS, REFUNDS & PROMOS
+// ----------------------------------------------------
+
+model Payment {
+  id                String        @id @default(uuid())
+  bookingId         String?
+  booking           Booking?      @relation(fields: [bookingId], references: [id])
+  receiptId         String?
+  receipt           Receipt?      @relation(fields: [receiptId], references: [id], onDelete: SetNull)
+  reference         String        @unique // Paystack or POS transaction reference
+  amountPesewas     Int
+  currency          String        @default("GHS")
+  status            PaymentStatus @default(PENDING)
+  channel           String        // "CARD", "MOBILE_MONEY", "CASH"
+  providerReference String?
+  paidAt            DateTime?
+  refunds           Refund[]
+  paymentRequests   PaymentRequest[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([reference])
+  @@index([bookingId])
+  @@index([receiptId])
+}
+
+model PaymentRequest {
+  id                String               @id @default(uuid())
+  bookingId         String
+  booking           Booking              @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amountPesewas     Int
+  currency          String               @default("GHS")
+  tokenHash         String               @unique // 256-bit unguessable raw token, hashed with SHA-256 at rest
+  shortCode         String?              @unique // Short code for link
+  message           String?              // Optional custom message
+  phone             String               // Customer phone in E.164
+  channel           String               @default("ALL") // "ALL" | "CARD" | "MOBILE_MONEY"
+  pushMomo          Boolean              @default(false)
+  momoProvider      String?              // "MTN", "TELECEL", "AT"
+  paystackReference String?              @unique
+  status            PaymentRequestStatus @default(PENDING)
+  expiresAt         DateTime
+  viewedAt          DateTime?
+  paidAt            DateTime?
+  cancelledAt       DateTime?
+  createdByUserId   String?
+  createdByUser     User?                @relation("PaymentRequestCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  paymentId         String?
+  payment           Payment?             @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  @@index([bookingId])
+  @@index([status])
+  @@index([expiresAt])
+}
+
+model ProcessedWebhook {
+  id          String   @id @default(uuid())
+  eventId     String   @unique
+  eventType   String
+  payload     Json?
+  processedAt DateTime @default(now())
+
+  @@index([eventId])
+}
+
+model Refund {
+  id                 String   @id @default(uuid())
+  paymentId          String
+  payment            Payment  @relation(fields: [paymentId], references: [id])
+  amountPesewas      Int
+  reason             String?
+  status             String   @default("COMPLETED")
+  processedByUserId  String?
+  createdAt          DateTime @default(now())
+}
+
+model PromoCode {
+  id            String    @id @default(uuid())
+  code          String    @unique
+  discountType  String    // "PERCENTAGE", "FIXED"
+  discountValue Int       // percentage (e.g. 10) or pesewas (e.g. 2000)
+  active        Boolean   @default(true)
+  validUntil    DateTime?
+  maxUses       Int?
+  usedCount     Int       @default(0)
+  createdAt     DateTime  @default(now())
+}
+
+// ----------------------------------------------------
+// COMMUNICATIONS & SETTINGS
+// ----------------------------------------------------
+
+model MessageLog {
+  id                   String    @id @default(uuid())
+  recipient            String
+  channel              String    @default("SMS") // "SMS" | "EMAIL"
+  event                String?   // "BOOKING_CONFIRMED", "REMINDER_24H", etc.
+  senderId             String?   @default("Glamour")
+  subject              String?
+  content              String
+  status               String    // "PENDING" | "SENT" | "DELIVERED" | "FAILED" | "SUPPRESSED" | "SANDBOX"
+  gatewayId            String?
+  bookingId            String?
+  idempotencyKey       String?   @unique
+  retryCount           Int       @default(0)
+  maxRetries           Int       @default(3)
+  nextRetryAt          DateTime?
+  error                String?
+  costEstimatePesewas  Int?
+  segmentCount         Int?
+  encoding             String?   // "GSM-7" | "UNICODE"
+  metadata             Json?
+  deliveredAt          DateTime?
+  failedAt             DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@index([recipient])
+  @@index([bookingId])
+  @@index([status])
+}
+
+model MessageTemplate {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  name        String?
+  channel     String   @default("SMS") // "SMS" | "EMAIL"
+  event       String   // e.g. "booking_confirmed", "reminder_24h", etc.
+  subject     String?  // Subject for email
+  template    String   // Template with {{name}}, {{service}}, etc.
+  variables   String[] @default([])
+  active      Boolean  @default(true)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([event, channel])
+}
+
+model NotificationJob {
+  id             String    @id @default(uuid())
+  jobType        String    @default("NOTIFICATION") // "NOTIFICATION" | "REMINDER"
+  channel        String    // "SMS" | "EMAIL" | "IN_APP"
+  event          String    // e.g. "booking_confirmed", "reminder_24h", etc.
+  bookingId      String?
+  recipient      String    // phone or email or userId
+  payload        Json
+  status         String    @default("PENDING") // "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "CANCELLED"
+  runAt          DateTime  @default(now())
+  attempts       Int       @default(0)
+  maxAttempts    Int       @default(3)
+  lastError      String?
+  idempotencyKey String    @unique
+  processedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([status, runAt])
+  @@index([bookingId, event])
+}
+
+model InAppNotification {
+  id         String    @id @default(uuid())
+  userId     String?   // null for broadcast/all-staff or specific staff/owner
+  title      String
+  message    String
+  type       String    @default("INFO") // "INFO" | "SUCCESS" | "WARNING" | "BOOKING"
+  link       String?
+  bookingId  String?
+  read       Boolean   @default(false)
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId, read])
+  @@index([createdAt])
+}
+
+model Setting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+// ----------------------------------------------------
+// AUDIT LOG & RECEIPT COUNTER
+// ----------------------------------------------------
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String
+  entityType String
+  entityId   String?
+  oldValues  Json?
+  newValues  Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model ReceiptCounter {
+  id         String   @id @default(uuid())
+  prefix     String   @unique // e.g. "R"
+  lastNumber Int      @default(0)
+  updatedAt  DateTime @updatedAt
+}
+
+model Receipt {
+  id                String    @id @default(uuid())
+  receiptNumber     String    @unique // Sequential e.g. "R-000123"
+  bookingId         String?
+  booking           Booking?  @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  customerId        String?
+  customer          Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  cashierId         String
+  cashier           User      @relation("ReceiptCashier", fields: [cashierId], references: [id], onDelete: Cascade)
+  customerName      String
+  customerPhone     String
+  subtotalPesewas   Int
+  discountPesewas   Int       @default(0)
+  discountPercent   Float?
+  discountReason    String?
+  promoCode         String?
+  tipPesewas        Int       @default(0)
+  totalPesewas      Int
+  amountPaidPesewas Int
+  changePesewas     Int       @default(0)
+  balanceDuePesewas Int       @default(0)
+  status            String    @default("PAID") // "PAID", "PARTIALLY_PAID", "VOIDED"
+  voidedAt          DateTime?
+  voidReason        String?
+  voidedByUserId    String?
+  voidedByUser      User?     @relation("ReceiptVoider", fields: [voidedByUserId], references: [id], onDelete: SetNull)
+  items             Json      // [{ serviceId, serviceName, pricePesewas, durationMin, addOns: [{ id, name, pricePesewas }] }]
+  payments          Json      // [{ method: "CASH"|"MOBILE_MONEY"|"CARD", amountPesewas, reference, notes }]
+  notes             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  receiptPayments   Payment[]
+
+  @@index([receiptNumber])
+  @@index([bookingId])
+  @@index([customerId])
+  @@index([cashierId])
+  @@index([status])
+  @@index([createdAt])
+}
+
