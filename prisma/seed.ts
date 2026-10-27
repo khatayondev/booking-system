@@ -267,22 +267,135 @@ async function main() {
     });
   }
 
+  // 5b. Seed Live Studio Menu (5 Categories, 14 Services)
+  const studioMenu = [
+    {
+      name: "Lashes",
+      slug: "lashes",
+      description: "Premium lash extensions crafted for lasting elegance.",
+      services: [
+        { name: "Classic Lashes", durationMin: 60, pricePesewas: 14000, desc: "Natural 1:1 extension application. (1 hour)" },
+        { name: "Hybrid Lashes", durationMin: 90, pricePesewas: 17000, desc: "Seamless blend of classic and volume fans. (1 hour 30 mins)" },
+        { name: "Volume Lashes", durationMin: 90, pricePesewas: 20000, desc: "Lush multi-lash handmade fans. (1 hour 30 mins)" },
+        { name: "Wispy Lashes", durationMin: 110, pricePesewas: 20000, desc: "Kim-K style staggered lengths with spiky peaks. (1 hour 50 mins)" },
+        { name: "Mega Volume Lashes", durationMin: 120, pricePesewas: 26000, desc: "Ultra-dark, maximum density fans. (2 hours)" },
+      ],
+    },
+    {
+      name: "Fashion Braces",
+      slug: "fashion-braces",
+      description: "Trendy aesthetic fashion dental accessories.",
+      services: [
+        { name: "Power Chain", durationMin: 30, pricePesewas: 30000, desc: "Continuous connected aesthetic color chain. (30 mins)" },
+        { name: "Ligature", durationMin: 30, pricePesewas: 20000, desc: "Individual aesthetic fashion colored elastic ties. (30 mins)" },
+      ],
+    },
+    {
+      name: "Pedicure",
+      slug: "pedicure",
+      description: "Therapeutic foot care and luxury exfoliating treatments.",
+      services: [
+        { name: "Regular Pedicure", durationMin: 60, pricePesewas: 12000, desc: "Foot soak, shaping, cuticle cleanup, scrub, polish. (1 hour)" },
+        { name: "Jelly Pedicure", durationMin: 90, pricePesewas: 16000, desc: "Ultra-hydrating gel bath with deep massage. (1 hour 30 mins)" },
+      ],
+    },
+    {
+      name: "Facials",
+      slug: "facials",
+      description: "Deep-cleansing, glow-restoring skincare.",
+      services: [
+        { name: "Dermaplaning", durationMin: 90, pricePesewas: 15000, desc: "Precision blade exfoliation removing dead skin cells. (1 hour 30 mins)" },
+        { name: "Acne Treatment", durationMin: 120, pricePesewas: 25000, desc: "Deep-pore extraction and high-frequency therapy. (2 hours)" },
+      ],
+    },
+    {
+      name: "Hair Installation",
+      slug: "hair-installation",
+      description: "Flawless lace melts, customization, and protective styling.",
+      services: [
+        { name: "Full Frontal", durationMin: 90, pricePesewas: 16000, desc: "Ear-to-ear HD lace frontal custom plucked and styled. (1 hour 30 mins)" },
+        { name: "Closure", durationMin: 60, pricePesewas: 10000, desc: "Lace closure installation with invisible parting. (1 hour)" },
+        { name: "Frontal Pony", durationMin: 150, pricePesewas: 20000, desc: "Sleek frontal ponytail installation with 360 melt. (2 hours 30 mins)" },
+      ],
+    },
+  ];
+
+  const allStudioServices = [];
+  for (let cIdx = 0; cIdx < studioMenu.length; cIdx++) {
+    const cDef = studioMenu[cIdx];
+    const cat = await prisma.serviceCategory.upsert({
+      where: { slug: cDef.slug },
+      update: { name: cDef.name, description: cDef.description, order: cIdx + 1, deletedAt: null },
+      create: { name: cDef.name, slug: cDef.slug, description: cDef.description, order: cIdx + 1 },
+    });
+
+    for (let sIdx = 0; sIdx < cDef.services.length; sIdx++) {
+      const sDef = cDef.services[sIdx];
+      const existing = await prisma.service.findFirst({ where: { name: sDef.name } });
+      let svc;
+      if (existing) {
+        svc = await prisma.service.update({
+          where: { id: existing.id },
+          data: {
+            categoryId: cat.id,
+            durationMin: sDef.durationMin,
+            bufferMin: 15,
+            pricePesewas: sDef.pricePesewas,
+            description: sDef.desc,
+            active: true,
+            deletedAt: null,
+            order: sIdx + 1,
+            depositType: DepositType.PERCENTAGE,
+            depositValue: 50,
+          },
+        });
+      } else {
+        svc = await prisma.service.create({
+          data: {
+            name: sDef.name,
+            categoryId: cat.id,
+            durationMin: sDef.durationMin,
+            bufferMin: 15,
+            pricePesewas: sDef.pricePesewas,
+            description: sDef.desc,
+            active: true,
+            order: sIdx + 1,
+            depositType: DepositType.PERCENTAGE,
+            depositValue: 50,
+          },
+        });
+      }
+      allStudioServices.push(svc);
+    }
+  }
+
   // 6. Seed Staff and Schedules (idempotent)
   const staff1 = await prisma.staff.upsert({
     where: { userId: ownerUser.id },
-    update: { phone: "+233241112233" },
+    update: { phone: "+233241112233", active: true },
     create: {
       name: "Akosua Addo",
       phone: "+233241112233",
-      bio: "Master Bridal Makeup Artist & Founder with 9 years experience.",
+      bio: "Master Lash Technician, Skincare Specialist & Studio Founder.",
       userId: ownerUser.id,
+      active: true,
     },
   });
+
+  // Assign bridalMakeup and all studio services to staff1
   await prisma.staffService.upsert({
     where: { staffId_serviceId: { staffId: staff1.id, serviceId: bridalMakeup.id } },
     update: {},
     create: { staffId: staff1.id, serviceId: bridalMakeup.id },
   });
+
+  for (const svc of allStudioServices) {
+    await prisma.staffService.upsert({
+      where: { staffId_serviceId: { staffId: staff1.id, serviceId: svc.id } },
+      update: {},
+      create: { staffId: staff1.id, serviceId: svc.id },
+    });
+  }
 
   let staff2 = await prisma.staff.findFirst({ where: { phone: "+233504445566" } });
   if (!staff2) {

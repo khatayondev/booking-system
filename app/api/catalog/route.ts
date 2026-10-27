@@ -9,7 +9,12 @@ import { successResponse, handleRouteError } from "@/lib/api-response";
 export async function GET() {
   try {
     const categories = await prisma.serviceCategory.findMany({
-      where: { deletedAt: null },
+      where: {
+        deletedAt: null,
+        services: {
+          some: { deletedAt: null, active: true },
+        },
+      },
       orderBy: { order: "asc" },
       include: {
         services: {

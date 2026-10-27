@@ -2,13 +2,10 @@
 
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import {
   Calendar as CalendarIcon,
   Clock,
-  User,
-  Users,
   ChevronRight,
   ChevronLeft,
   RotateCcw,
@@ -56,14 +53,6 @@ interface Category {
   services: Service[];
 }
 
-interface StaffMember {
-  id: string;
-  name: string;
-  bio?: string;
-  photoUrl?: string;
-  specialties: string[];
-}
-
 interface AvailabilitySlot {
   startUtc: string;
   endUtc: string;
@@ -102,12 +91,11 @@ function BookingWizardContent() {
 
   // Catalog State
   const [categories, setCategories] = React.useState<Category[]>([]);
-  const [allStaff, setAllStaff] = React.useState<StaffMember[]>([]);
   const [catalogLoading, setCatalogLoading] = React.useState(true);
   const [catalogError, setCatalogError] = React.useState<string | null>(null);
 
-  // Wizard Step (1 to 5)
-  const [step, setStep] = React.useState<1 | 2 | 3 | 4 | 5>(1);
+  // Wizard Step (1 to 4 in Solo Shop mode)
+  const [step, setStep] = React.useState<1 | 2 | 3 | 4>(1);
 
   // Selection States
   const [selectedServiceIds, setSelectedServiceIds] = React.useState<string[]>([]);
@@ -150,7 +138,6 @@ function BookingWizardContent() {
         const json = await res.json();
         if (json.success && json.data) {
           setCategories(json.data.categories || []);
-          setAllStaff(json.data.staffMembers || []);
 
           // Restore saved state from localStorage
           const savedStr = localStorage.getItem(STORAGE_KEY);
@@ -168,7 +155,7 @@ function BookingWizardContent() {
               if (saved.customerPhone) setCustomerPhone(saved.customerPhone);
               if (saved.customerEmail) setCustomerEmail(saved.customerEmail);
               if (saved.customerNotes) setCustomerNotes(saved.customerNotes);
-              if (saved.step && saved.step >= 1 && saved.step <= 5) setStep(saved.step);
+              if (saved.step && saved.step >= 1 && saved.step <= 4) setStep(saved.step as 1 | 2 | 3 | 4);
 
               // Check hold validity
               if (saved.hold?.expiresAt) {
@@ -261,9 +248,9 @@ function BookingWizardContent() {
     return () => clearInterval(timer);
   }, [hold]);
 
-  // Fetch Slots when Date, Services, or Staff changes on Step 3
+  // Fetch Slots when Date, Services, or Staff changes on Step 2 (Date & Time)
   React.useEffect(() => {
-    if (step !== 3 || selectedServiceIds.length === 0 || !selectedDate) return;
+    if (step !== 2 || selectedServiceIds.length === 0 || !selectedDate) return;
     let cancelled = false;
 
     const params = new URLSearchParams();
@@ -545,7 +532,7 @@ function BookingWizardContent() {
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  // Next Step Handler
+  // Next Step Handler (Solo Shop: Services -> Date/Time -> Details -> Pay)
   const handleNext = () => {
     if (step === 1) {
       if (selectedServiceIds.length === 0) {
@@ -554,14 +541,12 @@ function BookingWizardContent() {
       }
       setStep(2);
     } else if (step === 2) {
-      setStep(3);
-    } else if (step === 3) {
       if (!selectedSlot) {
         alert("Please pick an available time slot to continue.");
         return;
       }
-      setStep(4);
-    } else if (step === 4) {
+      setStep(3);
+    } else if (step === 3) {
       if (!customerName.trim()) {
         alert("Please enter your full name.");
         return;
@@ -569,14 +554,13 @@ function BookingWizardContent() {
       if (!validatePhone(customerPhone)) {
         return;
       }
-      setStep(5);
+      setStep(4);
     }
   };
 
-  // Step names
+  // Step names (Solo Shop: Stylist selection hidden)
   const stepTitles = [
     "Services & Add-ons",
-    "Select Stylist",
     "Date & Time",
     "Guest Details",
     "Review & Pay",
@@ -684,16 +668,16 @@ function BookingWizardContent() {
         </button>
       </div>
 
-      {/* Progress Indicator (5 Steps) */}
+      {/* Progress Indicator (4 Steps) */}
       <nav aria-label="Booking Progress" className="space-y-2">
         <div className="flex items-center justify-between text-xs font-bold text-[#71717A]">
-          <span className="text-[#1E1E1E]">Step {step} of 5:</span>
+          <span className="text-[#1E1E1E]">Step {step} of 4:</span>
           <span>{stepTitles[step - 1]}</span>
         </div>
 
-        {/* 5-Segment Progress Bar */}
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
-          {[1, 2, 3, 4, 5].map((i) => (
+        {/* 4-Segment Progress Bar */}
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+          {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
               className={`h-2 rounded-full transition-all duration-300 ${
@@ -713,7 +697,7 @@ function BookingWizardContent() {
             <button
               key={idx}
               onClick={() => {
-                if (idx + 1 < step) setStep((idx + 1) as 1 | 2 | 3 | 4 | 5);
+                if (idx + 1 < step) setStep((idx + 1) as 1 | 2 | 3 | 4);
               }}
               disabled={idx + 1 > step}
               className={`transition-colors ${
@@ -765,7 +749,7 @@ function BookingWizardContent() {
                 size="sm"
                 variant="blackPill"
                 onClick={() => {
-                  setStep(3);
+                  setStep(2);
                   setSelectedSlot(null);
                   setHold(null);
                   setHoldExpired(false);
@@ -943,135 +927,15 @@ function BookingWizardContent() {
           </div>
         )}
 
-        {/* STEP 2: Staff Selection */}
+        {/* STEP 2: Date & Time */}
         {step === 2 && (
-          <div className="space-y-6 animate-in fade-in duration-300">
-            <div className="space-y-1">
-              <h2 className="text-lg font-bold text-[#1E1E1E]">
-                Select Stylist
-              </h2>
-              <p className="text-xs text-[#71717A]">
-                Choose your preferred artist or select &apos;Any available&apos; for fastest scheduling.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Option A: Any Available */}
-              <button
-                type="button"
-                onClick={() => setSelectedStaffId("any")}
-                className={`p-5 rounded-2xl border text-left transition-all cursor-pointer ${
-                  selectedStaffId === "any"
-                    ? "bg-[#1E1E1E] text-white border-black shadow-md"
-                    : "bg-white text-[#1E1E1E] border-black/5 hover:border-black/20"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div
-                    className={`w-10 h-10 rounded-2xl flex items-center justify-center ${
-                      selectedStaffId === "any" ? "bg-white/10" : "bg-[#F4F4F6]"
-                    }`}
-                  >
-                    <Users className="w-5 h-5" />
-                  </div>
-                  {selectedStaffId === "any" && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white text-[#1E1E1E]">
-                      Selected
-                    </span>
-                  )}
-                </div>
-                <h3 className="font-bold text-sm">Any Available Stylist</h3>
-                <p
-                  className={`text-xs mt-1 leading-relaxed ${
-                    selectedStaffId === "any" ? "text-white/80" : "text-[#71717A]"
-                  }`}
-                >
-                  Our smart engine assigns the best available artist using balanced rotation and zero wait time.
-                </p>
-              </button>
-
-              {/* Option B: Specific Stylists */}
-              {allStaff.map((staff) => {
-                const isSelected = selectedStaffId === staff.id;
-
-                return (
-                  <button
-                    key={staff.id}
-                    type="button"
-                    onClick={() => setSelectedStaffId(staff.id)}
-                    className={`p-5 rounded-2xl border text-left transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-[#1E1E1E] text-white border-black shadow-md"
-                        : "bg-white text-[#1E1E1E] border-black/5 hover:border-black/20"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div
-                        className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold ${
-                          isSelected ? "bg-white/10 text-white" : "bg-[#F4F4F6] text-[#1E1E1E]"
-                        }`}
-                      >
-                        {staff.photoUrl ? (
-                          <div className="relative w-10 h-10 rounded-2xl overflow-hidden">
-                            <Image
-                              src={staff.photoUrl}
-                              alt={staff.name}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <User className="w-5 h-5" />
-                        )}
-                      </div>
-                      {isSelected && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white text-[#1E1E1E]">
-                          Selected
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="font-bold text-sm">{staff.name}</h3>
-                    {staff.bio && (
-                      <p
-                        className={`text-xs mt-0.5 line-clamp-2 ${
-                          isSelected ? "text-white/80" : "text-[#71717A]"
-                        }`}
-                      >
-                        {staff.bio}
-                      </p>
-                    )}
-                    {staff.specialties?.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2.5">
-                        {staff.specialties.slice(0, 3).map((spec, idx) => (
-                          <span
-                            key={idx}
-                            className={`text-[10px] px-2 py-0.5 rounded-full ${
-                              isSelected
-                                ? "bg-white/15 text-white"
-                                : "bg-[#F4F4F6] text-[#71717A]"
-                            }`}
-                          >
-                            {spec}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 3: Date & Time */}
-        {step === 3 && (
           <div className="space-y-6 animate-in fade-in duration-300">
             <div className="space-y-1">
               <h2 className="text-lg font-bold text-[#1E1E1E]">
                 Select Date & Time
               </h2>
               <p className="text-xs text-[#71717A]">
-                Slots respect minimum notice hours and salon operating schedule.
+                Available appointment slots calculated directly from your treatment durations.
               </p>
             </div>
 
@@ -1119,7 +983,7 @@ function BookingWizardContent() {
                     No available slots on this date
                   </p>
                   <p className="text-[11px] text-[#71717A] max-w-sm mx-auto">
-                    All stylists may be fully booked or the salon is closed. Try selecting another date or switching to &apos;Any available stylist&apos;.
+                    The studio is either closed or fully booked on this date. Please select another date.
                   </p>
                 </div>
               ) : (
@@ -1159,7 +1023,7 @@ function BookingWizardContent() {
                             isSelected ? "text-white/80" : "text-[#71717A]"
                           }`}
                         >
-                          {slot.staffName}
+                          Available Slot
                         </span>
                       </button>
                     );
@@ -1170,8 +1034,8 @@ function BookingWizardContent() {
           </div>
         )}
 
-        {/* STEP 4: Details (No Accounts) */}
-        {step === 4 && (
+        {/* STEP 3: Details (No Accounts) */}
+        {step === 3 && (
           <div className="space-y-6 animate-in fade-in duration-300">
             <div className="space-y-1">
               <h2 className="text-lg font-bold text-[#1E1E1E]">
@@ -1242,8 +1106,8 @@ function BookingWizardContent() {
           </div>
         )}
 
-        {/* STEP 5: Review & Pay */}
-        {step === 5 && (
+        {/* STEP 4: Review & Pay */}
+        {step === 4 && (
           <div className="space-y-6 animate-in fade-in duration-300">
             <div className="space-y-1">
               <h2 className="text-lg font-bold text-[#1E1E1E]">
@@ -1292,9 +1156,9 @@ function BookingWizardContent() {
 
                 <div className="border-t border-black/5 pt-2.5 space-y-1">
                   <div className="flex justify-between text-[#71717A]">
-                    <span>Assigned Stylist:</span>
+                    <span>Studio Lead:</span>
                     <span className="font-bold text-[#1E1E1E]">
-                      {selectedSlot?.staffName || "Any Available Stylist"}
+                      {selectedSlot?.staffName || "Aura Studio Lead Artist"}
                     </span>
                   </div>
                   <div className="flex justify-between text-[#71717A]">
@@ -1429,7 +1293,7 @@ function BookingWizardContent() {
               <Button
                 variant="outlinePill"
                 size="sm"
-                onClick={() => setStep((step - 1) as 1 | 2 | 3 | 4 | 5)}
+                onClick={() => setStep((step - 1) as 1 | 2 | 3 | 4)}
                 className="text-xs h-10 px-3 sm:px-4 bg-white cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4 mr-1" />
@@ -1437,7 +1301,7 @@ function BookingWizardContent() {
               </Button>
             )}
 
-            {step < 5 ? (
+            {step < 4 ? (
               <Button
                 variant="blackPill"
                 size="sm"
