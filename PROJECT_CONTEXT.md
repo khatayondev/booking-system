@@ -579,3 +579,49 @@ WHERE (
     7. Manager role gating for template modification.
   - **Full Suite Status**: 15/15 Vitest test suites passing (137/137 tests); 0 TypeScript errors; 0 ESLint errors; Next.js production build succeeded with 73 routes.
 
+---
+
+### Prompt 18: Customer Self-Service, Cancellations & Refunds
+- **Customer Self-Service Portal**:
+  - **Private Manage Link**: Accessible at [`app/(public)/manage/[token]/page.tsx`](file:///Users/khatayon/Booking-System/app/(public)/manage/[token]/page.tsx) using 24-byte unguessable raw hex token stored at rest as a SHA-256 hash (`manageTokenHash`) on `Booking`.
+  - **Lookup Portal**: Dedicated reference + phone lookup at [`app/(public)/manage/page.tsx`](file:///Users/khatayon/Booking-System/app/(public)/manage/page.tsx) with rate-limiting per IP (5 requests / 15 min) and per normalized Ghana phone (5 requests / 15 min), with optional 6-digit SMS OTP verification (`/api/manage/lookup/otp`).
+  - **Booking Inspection**: Displays customer contact, assigned specialist, appointment date/time formatted in GMT (`Africa/Accra`), service items with prices, deposit paid, and outstanding balance due in GH₵.
+  - **Balance Payment**: One-click Paystack checkout initiation (`/api/manage/[token]/pay-balance`) allowing customers to settle remaining balance.
+  - **Calendar Export**:
+    - RFC 5545 `.ics` file download endpoint at [`app/api/manage/[token]/calendar/route.ts`](file:///Users/khatayon/Booking-System/app/api/manage/[token]/calendar/route.ts) with `text/calendar; charset=utf-8` MIME type, alarms (-PT24H and -PT2H), and studio location.
+    - One-click Google Calendar web link helper (`generateGoogleCalendarUrl`).
+- **Policy-Driven Cancellation & Refund Calculation Engine**:
+  - Implemented in [`lib/self-service/policy.ts`](file:///Users/khatayon/Booking-System/lib/self-service/policy.ts) supporting configurable `cancellationNoticeHours` (e.g. 24h) and all `depositRefundPolicy` options:
+    1. `FULL_REFUND_BEFORE_CUTOFF`: 100% deposit refund + full prepayment refund when > 24 hours prior; deposit forfeited (0% refund) + prepayment refunded when < 24 hours prior.
+    2. `PARTIAL_50`: 50% deposit refund + full prepayment refund when > 24 hours prior; deposit forfeited when < 24 hours prior.
+    3. `NON_REFUNDABLE`: 0% deposit refund before and after cutoff; excess prepayment refunded.
+  - Interactive cancellation modal displays live refund breakdown before customer confirms.
+- **Rescheduling Engine**:
+  - Enforces minimum notice window (`canReschedule`); blocks rescheduling past appointments.
+  - Validates stylist availability using slot checks.
+  - **Edge Case Protection**: Rejects rescheduling to the exact same appointment slot with `SAME_SLOT_RESCHEDULE` (400).
+  - Automatically updates 24h and 2h reminder notification schedules via `notificationEvents.onBookingRescheduled`.
+- **Cancellation Edge Cases**:
+  - **Pending Payment Protection**: Blocks cancellation if an active transaction is pending authorization (`PENDING_PAYMENT_EXISTS` / 409).
+  - **Double-Click & Concurrency Idempotency**: Second click on cancellation returns `alreadyCancelled: true` with 0 additional refund, preventing duplicate refunds and duplicate notifications.
+  - **Token Security**: Unguessable 24-byte tokens hashed via SHA-256; Customer A cannot access, reschedule, or cancel Customer B's booking with mismatched token.
+- **Admin Dashboard Refund Flow**:
+  - Implemented in [`lib/self-service/refunds.ts`](file:///Users/khatayon/Booking-System/lib/self-service/refunds.ts) and [`app/api/admin/bookings/[id]/refund/route.ts`](file:///Users/khatayon/Booking-System/app/api/admin/bookings/[id]/refund/route.ts).
+  - **Role Limits Enforced**: Staff limited to GH₵ 50 (5,000 pesewas), Manager limited to GH₵ 500 (50,000 pesewas), Owner unlimited.
+  - **Reason Required**: Mandatory non-empty reason string enforced on server.
+  - **Refund Channels**: Electronic reversal via Paystack refund API (`POST https://api.paystack.co/refund`) or manual cash/MoMo offline recording.
+  - **State Updates**: Updates `Payment` status (`REFUNDED` or `PARTIALLY_REFUNDED`), decrements `Booking.amountPaidPesewas`, creates `Refund` record, and triggers `notificationEvents.onRefundIssued`.
+  - **UI Integration**: `RefundModal` component ([`components/bookings/refund-modal.tsx`](file:///Users/khatayon/Booking-System/components/bookings/refund-modal.tsx)) seamlessly integrated into `BookingDrawer`.
+- **Verification & Acceptance**:
+  - `tests/self-service.test.ts`: 24 comprehensive unit and integration tests covering:
+    1. Refund calculations across all policy windows (`FULL_REFUND_BEFORE_CUTOFF`, `PARTIAL_50`, `NON_REFUNDABLE` before and inside cutoff).
+    2. Token security proving Customer A cannot access, reschedule, or cancel Customer B's booking.
+    3. Same-slot reschedule prevention.
+    4. Pending payment cancellation block.
+    5. Double-click idempotency.
+    6. Rate-limited lookup by reference and phone.
+    7. RFC 5545 `.ics` formatting and Google calendar URLs.
+    8. Dashboard refund role limits (Staff vs Manager vs Owner) and required reason.
+  - **Full Suite Status**: 16/16 Vitest test files passing (161/161 tests); 0 TypeScript errors; 0 ESLint errors; Next.js production build succeeded with 77 routes.
+
+

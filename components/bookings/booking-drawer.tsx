@@ -17,6 +17,7 @@ import {
   UserCheck,
   CheckCircle2,
   Ban,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -25,6 +26,7 @@ import { BookingRecord, BookingStaff } from "./types";
 import { BookingStatusBadge } from "./status-badge";
 import { RequestPaymentModal } from "@/components/payment-requests/request-payment-modal";
 import { PaymentRequestsList } from "@/components/payment-requests/payment-requests-list";
+import { RefundModal } from "./refund-modal";
 
 interface BookingDrawerProps {
   bookingId: string | null;
@@ -59,6 +61,7 @@ export function BookingDrawer({
   const [newNote, setNewNote] = React.useState("");
   const [addingNote, setAddingNote] = React.useState(false);
   const [requestPaymentModalOpen, setRequestPaymentModalOpen] = React.useState(false);
+  const [refundModalOpen, setRefundModalOpen] = React.useState(false);
 
   // Refetch helper
   const refetch = React.useCallback(async () => {
@@ -393,6 +396,20 @@ export function BookingDrawer({
                     >
                       <Ban className="w-3.5 h-3.5" />
                       <span>Cancel Appointment</span>
+                    </Button>
+                  )}
+
+                  {/* Refund Button */}
+                  {booking.amountPaidPesewas > 0 && (
+                    <Button
+                      size="sm"
+                      variant="outlinePill"
+                      disabled={actionLoading}
+                      onClick={() => setRefundModalOpen(true)}
+                      className="text-xs font-semibold text-rose-800 hover:bg-rose-50 border-rose-300 cursor-pointer bg-white"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Issue Refund</span>
                     </Button>
                   )}
                 </div>
@@ -879,6 +896,22 @@ export function BookingDrawer({
           customerName={booking.customer.name}
           customerPhone={booking.customer.phone}
           balanceDuePesewas={booking.balanceDuePesewas}
+          onSuccess={async () => {
+            await refetch();
+            onRefresh();
+          }}
+        />
+      )}
+
+      {/* ISSUE REFUND MODAL */}
+      {booking && (
+        <RefundModal
+          isOpen={refundModalOpen}
+          onClose={() => setRefundModalOpen(false)}
+          bookingId={booking.id}
+          reference={booking.reference}
+          customerName={booking.customer.name}
+          amountPaidPesewas={booking.amountPaidPesewas}
           onSuccess={async () => {
             await refetch();
             onRefresh();
