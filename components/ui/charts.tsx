@@ -5,6 +5,8 @@ import {
   ResponsiveContainer,
   LineChart as RechartsLineChart,
   Line,
+  BarChart as RechartsBarChart,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,
@@ -237,3 +239,69 @@ export function LineChart({ data, height = 220, className }: LineChartProps) {
     </div>
   );
 }
+
+// Monochrome Bar Chart for revenue and breakdowns
+export interface BarChartItem {
+  label: string;
+  value: number;
+  secondaryValue?: number;
+}
+
+interface BarChartProps {
+  data: BarChartItem[];
+  height?: number;
+  className?: string;
+  valuePrefix?: string;
+  barColor?: string;
+}
+
+export function BarChart({
+  data,
+  height = 220,
+  className,
+  valuePrefix = "GH₵ ",
+  barColor = "#1E1E1E",
+}: BarChartProps) {
+  return (
+    <div className={cn("w-full", className)}>
+      <ResponsiveContainer width="100%" height={height}>
+        <RechartsBarChart data={data} margin={{ top: 15, right: 10, left: -20, bottom: 0 }}>
+          <XAxis
+            dataKey="label"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: "#71717A", fontSize: 11 }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: "#A1A1AA", fontSize: 11 }}
+          />
+          <Tooltip
+            content={({ active, payload }) => {
+              if (active && payload && payload.length) {
+                const val = payload[0].value;
+                const item = payload[0].payload as BarChartItem;
+                return (
+                  <div className="bg-[#1E1E1E] text-white px-3 py-1.5 rounded-xl shadow-lg border border-white/10 text-xs">
+                    <p className="font-semibold">
+                      {item.label}: {valuePrefix}{val}
+                    </p>
+                    {item.secondaryValue !== undefined && (
+                      <p className="text-[10px] text-white/60">
+                        Refunds: {valuePrefix}{item.secondaryValue}
+                      </p>
+                    )}
+                  </div>
+                );
+              }
+              return null;
+            }}
+          />
+          <Bar dataKey="value" fill={barColor} radius={[4, 4, 0, 0]} />
+        </RechartsBarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+

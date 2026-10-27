@@ -624,4 +624,48 @@ WHERE (
     8. Dashboard refund role limits (Staff vs Manager vs Owner) and required reason.
   - **Full Suite Status**: 16/16 Vitest test files passing (161/161 tests); 0 TypeScript errors; 0 ESLint errors; Next.js production build succeeded with 77 routes.
 
+---
+
+### Prompt 19: Reports and Audit Log
+- **Comprehensive Reports Engine (`lib/reports/service.ts`)**:
+  - **Exact Payments Ledger Reconciliation**:
+    - Queries all successful collections (`PAID`, `PARTIALLY_REFUNDED`, `REFUNDED`) from the `Payment` ledger and completed `Refund` records.
+    - `Net Revenue = Gross Payments - Completed Refunds` calculated to the exact pesewa (`1 GHS = 100 pesewas`).
+    - Revenue grouped over time (by Day, by ISO Week, by Month) and by payment channel (`CARD`, `MOBILE_MONEY`, `CASH`) with strict mathematical reconciliation (`sum(channels) === netRevenue`, `sum(days) === netRevenue`).
+    - Revenue attributed by service and by staff member, accounting for prorated booking items and refunds.
+  - **Operational Bookings Breakdown**:
+    - Grouped by channel source (`WEB`, `POS`, `WALK_IN`) and operational status (`CONFIRMED`, `COMPLETED`, `CANCELLED`, `NO_SHOW`, etc.).
+    - Automatic calculation of key operational rates: `Cancellation Rate` and `No-Show Rate`.
+    - Average Order Value (AOV) computed as `Net Revenue / Total Bookings`.
+  - **Staff Utilisation Engine**:
+    - Computes active booked minutes against scheduled shift minutes from `StaffSchedule` (or studio operating hours) minus approved `TimeOff`.
+    - Utilisation rate percentage capped at 100%.
+  - **Top Customers & Top Services**:
+    - Top 5 clients ranked by net spend and visit frequency.
+    - Top 5 service drivers ranked by net revenue and booking volume.
+  - **Staff Commission Report**:
+    - Dynamic evaluation based on studio settings (`enable_staff_commissions` and `staff_commission_percentage`).
+    - Computes commission pesewas per staff member based on completed service revenue.
+  - **Comparative Analysis Engine**:
+    - Computes metrics for an immediately preceding window of identical duration.
+    - Returns percentage deltas for net revenue, gross collections, booking volume, AOV, cancellation rate points, and no-show rate points.
+- **Permission-Gated Exports**:
+  - **CSV Export Engine (`lib/reports/csv.ts` & `/api/admin/reports/export`)**:
+    - Generates multi-section CSV file (Executive Summary, Daily, Payment Methods, Services, Staff Utilisation, Commissions, Top Customers).
+    - Protected by `REPORTS_EXPORT` permission (Owner-only by default).
+  - **Print / PDF Summary**:
+    - One-click print / PDF export with print-optimized CSS layout.
+- **Owner-Only Audit Log Viewer (`lib/audit/service.ts`, `/api/admin/audit`, `/audit`)**:
+  - Strictly restricted to `OWNER_ADMIN` via `AUDIT_VIEW` permission; non-owners receive clean access restricted banner.
+  - Append-only storage: logs cannot be modified or deleted.
+  - Filters by action keyword, entity type (`Booking`, `Payment`, `Customer`, `Service`, `Settings`, `Staff`, `User`, `Role`), date range, and free-text search.
+  - Key-by-key Before/After diff inspector modal (`computeAuditDiff`) showing exact field state changes with side-by-side color-coded values and raw JSON viewer.
+- **Luxury Monochrome UI (`/reports` & `/audit`)**:
+  - Custom SVG/Recharts monochrome line and bar charts, donut distribution ring, interactive KPI cards with tooltips defining Net Revenue, Gross Collections, Utilisation, and Rates.
+  - Interactive date-range preset bar (`Today`, `Last 7 Days`, `Last 30 Days`, `This Month`, `Last Month`, `Custom`) and previous period toggle.
+- **Verification & Acceptance**:
+  - `tests/reports-audit.test.ts`: 9 comprehensive acceptance tests verifying exact pesewa reconciliation with the payments ledger, daily/channel breakdowns, cancellation/no-show rates, staff utilisation, period deltas, staff commissions, CSV exports, and Owner audit diffs/permission gating.
+  - **Full Suite Status**: 17/17 Vitest test files passing (171/171 tests); 0 TypeScript errors (`tsc --noEmit`); 0 ESLint errors (`eslint .`); Next.js production build succeeded with 80 routes.
+
+
 
