@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     const chargeResult = await paymentProvider.chargeMobileMoney({
       reference,
       amountPesewas: amountToPayPesewas,
-      email: booking.customer.email || `customer-${normalizedPhone.replace("+", "")}@aurastudio.gh`,
+      email: booking.customer.email || `customer-${normalizedPhone.replace("+", "")}@beccascrown.gh`,
       phone: normalizedPhone,
       provider: momoProvider,
       metadata: {

@@ -84,7 +84,7 @@ export const DEFAULT_HOLIDAYS: Holiday[] = [
 ];
 
 export const DEFAULT_BUSINESS_SETTINGS: BusinessSettings = {
-  businessName: "Aura Beauty Studio",
+  businessName: "Becca's Crown Beauty Vault",
   businessLogo: "",
   businessPhone: "+233 24 111 2233",
   businessAddress: "14 Senchi Street, Airport Residential Area, Accra, Ghana",
@@ -101,7 +101,7 @@ export const DEFAULT_BUSINESS_SETTINGS: BusinessSettings = {
     "Free cancellations and reschedules are permitted up to 24 hours prior to appointment time. Deposits for late cancellations or no-shows are non-refundable.",
   paystackPublicKey: "",
   paystackSecretKey: "",
-  smsSenderId: "AURA STUDIO",
+  smsSenderId: "BeccasCrown",
   currency: STUDIO_CURRENCY,
   timezone: STUDIO_TIMEZONE,
 };

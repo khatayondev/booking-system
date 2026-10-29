@@ -707,7 +707,7 @@ export default function UsersAndRolesPage() {
                 <Input
                   required
                   type="email"
-                  placeholder="ama@aurabeauty.gh"
+                  placeholder="ama@beccascrown.gh"
                   value={newUserEmail}
                   onChange={(e) => setNewUserEmail(e.target.value)}
                 />

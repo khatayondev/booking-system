@@ -15,7 +15,7 @@ import {
   ExternalLink,
   ShieldAlert,
   ArrowLeft,
-  Sparkles,
+  Crown,
 } from "lucide-react";
 import { formatPesewas } from "@/lib/money";
 
@@ -368,7 +368,7 @@ function ManageBookingPageContent() {
           {/* Services breakdown */}
           <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-6 space-y-4">
             <h2 className="text-base font-serif font-bold text-white flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-400" /> Booked Services
+              <Crown className="w-4 h-4 text-amber-400" /> Booked Services
             </h2>
             <div className="divide-y divide-neutral-800/80">
               {booking.services.map((svc) => (

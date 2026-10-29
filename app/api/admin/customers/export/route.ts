@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       session
     );
 
-    const filename = `aura-studio-customers-${new Date().toISOString().slice(0, 10)}.csv`;
+    const filename = `beccascrown-customers-${new Date().toISOString().slice(0, 10)}.csv`;
 
     return new NextResponse(csvContent, {
       status: 200,

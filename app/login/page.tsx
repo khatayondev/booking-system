@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Sparkles, Lock, ArrowRight, ShieldCheck, KeyRound, Zap, Eye, EyeOff, Check } from "lucide-react";
+import { Crown, Lock, ArrowRight, ShieldCheck, KeyRound, Zap, Eye, EyeOff, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label, Input } from "@/components/ui/controls";
@@ -143,13 +143,13 @@ function StaffLoginForm() {
         {/* Branding header */}
         <div className="text-center mb-6">
           <div className="w-12 h-12 rounded-2xl bg-[#1E1E1E] text-white flex items-center justify-center mx-auto mb-3 shadow-md">
-            <Sparkles className="w-6 h-6" />
+            <Crown className="w-6 h-6 text-amber-300" />
           </div>
           <h1 className="text-2xl font-extrabold text-[#1E1E1E] tracking-tight">
             Staff Portal
           </h1>
           <p className="text-xs text-[#71717A] mt-1">
-            Aura Beauty &amp; Fashion Studio • Accra, Ghana
+            Becca&apos;s Crown Beauty Vault • Accra, Ghana
           </p>
         </div>
 
@@ -228,7 +228,7 @@ function StaffLoginForm() {
                 <Input
                   id="identifier"
                   type="text"
-                  placeholder="owner@aurastudio.gh or 024 111 2233"
+                  placeholder="owner@beccascrown.gh or 024 111 2233"
                   value={identifier}
                   onChange={(e) => {
                     setIdentifier(e.target.value);

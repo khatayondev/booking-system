@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import {
   CheckCircle2,
   Circle,
-  Sparkles,
+  Crown,
   ArrowRight,
   Clock,
   Scissors,
@@ -42,13 +42,14 @@ const TASKS: ChecklistTask[] = [
     href: "/services",
     icon: Scissors,
   },
-  {
-    id: "staff",
-    title: "3. Onboard Stylists & Schedules",
-    description: "Add staff team members, assign services, and establish weekly working shifts.",
-    href: "/staff",
-    icon: Users,
-  },
+  // Solo direct shop mode: Stylist onboarding omitted for direct operation
+  // {
+  //   id: "staff",
+  //   title: "3. Onboard Stylists & Schedules",
+  //   description: "Add staff team members, assign services, and establish weekly working shifts.",
+  //   href: "/staff",
+  //   icon: Users,
+  // },
   {
     id: "paystack",
     title: "4. Connect Paystack Live Keys",
@@ -129,7 +130,7 @@ export function OwnerOnboardingChecklist() {
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-[#1E1E1E] text-white flex items-center justify-center shadow-xs shrink-0">
-            <Sparkles className="w-5 h-5" />
+            <Crown className="w-5 h-5 text-amber-300" />
           </div>
           <div>
             <div className="flex items-center gap-2">

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { CreditCard, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
+import { CreditCard, ArrowRight, CheckCircle2, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPesewas } from "@/lib/money";
 
@@ -112,7 +112,7 @@ export function PaymentRequestBanner({
               Payment Request Received
             </span>
             <span className="bg-amber-400/20 text-amber-300 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
-              <Sparkles className="w-2.5 h-2.5" />
+              <Crown className="w-2.5 h-2.5 text-amber-300" />
               <span>Due Now • {formatPesewas(activeRequest!.amountPesewas)}</span>
             </span>
           </div>

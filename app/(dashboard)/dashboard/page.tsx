@@ -550,8 +550,7 @@ export default function DashboardOverviewPage() {
                               <Clock className="w-3 h-3" />
                               {item.timeFormatted}
                             </span>
-                            <span>•</span>
-                            <span>{item.staffName}</span>
+                            {/* Solo direct shop mode: item.staffName omitted */}
                           </div>
                         </div>
                       </div>
@@ -741,10 +740,12 @@ export default function DashboardOverviewPage() {
                       </div>
 
                       <div className="mt-4 pt-3 border-t border-white/10 space-y-1.5 text-xs text-white/70">
+                        {/* Solo direct shop mode: Staff Stylist omitted
                         <div className="flex justify-between">
                           <span>Staff Stylist:</span>
                           <span className="text-white font-medium">{b.staffName}</span>
                         </div>
+                        */}
                         <div className="flex justify-between">
                           <span>Time (Accra GMT):</span>
                           <span className="text-white font-mono">{b.timeFormatted}</span>
@@ -799,7 +800,7 @@ export default function DashboardOverviewPage() {
                           <span className="text-[11px] text-white/50 font-mono">({b.reference})</span>
                         </div>
                         <p className="text-[11px] text-white/70 mt-0.5">
-                          {b.serviceName} • {b.categoryName} • Staff: {b.staffName}
+                          {b.serviceName} • {b.categoryName}
                         </p>
                       </div>
                     </div>

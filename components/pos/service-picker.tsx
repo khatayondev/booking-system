@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, Plus, Clock, Sparkles, Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, Plus, Clock, Check, ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/controls";
 import { Button } from "@/components/ui/button";
 import { formatPesewas } from "@/lib/money";
@@ -171,7 +171,7 @@ export function ServicePicker({
                       className="w-full flex items-center justify-between text-[11px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white"
                     >
                       <span className="flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-amber-500" />
+                        <Plus className="w-3 h-3 text-amber-500" />
                         <span>Add-ons ({service.addons.length})</span>
                         {chosenAddons.length > 0 && (
                           <span className="bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-1">

@@ -11,7 +11,7 @@ import { emitBookingEvent } from "@/lib/booking-events";
 const publicBookingSchema = z.object({
   serviceIds: z.array(z.string().min(1)).min(1, "At least one service is required"),
   addonIds: z.array(z.string().min(1)).optional().default([]),
-  staffId: z.string().min(1, "Staff member is required"),
+  staffId: z.string().optional(),
   startUtc: z.string().datetime("startUtc must be a valid ISO datetime"),
   endUtc: z.string().datetime("endUtc must be a valid ISO datetime"),
   holdToken: z.string().optional(),
@@ -73,6 +73,19 @@ export async function POST(req: NextRequest) {
         "BAD_REQUEST",
         400
       );
+    }
+
+    // Resolve staff member (fallback to active lead staff in solo shop mode)
+    let assignedStaffId = staffId;
+    if (!assignedStaffId) {
+      const defaultStaff = await prisma.staff.findFirst({
+        where: { active: true },
+        orderBy: { createdAt: "asc" },
+      });
+      if (!defaultStaff) {
+        return errorResponse("No active staff member available", "BAD_REQUEST", 400);
+      }
+      assignedStaffId = defaultStaff.id;
     }
 
     // 2. Fetch services and validate
@@ -170,7 +183,7 @@ export async function POST(req: NextRequest) {
           source: "WEB",
           startUtc: new Date(startUtc),
           endUtc: new Date(endUtc),
-          staffId,
+          staffId: assignedStaffId,
           customerId: dbCustomer.id,
           subtotalPesewas,
           totalPesewas,

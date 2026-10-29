@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, Home, Calendar } from "lucide-react";
+import { Crown, Home, Calendar } from "lucide-react";
 
 export default function NotFound() {
   return (
@@ -7,7 +7,7 @@ export default function NotFound() {
       <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl border border-[#E4E4E7] text-center space-y-6">
         {/* Brand Icon */}
         <div className="w-16 h-16 rounded-3xl bg-[#1E1E1E] text-white mx-auto flex items-center justify-center shadow-md">
-          <Sparkles className="w-8 h-8" />
+          <Crown className="w-8 h-8 text-amber-300" />
         </div>
 
         <div className="space-y-2">

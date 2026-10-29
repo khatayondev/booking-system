@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Search, Shield, ArrowRight, Smartphone, AlertCircle, Sparkles } from "lucide-react";
+import { Search, Shield, ArrowRight, Smartphone, AlertCircle, Crown } from "lucide-react";
 
 export default function ManageLookupPage() {
   const router = useRouter();
@@ -100,7 +100,7 @@ export default function ManageLookupPage() {
       <div className="max-w-md w-full space-y-8 relative z-10">
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-semibold tracking-wider uppercase mb-2">
-            <Sparkles className="w-3.5 h-3.5" /> Client Self-Service
+            <Crown className="w-3.5 h-3.5" /> Client Self-Service
           </div>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-white">
             Manage Your Booking

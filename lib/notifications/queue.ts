@@ -139,7 +139,7 @@ export class NotificationQueue {
       time: timeFormatted,
       reference: details.reference,
       amountDue: details.amountDue || "GHS 0.00",
-      manageLink: details.manageLink || `https://aurastudio.com/manage/${details.reference}`,
+      manageLink: details.manageLink || `https://beccascrown.gh/manage/${details.reference}`,
     };
 
     // Schedule 24h reminder if future
@@ -324,7 +324,7 @@ export class NotificationQueue {
       const emailProvider = await getEmailProvider();
       sendResult = await emailProvider.sendEmail({
         to: job.recipient,
-        subject: subject || "Aura Studio Notification",
+        subject: subject || "Becca's Crown Beauty Vault Notification",
         text: content.replace(/<[^>]+>/g, ""),
         html: content,
         idempotencyKey: job.idempotencyKey,

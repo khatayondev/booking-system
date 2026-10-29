@@ -26,7 +26,7 @@ export const GET = withErrorHandler(async (req: Request) => {
 
   const staffFilter = !hasViewAll && session.staffId ? { staffId: session.staffId } : {};
 
-  // Search bookings by reference, customer name, customer phone, notes
+  // Search bookings by reference, customer name, phone, email, service name, notes
   const bookings = await prisma.booking.findMany({
     where: {
       ...staffFilter,
@@ -35,6 +35,8 @@ export const GET = withErrorHandler(async (req: Request) => {
         { reference: { contains: query, mode: "insensitive" } },
         { customer: { name: { contains: query, mode: "insensitive" } } },
         { customer: { phone: { contains: query, mode: "insensitive" } } },
+        { customer: { email: { contains: query, mode: "insensitive" } } },
+        { items: { some: { service: { name: { contains: query, mode: "insensitive" } } } } },
         { notes: { contains: query, mode: "insensitive" } },
       ],
     },
@@ -53,6 +55,8 @@ export const GET = withErrorHandler(async (req: Request) => {
     reference: b.reference,
     title: b.customer.name,
     subtitle: `${b.items[0]?.service.name || "Appointment"} • ${formatTime(b.startUtc)}`,
+    serviceName: b.items[0]?.service.name || "Appointment",
+    startUtc: b.startUtc.toISOString(),
     phone: b.customer.phone,
     status: b.status,
     totalPesewas: b.totalPesewas,

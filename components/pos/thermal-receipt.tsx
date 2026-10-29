@@ -24,13 +24,13 @@ export function ThermalReceipt({
 
   const cleanPhone = receipt.customerPhone.replace(/\D/g, "");
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
-    `✨ Aura Beauty Studio Receipt (${receipt.receiptNumber})\nTotal: ${formatPesewas(
+    `✨ Becca's Crown Beauty Vault Receipt (${receipt.receiptNumber})\nTotal: ${formatPesewas(
       receipt.totalPesewas
-    )}\nThank you for choosing Aura Beauty Studio, East Legon!`
+    )}\nThank you for choosing Becca's Crown Beauty Vault, East Legon!`
   )}`;
 
   const smsUrl = `sms:${receipt.customerPhone}?body=${encodeURIComponent(
-    `Aura Beauty Studio Receipt ${receipt.receiptNumber}. Total: ${formatPesewas(
+    `Becca's Crown Beauty Vault Receipt ${receipt.receiptNumber}. Total: ${formatPesewas(
       receipt.totalPesewas
     )}. Thank you for your visit!`
   )}`;
@@ -133,7 +133,7 @@ export function ThermalReceipt({
       >
         {/* Studio Header */}
         <div className="text-center space-y-1 mb-3">
-          <h2 className="text-sm font-bold tracking-wider uppercase">AURA BEAUTY STUDIO</h2>
+          <h2 className="text-sm font-bold tracking-wider uppercase">BECCA&apos;S CROWN BEAUTY VAULT</h2>
           <p className="text-[11px] text-[#52525B]">East Legon, Senchi Street</p>
           <p className="text-[11px] text-[#52525B]">Accra, Ghana • +233 24 111 9988</p>
           <p className="text-[10px] text-[#71717A]">TIN: C0029482910</p>
@@ -283,9 +283,9 @@ export function ThermalReceipt({
 
         {/* Studio Footer */}
         <div className="text-center space-y-1 text-[10px] text-[#71717A]">
-          <p className="font-semibold text-zinc-800">Thank you for visiting Aura Beauty Studio!</p>
+          <p className="font-semibold text-zinc-800">Thank you for visiting Becca&apos;s Crown Beauty Vault!</p>
           <p>All services subject to salon care & refund policies.</p>
-          <p>Instagram: @aurabeautystudio • www.aurastudio.gh</p>
+          <p>Instagram: @beccascrown • www.beccascrown.gh</p>
         </div>
       </div>
     </div>

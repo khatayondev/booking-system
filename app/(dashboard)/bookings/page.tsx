@@ -8,6 +8,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Radio,
+  X,
+  Clock,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
@@ -63,6 +65,77 @@ function BookingsContent() {
   const [selectedBookingId, setSelectedBookingId] = React.useState<string | null>(null);
   const [sseConnected, setSseConnected] = React.useState(false);
   const [refreshTrigger, setRefreshTrigger] = React.useState(0);
+
+  // Smart Search Auto-Suggest State
+  const [searchResults, setSearchResults] = React.useState<Array<{
+    id: string;
+    reference: string;
+    title: string;
+    subtitle: string;
+    phone: string;
+    status: string;
+    startUtc: string;
+    serviceName: string;
+  }>>([]);
+  const [isSearching, setIsSearching] = React.useState(false);
+  const [showSearchPopover, setShowSearchPopover] = React.useState(false);
+  const searchContainerRef = React.useRef<HTMLDivElement>(null);
+
+  // Query smart search as user types
+  React.useEffect(() => {
+    const q = filters.search.trim();
+    if (q.length < 2) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    let active = true;
+    setIsSearching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/dashboard/search?q=${encodeURIComponent(q)}`);
+        if (res.ok && active) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            setSearchResults(json.data.results || []);
+          }
+        }
+      } catch {
+        // quiet fail
+      } finally {
+        if (active) setIsSearching(false);
+      }
+    }, 200);
+
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [filters.search]);
+
+  // Click outside to dismiss popover
+  React.useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setShowSearchPopover(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelectSearchResult = (result: (typeof searchResults)[0]) => {
+    setShowSearchPopover(false);
+    setSelectedBookingId(result.id);
+    if (result.startUtc) {
+      const apptDate = result.startUtc.split("T")[0];
+      setFilters((prev) => ({
+        ...prev,
+        selectedDate: apptDate,
+      }));
+    }
+  };
 
   // 1. Fetch current staff & services list
   React.useEffect(() => {
@@ -322,11 +395,11 @@ function BookingsContent() {
         </div>
 
         {/* FILTER BAR & CONTROLS */}
-        <Card variant="white" className="p-4 rounded-3xl border border-black/10 shadow-xs space-y-3">
+        <Card variant="white" className="p-3 rounded-3xl border border-black/10 shadow-xs">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
             {/* Calendar Controls (if calendar mode) */}
-            {filters.viewMode === "calendar" ? (
-              <div className="flex flex-wrap items-center gap-2">
+            {filters.viewMode === "calendar" && (
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
                 {/* Subview Pills */}
                 <div className="p-1 rounded-full bg-zinc-100 flex items-center gap-1 border border-zinc-200">
                   <button
@@ -350,17 +423,6 @@ function BookingsContent() {
                     }`}
                   >
                     Week
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFilters((p) => ({ ...p, calendarSubView: "staff" }))}
-                    className={`px-3 py-1 rounded-full text-xs font-bold cursor-pointer transition-all ${
-                      filters.calendarSubView === "staff"
-                        ? "bg-[#1E1E1E] text-white shadow-xs"
-                        : "text-zinc-600 hover:text-black"
-                    }`}
-                  >
-                    Per-Staff Columns
                   </button>
                 </div>
 
@@ -406,19 +468,154 @@ function BookingsContent() {
                   </Button>
                 </div>
               </div>
-            ) : (
-              /* Search Bar in List Mode */
-              <div className="relative flex-1 max-w-md">
-                <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            )}
+
+            {/* SMART SEARCH BAR (Always present on the bar) */}
+            <div ref={searchContainerRef} className="relative flex-1 min-w-[220px] max-w-md">
+              <div className="relative flex items-center">
+                <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3.5 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Search by client name, +233 phone, or BK-XXXX..."
+                  placeholder="Smart search: code, client, phone, service..."
                   value={filters.search}
-                  onChange={(e) => setFilters((p) => ({ ...p, search: e.target.value, page: 1 }))}
-                  className="w-full text-xs pl-9 pr-3 py-2 rounded-full border border-zinc-300 bg-white focus:outline-none focus:border-black"
+                  onFocus={() => {
+                    if (filters.search.trim().length >= 2) setShowSearchPopover(true);
+                  }}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setFilters((p) => ({ ...p, search: val, page: 1 }));
+                    if (val.trim().length >= 2) {
+                      setShowSearchPopover(true);
+                    } else {
+                      setShowSearchPopover(false);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      setShowSearchPopover(false);
+                    }
+                  }}
+                  className="w-full text-xs pl-9 pr-8 py-2 rounded-full border border-zinc-300 bg-white shadow-2xs focus:outline-none focus:border-black focus:ring-1 focus:ring-black placeholder:text-zinc-400 transition-all font-medium"
                 />
+                {filters.search && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFilters((p) => ({ ...p, search: "", page: 1 }));
+                      setShowSearchPopover(false);
+                    }}
+                    className="absolute right-2.5 p-1 rounded-full text-zinc-400 hover:text-black hover:bg-zinc-100 transition-colors"
+                    aria-label="Clear search"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
-            )}
+
+              {/* Floating Smart Suggest Popover */}
+              {showSearchPopover && (
+                <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-white rounded-2xl shadow-xl border border-zinc-200 overflow-hidden divide-y divide-zinc-100 max-h-80 overflow-y-auto animate-in fade-in-50 duration-150">
+                  <div className="px-3.5 py-2 bg-zinc-50 flex items-center justify-between text-[11px] font-semibold text-zinc-500">
+                    <span className="flex items-center gap-1.5">
+                      <Search className="w-3.5 h-3.5 text-zinc-500" />
+                      Appointments matching &ldquo;{filters.search}&rdquo;
+                    </span>
+                    {isSearching ? (
+                      <span className="text-zinc-400">Searching...</span>
+                    ) : (
+                      <span>
+                        {searchResults.length} {searchResults.length === 1 ? "match" : "matches"}
+                      </span>
+                    )}
+                  </div>
+
+                  {isSearching && searchResults.length === 0 ? (
+                    <div className="p-4 text-center text-xs text-zinc-400">
+                      Searching appointments across database...
+                    </div>
+                  ) : searchResults.length === 0 ? (
+                    <div className="p-4 text-center space-y-1">
+                      <p className="text-xs font-semibold text-zinc-700">No appointments found</p>
+                      <p className="text-[11px] text-zinc-400">
+                        Try searching by client name, reference code (e.g. BK-XXXX), phone, or service.
+                      </p>
+                    </div>
+                  ) : (
+                    searchResults.map((result) => {
+                      const apptDate = result.startUtc ? new Date(result.startUtc) : null;
+                      const formattedDate = apptDate
+                        ? apptDate.toLocaleDateString("en-GB", {
+                            timeZone: "Africa/Accra",
+                            weekday: "short",
+                            day: "numeric",
+                            month: "short",
+                          }) +
+                          " • " +
+                          apptDate.toLocaleTimeString("en-GB", {
+                            timeZone: "Africa/Accra",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })
+                        : "";
+
+                      return (
+                        <button
+                          key={result.id}
+                          type="button"
+                          onClick={() => handleSelectSearchResult(result)}
+                          className="w-full text-left p-3 hover:bg-zinc-50/80 transition-colors flex items-center justify-between gap-3 cursor-pointer group"
+                        >
+                          <div className="min-w-0 flex-1 space-y-0.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-zinc-900 group-hover:text-black truncate">
+                                {result.title}
+                              </span>
+                              <span className="text-[10px] text-zinc-400 font-mono">
+                                {result.phone}
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-zinc-500 truncate flex items-center gap-1.5">
+                              <span className="font-medium text-zinc-700">{result.serviceName}</span>
+                              {formattedDate && (
+                                <>
+                                  <span>•</span>
+                                  <span className="flex items-center gap-1 text-zinc-400">
+                                    <Clock className="w-3 h-3 inline" />
+                                    {formattedDate}
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col items-end gap-1 shrink-0">
+                            <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 bg-zinc-100 rounded text-zinc-700 border border-zinc-200">
+                              {result.reference}
+                            </span>
+                            <span
+                              className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border ${
+                                result.status === "CONFIRMED"
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                  : result.status === "CHECKED_IN"
+                                  ? "bg-purple-50 text-purple-700 border-purple-200"
+                                  : result.status === "COMPLETED"
+                                  ? "bg-blue-50 text-blue-700 border-blue-200"
+                                  : result.status === "PENDING_PAYMENT"
+                                  ? "bg-amber-50 text-amber-700 border-amber-200"
+                                  : "bg-zinc-100 text-zinc-600 border-zinc-200"
+                              }`}
+                            >
+                              {result.status.replace("_", " ")}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Common Dropdown Filters */}
             <div className="flex flex-wrap items-center gap-2">
@@ -437,7 +634,7 @@ function BookingsContent() {
                 <option value="NO_SHOW">No Show</option>
               </select>
 
-              {/* Staff Filter (if viewing all allowed) */}
+              {/* Solo direct shop mode: Stylist filter omitted
               <select
                 value={filters.staffId}
                 onChange={(e) => setFilters((p) => ({ ...p, staffId: e.target.value, page: 1 }))}
@@ -450,6 +647,7 @@ function BookingsContent() {
                   </option>
                 ))}
               </select>
+              */}
 
               {/* Service Filter */}
               <select

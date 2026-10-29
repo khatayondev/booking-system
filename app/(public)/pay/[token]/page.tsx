@@ -1,4 +1,7 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
+import crypto from "crypto";
+import { prisma } from "@/lib/db";
 import { PublicPaymentRequestClient } from "./pay-page-client";
 
 export const instant = false;
@@ -9,6 +12,19 @@ export default async function PublicPaymentRequestPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
+
+  // Auto-redirect if this token belongs to a booking manage portal
+  if (token) {
+    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+    const booking = await prisma.booking.findFirst({
+      where: { manageTokenHash: tokenHash },
+      select: { id: true },
+    });
+
+    if (booking) {
+      redirect(`/manage/${token}`);
+    }
+  }
 
   return (
     <Suspense

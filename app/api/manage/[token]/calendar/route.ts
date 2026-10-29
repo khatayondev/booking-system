@@ -14,7 +14,7 @@ export async function GET(
     const primaryService = booking.services[0]?.name || "Beauty Appointment";
     const icsContent = generateIcsCalendar({
       reference: booking.reference,
-      summary: `${primaryService} - Aura Beauty Studio`,
+      summary: `${primaryService} - Becca's Crown Beauty Vault`,
       description: `Appointment for ${booking.customerName}\\nReference: ${booking.reference}\\nStaff: ${booking.staffName}\\nManage: ${req.nextUrl.origin}/manage/${token}`,
       startUtc: new Date(booking.startUtc),
       endUtc: new Date(booking.endUtc),
@@ -25,7 +25,7 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "text/calendar; charset=utf-8",
-        "Content-Disposition": `attachment; filename="aura-booking-${booking.reference}.ics"`,
+        "Content-Disposition": `attachment; filename="beccascrown-booking-${booking.reference}.ics"`,
         "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
       },
     });

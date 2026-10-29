@@ -358,7 +358,7 @@ export function BookingDrawer({
                     </Button>
                   )}
 
-                  {/* Reassign Staff */}
+                  {/* Solo direct shop mode: Reassign Stylist omitted
                   {booking.status !== "COMPLETED" && booking.status !== "CANCELLED" && canEdit && (
                     <Button
                       size="sm"
@@ -371,6 +371,7 @@ export function BookingDrawer({
                       <span>Reassign Stylist</span>
                     </Button>
                   )}
+                  */}
 
                   {/* No Show Button */}
                   {(booking.status === "CONFIRMED" || booking.status === "CHECKED_IN") && canEdit && (
@@ -506,7 +507,7 @@ export function BookingDrawer({
                 <Card variant="white" className="p-4 space-y-2 border border-zinc-200 rounded-2xl">
                   <div className="flex items-center gap-2 text-zinc-500 text-xs font-bold uppercase tracking-wider">
                     <Calendar className="w-3.5 h-3.5" />
-                    <span>Schedule & Stylist</span>
+                    <span>Schedule & Timing</span>
                   </div>
                   <div>
                     <div className="text-xs font-extrabold text-[#1E1E1E]">
@@ -536,12 +537,14 @@ export function BookingDrawer({
                         })}
                       </span>
                     </div>
+                    {/* Solo direct shop mode: Assigned Artist omitted
                     <div className="mt-2 pt-2 border-t border-zinc-100 text-xs">
                       <span className="text-zinc-500 text-[10px] uppercase font-bold block">
                         Assigned Artist:
                       </span>
                       <span className="font-bold text-[#1E1E1E]">{booking.staff.name}</span>
                     </div>
+                    */}
                   </div>
                 </Card>
               </div>
@@ -831,7 +834,7 @@ export function BookingDrawer({
         </div>
       )}
 
-      {/* REASSIGN STAFF MODAL */}
+      {/* Solo direct shop mode: Reassign modal omitted
       {reassignModalOpen && (
         <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
           <Card variant="white" className="p-6 max-w-md w-full space-y-4 rounded-3xl shadow-2xl border border-zinc-200">
@@ -885,6 +888,7 @@ export function BookingDrawer({
           </Card>
         </div>
       )}
+      */}
 
       {/* REQUEST PAYMENT MODAL */}
       {booking && (

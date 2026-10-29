@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import {
-  Sparkles,
+  Crown,
   Search,
   MoreVertical,
   Scissors,
@@ -129,8 +129,8 @@ export default function DesignSystemPage() {
               <Button variant="circularIcon" size="icon" aria-label="Search icon">
                 <Search className="w-4 h-4 text-[#71717A]" />
               </Button>
-              <Button variant="circularIconDark" size="icon" aria-label="Sparkles icon">
-                <Sparkles className="w-4 h-4 text-white" />
+              <Button variant="circularIconDark" size="icon" aria-label="Crown icon">
+                <Crown className="w-4 h-4 text-white" />
               </Button>
               <Button variant="ghost" size="sm">
                 Ghost Action

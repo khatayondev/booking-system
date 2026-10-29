@@ -206,7 +206,7 @@ export async function processPosCheckout(
     receiptStatus = "PARTIALLY_PAID";
   }
 
-  // 6. Customer Resolution (Find or Quick-Create)
+  // 6. Customer Resolution (Find, Quick-Create, or Default Walk-in)
   let customerId = input.customerId;
   let customerName = "Walk-in Guest";
   let customerPhone = "+233000000000";
@@ -221,30 +221,56 @@ export async function processPosCheckout(
     customerId = existing.id;
     customerName = existing.name;
     customerPhone = existing.phone;
-  } else if (input.customer?.phone) {
-    const normPhone = normalizeGhanaPhone(input.customer.phone);
-    const existing = await prisma.customer.findUnique({
-      where: { phone: normPhone },
+  } else if (input.customer?.phone && input.customer.phone.trim()) {
+    try {
+      const normPhone = normalizeGhanaPhone(input.customer.phone);
+      const existing = await prisma.customer.findUnique({
+        where: { phone: normPhone },
+      });
+
+      if (existing) {
+        customerId = existing.id;
+        customerName = input.customer.name?.trim() || existing.name;
+        customerPhone = existing.phone;
+      } else {
+        // Create new customer
+        customerName = input.customer.name?.trim() || "Walk-in Customer";
+        customerPhone = normPhone;
+        const createdCustomer = await prisma.customer.create({
+          data: {
+            name: customerName,
+            phone: customerPhone,
+            email: input.customer.email?.trim() || null,
+            notes: input.customer.notes?.trim() || null,
+          },
+        });
+        customerId = createdCustomer.id;
+      }
+    } catch {
+      // If phone normalization failed, fallback to default walk-in customer below
+    }
+  }
+
+  // If still no customer resolved (e.g. quick walk-in sale without registered customer)
+  if (!customerId) {
+    const defaultPhone = "+233000000000";
+    let defaultCustomer = await prisma.customer.findUnique({
+      where: { phone: defaultPhone },
     });
 
-    if (existing) {
-      customerId = existing.id;
-      customerName = input.customer.name.trim() || existing.name;
-      customerPhone = existing.phone;
-    } else {
-      // Create new customer
-      customerName = input.customer.name.trim() || "Walk-in Customer";
-      customerPhone = normPhone;
-      const createdCustomer = await prisma.customer.create({
+    if (!defaultCustomer) {
+      defaultCustomer = await prisma.customer.create({
         data: {
-          name: customerName,
-          phone: customerPhone,
-          email: input.customer.email?.trim() || null,
-          notes: input.customer.notes?.trim() || null,
+          name: "Walk-in Guest",
+          phone: defaultPhone,
+          notes: "System default customer for POS walk-in sales without registered profile",
         },
       });
-      customerId = createdCustomer.id;
     }
+
+    customerId = defaultCustomer.id;
+    customerName = input.customer?.name?.trim() || defaultCustomer.name;
+    customerPhone = defaultCustomer.phone;
   }
 
   // 7. Staff Resolution
@@ -704,7 +730,7 @@ export async function getEndOfDaySummary(
  */
 export function formatReceiptShareText(receipt: PosReceiptDetail): string {
   const lines: string[] = [];
-  lines.push("✨ AURA BEAUTY STUDIO ✨");
+  lines.push("✨ BECCA'S CROWN BEAUTY VAULT ✨");
   lines.push("East Legon, Accra | Tel: +233 24 111 9988");
   lines.push("--------------------------------");
   lines.push(`Receipt: ${receipt.receiptNumber}`);
@@ -749,8 +775,8 @@ export function formatReceiptShareText(receipt: PosReceiptDetail): string {
     lines.push("Status: Paid in Full ✓");
   }
   lines.push("--------------------------------");
-  lines.push("Thank you for visiting Aura Beauty Studio!");
-  lines.push("Follow us @aurabeautystudio");
+  lines.push("Thank you for visiting Becca's Crown Beauty Vault!");
+  lines.push("Follow us @beccascrown");
 
   return lines.join("\n");
 }

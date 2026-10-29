@@ -121,12 +121,12 @@ export async function PATCH(
       if (targetStatus === "CONFIRMED") {
         await sendSms({
           recipient: booking.customer.phone,
-          message: `Aura Studio: Your appointment (${booking.reference}) has been confirmed! We look forward to seeing you.`,
+          message: `Becca's Crown: Your appointment (${booking.reference}) has been confirmed! We look forward to seeing you.`,
         });
       } else if (targetStatus === "CANCELLED") {
         await sendSms({
           recipient: booking.customer.phone,
-          message: `Aura Studio: Your appointment (${booking.reference}) has been cancelled. Reason: ${parsed.reason || "Client request"}. Contact us if you need to rebook.`,
+          message: `Becca's Crown: Your appointment (${booking.reference}) has been cancelled. Reason: ${parsed.reason || "Client request"}. Contact us if you need to rebook.`,
         });
       }
     } catch (smsErr) {

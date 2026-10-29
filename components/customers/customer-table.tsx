@@ -7,7 +7,7 @@ import {
   Mail,
   Calendar,
   AlertTriangle,
-  Sparkles,
+  Crown,
   HeartHandshake,
   CheckCircle2,
   XCircle,
@@ -191,7 +191,7 @@ export function CustomerTable({
                                 : "bg-zinc-800 text-zinc-300 border-zinc-700"
                             }`}
                           >
-                            {isTagVip && <Sparkles className="w-2.5 h-2.5 text-amber-400" />}
+                            {isTagVip && <Crown className="w-2.5 h-2.5 text-amber-400" />}
                             {isTagBridal && <HeartHandshake className="w-2.5 h-2.5 text-rose-400" />}
                             {tag}
                           </span>

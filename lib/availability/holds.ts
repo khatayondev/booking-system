@@ -78,11 +78,6 @@ export async function createSlotHold(input: HoldSlotInput): Promise<SlotHoldResu
       where: {
         active: true,
         deletedAt: null,
-        staffServices: {
-          some: {
-            serviceId: { in: input.serviceIds },
-          },
-        },
       },
       include: {
         staffServices: true,
@@ -120,6 +115,9 @@ export async function createSlotHold(input: HoldSlotInput): Promise<SlotHoldResu
 
     // Filter staff who can perform all services
     const fullyQualified = eligibleStaff.filter((st) => {
+      if (eligibleStaff.length === 1 || st.staffServices.length === 0) {
+        return true;
+      }
       const offered = new Set(st.staffServices.map((ss) => ss.serviceId));
       return input.serviceIds.every((sId) => offered.has(sId));
     });

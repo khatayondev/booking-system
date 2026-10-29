@@ -26,7 +26,7 @@ export async function POST(
     const initResult = await provider.initialize({
       reference: paystackRef,
       amountPesewas: booking.balanceDuePesewas,
-      email: booking.customerEmail || `customer-${booking.reference.toLowerCase()}@aurabeauty.com`,
+      email: booking.customerEmail || `customer-${booking.reference.toLowerCase()}@beccascrown.gh`,
       currency: "GHS",
       callbackUrl: `${req.nextUrl.origin}/manage/${token}?payment=success&ref=${paystackRef}`,
       metadata: {

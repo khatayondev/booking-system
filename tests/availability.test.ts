@@ -16,6 +16,7 @@ import { AppError } from "../lib/api-response";
 describe("Prompt 9: Availability Engine & Slot Holds", () => {
   let staffAId: string;
   let staffBId: string;
+  let createdExtraStaffId: string | null = null;
   let serviceAId: string;
   let serviceBId: string;
   let addonAId: string;
@@ -23,13 +24,21 @@ describe("Prompt 9: Availability Engine & Slot Holds", () => {
 
   beforeAll(async () => {
     // 1. Fetch or create test staff members
-    const staffMembers = await prisma.staff.findMany({
+    let staffMembers = await prisma.staff.findMany({
       where: { active: true, deletedAt: null },
       take: 2,
     });
 
     if (staffMembers.length < 2) {
-      throw new Error("At least two active staff members required for tests");
+      const extraStaff = await prisma.staff.create({
+        data: {
+          name: "Test Secondary Stylist",
+          phone: "+233249876543",
+          active: true,
+        },
+      });
+      createdExtraStaffId = extraStaff.id;
+      staffMembers.push(extraStaff);
     }
 
     staffAId = staffMembers[0].id;
@@ -108,12 +117,35 @@ describe("Prompt 9: Availability Engine & Slot Holds", () => {
     await prisma.serviceAddon.deleteMany({
       where: { id: addonAId },
     });
-    await prisma.staffService.deleteMany({
-      where: { serviceId: { in: [serviceAId, serviceBId] } },
-    });
-    await prisma.service.deleteMany({
-      where: { id: { in: [serviceAId, serviceBId] } },
-    });
+    if (serviceAId && serviceBId) {
+      await prisma.staffService.deleteMany({
+        where: { serviceId: { in: [serviceAId, serviceBId] } },
+      });
+      await prisma.bookingItem.deleteMany({
+        where: { serviceId: { in: [serviceAId, serviceBId] } },
+      });
+      await prisma.service.deleteMany({
+        where: { id: { in: [serviceAId, serviceBId] } },
+      });
+    }
+
+    if (createdExtraStaffId) {
+      await prisma.bookingItem.deleteMany({
+        where: { booking: { staffId: createdExtraStaffId } },
+      });
+      await prisma.booking.deleteMany({
+        where: { staffId: createdExtraStaffId },
+      });
+      await prisma.staffSchedule.deleteMany({
+        where: { staffId: createdExtraStaffId },
+      });
+      await prisma.staffService.deleteMany({
+        where: { staffId: createdExtraStaffId },
+      });
+      await prisma.staff.delete({
+        where: { id: createdExtraStaffId },
+      }).catch(() => null);
+    }
 
     await prisma.$disconnect();
   });

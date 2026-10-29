@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { Crown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Gallery & Studio Looks | Aura Beauty Studio East Legon",
+  title: "Gallery & Studio Looks | Becca's Crown Beauty Vault East Legon",
   description:
     "Explore our lookbook: bridal transformations, Russian volume lash sets, couture evening gown rentals, and our modern Accra beauty salon.",
 };
@@ -38,7 +38,7 @@ export default function GalleryPage() {
     },
     {
       id: "look-4",
-      title: "Aura Studio Interior & Private Suites",
+      title: "Crown Studio Interior & Private Suites",
       category: "Studio",
       image: "/images/salon_interior_accra.jpg",
       description: "Frosted glass partitions, backlit arch mirrors, and private VIP bridal glam suites in East Legon.",
@@ -51,7 +51,7 @@ export default function GalleryPage() {
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
-          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+          <Crown className="w-3.5 h-3.5 text-amber-500" />
           <span>Lookbook & Inspiration</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-[#1E1E1E] tracking-tight">

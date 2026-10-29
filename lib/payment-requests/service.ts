@@ -168,7 +168,7 @@ export async function createPaymentRequest(
     try {
       const provider = getPaymentProvider();
       await provider.chargeMobileMoney({
-        email: booking.customer.email || `${customerPhone.replace("+", "")}@aurastudio.gh`,
+        email: booking.customer.email || `${customerPhone.replace("+", "")}@beccascrown.gh`,
         amountPesewas,
         phone: customerPhone,
         provider: toPaystackMomoProvider(input.momoProvider),
@@ -185,7 +185,7 @@ export async function createPaymentRequest(
   }
 
   // 11. Dispatch SMS with short link to customer
-  const smsMessage = `Aura Beauty Studio: Payment request of ${formatPesewas(
+  const smsMessage = `Becca's Crown: Payment request of ${formatPesewas(
     amountPesewas
   )} for booking ${booking.reference}. Pay securely: ${shortUrl}${
     input.message ? ` (${input.message})` : ""
@@ -195,7 +195,7 @@ export async function createPaymentRequest(
     await sendSms({
       recipient: customerPhone,
       message: smsMessage,
-      senderId: "AuraStudio",
+      senderId: "BeccasCrown",
     });
   } catch (err: unknown) {
     console.error("Failed to send payment request SMS:", err);
@@ -416,7 +416,7 @@ export async function payPaymentRequest(
   }
 
   if (pr.status === "EXPIRED" || pr.expiresAt < new Date()) {
-    throw new AppError("This payment request has expired. Please contact Aura Studio for a new link.", 400, "EXPIRED");
+    throw new AppError("This payment request has expired. Please contact Becca's Crown for a new link.", 400, "EXPIRED");
   }
 
   const paymentReference =
@@ -536,10 +536,10 @@ export async function payPaymentRequest(
   try {
     await sendSms({
       recipient: result.customerPhone,
-      message: `Aura Beauty Studio: Payment of ${formatPesewas(
+      message: `Becca's Crown: Payment of ${formatPesewas(
         pr.amountPesewas
       )} received for booking ${result.bookingReference}. Receipt #${result.receiptNumber}. Thank you!`,
-      senderId: "AuraStudio",
+      senderId: "BeccasCrown",
     });
   } catch (err: unknown) {
     console.error("Failed to send payment receipt SMS:", err);
@@ -702,7 +702,7 @@ export async function resendPaymentRequest(
   const shortUrl = `${baseUrl}/pay/r/${updated.shortCode}`;
 
   // Resend SMS
-  const smsMessage = `Aura Beauty Studio: Payment request of ${formatPesewas(
+  const smsMessage = `Becca's Crown: Payment request of ${formatPesewas(
     updated.amountPesewas
   )} for booking ${pr.booking.reference}. Pay securely: ${shortUrl}${
     updated.message ? ` (${updated.message})` : ""
@@ -712,7 +712,7 @@ export async function resendPaymentRequest(
     await sendSms({
       recipient: updated.phone,
       message: smsMessage,
-      senderId: "AuraStudio",
+      senderId: "BeccasCrown",
     });
   } catch (err: unknown) {
     console.error("Failed to resend SMS:", err);
@@ -723,7 +723,7 @@ export async function resendPaymentRequest(
     try {
       const provider = getPaymentProvider();
       await provider.chargeMobileMoney({
-        email: pr.booking.customer.email || `${updated.phone.replace("+", "")}@aurastudio.gh`,
+        email: pr.booking.customer.email || `${updated.phone.replace("+", "")}@beccascrown.gh`,
         amountPesewas: updated.amountPesewas,
         phone: updated.phone,
         provider: toPaystackMomoProvider(updated.momoProvider),

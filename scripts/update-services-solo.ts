@@ -136,6 +136,32 @@ const MENU: CategoryDef[] = [
       },
     ],
   },
+  {
+    name: "Makeup & Bridal Glam",
+    slug: "makeup",
+    description: "Flawless red-carpet glam, bridal beauty, and photo-ready transformations.",
+    services: [
+      {
+        name: "Bridal Soft Glam",
+        durationMin: 90,
+        pricePesewas: 55000, // GH₵ 550.00
+        description: "Skin-prep, HD waterproof foundation, custom lash clusters, and touch-up kit. (1 hour 30 mins)",
+      },
+    ],
+  },
+  {
+    name: "Hair Styling & Braids",
+    slug: "hair",
+    description: "Signature protective braids, knotless styles, and trendsetting extensions.",
+    services: [
+      {
+        name: "Goddess Knotless Braids (Mid-Back)",
+        durationMin: 180,
+        pricePesewas: 35000, // GH₵ 350.00
+        description: "Painless knotless technique with human hair curls attached. (3 hours)",
+      },
+    ],
+  },
 ];
 
 async function main() {
@@ -213,6 +239,17 @@ async function main() {
     },
     data: {
       active: false,
+    },
+  });
+
+  // Soft-delete test categories not in the MENU
+  const allNewCategorySlugs = MENU.map((c) => c.slug);
+  await prisma.serviceCategory.updateMany({
+    where: {
+      slug: { notIn: allNewCategorySlugs },
+    },
+    data: {
+      deletedAt: new Date(),
     },
   });
 

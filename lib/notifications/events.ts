@@ -50,7 +50,7 @@ export class NotificationEvents {
   async onBookingConfirmed(booking: BookingEventData) {
     const { dateFormatted, timeFormatted } = this.formatDateAndTime(booking.startUtc);
     const amountDue = formatPesewas(booking.balanceDuePesewas ?? (booking.totalPricePesewas - (booking.amountPaidPesewas || 0)));
-    const manageLink = `https://aurastudio.com/manage/${booking.reference}`;
+    const manageLink = `https://beccascrown.gh/manage/${booking.reference}`;
 
     const variables: TemplateVariables = {
       name: booking.customerName,
@@ -60,7 +60,7 @@ export class NotificationEvents {
       reference: booking.reference,
       amountDue,
       manageLink,
-      businessName: "Aura Beauty Studio",
+      businessName: "Becca's Crown Beauty Vault",
       staffName: booking.staffName || "Our Glamour Team",
     };
 
@@ -121,7 +121,7 @@ export class NotificationEvents {
     const amountPaid = formatPesewas(payment.amountPesewas);
     const remainingBalance = Math.max(0, booking.totalPricePesewas - ((booking.amountPaidPesewas || 0) + payment.amountPesewas));
     const amountDue = formatPesewas(remainingBalance);
-    const manageLink = `https://aurastudio.com/manage/${booking.reference}`;
+    const manageLink = `https://beccascrown.gh/manage/${booking.reference}`;
 
     const variables: TemplateVariables = {
       name: booking.customerName,
@@ -130,7 +130,7 @@ export class NotificationEvents {
       reference: booking.reference,
       service: booking.serviceName,
       manageLink,
-      businessName: "Aura Beauty Studio",
+      businessName: "Becca's Crown Beauty Vault",
     };
 
     const jobs = [];
@@ -168,7 +168,7 @@ export class NotificationEvents {
    */
   async onPaymentRequest(booking: BookingEventData, amountDuePesewas: number) {
     const amountDue = formatPesewas(amountDuePesewas);
-    const manageLink = `https://aurastudio.com/manage/${booking.reference}/pay`;
+    const manageLink = `https://beccascrown.gh/manage/${booking.reference}/pay`;
 
     const variables: TemplateVariables = {
       name: booking.customerName,
@@ -176,7 +176,7 @@ export class NotificationEvents {
       service: booking.serviceName,
       reference: booking.reference,
       manageLink,
-      businessName: "Aura Beauty Studio",
+      businessName: "Becca's Crown Beauty Vault",
     };
 
     const jobs = [];
@@ -214,7 +214,7 @@ export class NotificationEvents {
    */
   async onBookingRescheduled(booking: BookingEventData, newStartUtc: Date) {
     const { dateFormatted, timeFormatted } = this.formatDateAndTime(newStartUtc);
-    const manageLink = `https://aurastudio.com/manage/${booking.reference}`;
+    const manageLink = `https://beccascrown.gh/manage/${booking.reference}`;
     const amountDue = formatPesewas(booking.balanceDuePesewas ?? (booking.totalPricePesewas - (booking.amountPaidPesewas || 0)));
 
     const variables: TemplateVariables = {
@@ -225,7 +225,7 @@ export class NotificationEvents {
       service: booking.serviceName,
       manageLink,
       amountDue,
-      businessName: "Aura Beauty Studio",
+      businessName: "Becca's Crown Beauty Vault",
     };
 
     // 1. Reschedule reminders
@@ -291,7 +291,7 @@ export class NotificationEvents {
    */
   async onBookingCancelled(booking: BookingEventData, reason?: string) {
     const { dateFormatted, timeFormatted } = this.formatDateAndTime(booking.startUtc);
-    const manageLink = `https://aurastudio.com/manage/${booking.reference}`;
+    const manageLink = `https://beccascrown.gh/manage/${booking.reference}`;
 
     const variables: TemplateVariables = {
       name: booking.customerName,
@@ -300,7 +300,7 @@ export class NotificationEvents {
       date: dateFormatted,
       time: timeFormatted,
       manageLink,
-      businessName: "Aura Beauty Studio",
+      businessName: "Becca's Crown Beauty Vault",
     };
 
     // 1. Cancel pending reminder jobs
@@ -356,7 +356,7 @@ export class NotificationEvents {
    */
   async onRefundIssued(booking: BookingEventData, refundAmountPesewas: number) {
     const refundAmount = formatPesewas(refundAmountPesewas);
-    const manageLink = `https://aurastudio.com/manage/${booking.reference}`;
+    const manageLink = `https://beccascrown.gh/manage/${booking.reference}`;
 
     const variables: TemplateVariables = {
       name: booking.customerName,
@@ -364,7 +364,7 @@ export class NotificationEvents {
       reference: booking.reference,
       service: booking.serviceName,
       manageLink,
-      businessName: "Aura Beauty Studio",
+      businessName: "Becca's Crown Beauty Vault",
     };
 
     const jobs = [];
@@ -401,14 +401,14 @@ export class NotificationEvents {
    * Event: No-Show Follow-up
    */
   async onNoShowFollowup(booking: BookingEventData) {
-    const manageLink = `https://aurastudio.com/book`;
+    const manageLink = `https://beccascrown.gh/book`;
 
     const variables: TemplateVariables = {
       name: booking.customerName,
       service: booking.serviceName,
       reference: booking.reference,
       manageLink,
-      businessName: "Aura Beauty Studio",
+      businessName: "Becca's Crown Beauty Vault",
     };
 
     const jobs = [];

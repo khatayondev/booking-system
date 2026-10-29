@@ -15,7 +15,7 @@ export class ResendEmailProvider implements EmailProvider {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: options.from || "Aura Studio <notifications@aurastudio.com>",
+          from: options.from || "Becca's Crown Beauty Vault <notifications@beccascrown.gh>",
           to: [options.to],
           subject: options.subject,
           html: options.html,

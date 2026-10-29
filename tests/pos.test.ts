@@ -144,6 +144,40 @@ describe("Prompt 14: POS (Walk-ins and in-store checkout)", () => {
       expect(receipt.balanceDuePesewas).toBe(12000);
       expect(receipt.status).toBe("PARTIALLY_PAID");
     });
+
+    it("successfully processes checkout for walk-in guest with no customerId or phone provided", async () => {
+      const now = Date.now();
+      const uniqueOffset = Math.floor(Math.random() * 500000) + 10000;
+      const input: PosCheckoutInput = {
+        // No customerId and no customer specified (anonymous walk-in)
+        staffId: testStaffId,
+        isWalkIn: true,
+        scheduledStartUtc: new Date(now + uniqueOffset * 60000).toISOString(),
+        items: [
+          {
+            serviceId: testServiceId,
+            serviceName: "Walk-in Quick Service",
+            pricePesewas: 14000,
+            durationMin: 60,
+          },
+        ],
+        payments: [
+          {
+            method: "CASH",
+            amountPesewas: 14000,
+            tenderedPesewas: 14000,
+          },
+        ],
+      };
+
+      const receipt = await processPosCheckout(input, ownerUser);
+
+      expect(receipt.totalPesewas).toBe(14000);
+      expect(receipt.amountPaidPesewas).toBe(14000);
+      expect(receipt.status).toBe("PAID");
+      expect(receipt.customerName).toBe("Walk-in Guest");
+      expect(receipt.customerId).toBeDefined();
+    });
   });
 
   describe("2. Role-Based Discount Limits & Reason Enforcement", () => {

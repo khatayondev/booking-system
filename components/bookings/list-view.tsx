@@ -52,7 +52,9 @@ export function BookingListView({
               <th className="py-3 px-3">Reference</th>
               <th className="py-3 px-3">Client</th>
               <th className="py-3 px-3">Services</th>
+              {/* Solo direct shop mode: Stylist column omitted
               <th className="py-3 px-3">Stylist</th>
+              */}
               <th className="py-3 px-3">Date & Time</th>
               <th className="py-3 px-3">Payment</th>
               <th className="py-3 px-3">Status</th>
@@ -110,10 +112,11 @@ export function BookingListView({
                     </div>
                   </td>
 
-                  {/* Stylist */}
+                  {/* Solo direct shop mode: Stylist column omitted
                   <td className="py-3.5 px-3">
                     <span className="font-bold text-zinc-800">{b.staff.name}</span>
                   </td>
+                  */}
 
                   {/* Date & Time */}
                   <td className="py-3.5 px-3 whitespace-nowrap">

@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     const initResult = await provider.initialize({
       reference: uniqueRef,
       amountPesewas: amountToPayPesewas,
-      email: booking.customer.email || `customer-${booking.customer.phone.replace("+", "")}@aurastudio.gh`,
+      email: booking.customer.email || `customer-${booking.customer.phone.replace("+", "")}@beccascrown.gh`,
       currency: "GHS",
       channels: ["card", "mobile_money"],
       metadata: {

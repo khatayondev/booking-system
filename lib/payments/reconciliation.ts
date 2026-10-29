@@ -189,7 +189,7 @@ export async function reconcilePaymentTransaction(
         try {
           await sendSms({
             recipient: customerPhone,
-            message: `Aura Beauty Studio: Your booking (${bookingReference}) has been confirmed! Payment received: ${formatPesewas(
+            message: `Becca's Crown Beauty Vault: Your booking (${bookingReference}) has been confirmed! Payment received: ${formatPesewas(
               payment.amountPesewas
             )}. We look forward to welcoming you to our East Legon studio.`,
           });

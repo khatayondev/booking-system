@@ -16,13 +16,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Aura Beauty & Dress Studio | Booking, Payments & POS",
-  description: "Premier beauty, makeup, lash tech, hair, and dress services in Accra, Ghana.",
+  title: "Becca's Crown Beauty Vault | Booking, Payments & POS",
+  description: "Premier beauty, makeup, lash artistry, hair, and aesthetics in Accra, Ghana.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Aura Studio",
+    title: "Becca's Crown",
   },
   icons: {
     icon: "/favicon.ico",

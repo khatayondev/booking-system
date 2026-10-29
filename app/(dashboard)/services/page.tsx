@@ -13,7 +13,6 @@ import {
   Scissors,
   Plus,
   Clock,
-  Sparkles,
   Edit2,
   Trash2,
   CheckCircle2,
@@ -234,7 +233,7 @@ export default function ServicesPage() {
         depositType: svcDepositType,
         depositValue,
         active: svcActive,
-        staffIds: svcSelectedStaff,
+        staffIds: svcSelectedStaff.length > 0 ? svcSelectedStaff : staffMembers.map((s) => s.id),
       };
 
       const url = editingService
@@ -632,7 +631,7 @@ export default function ServicesPage() {
                             </div>
                           </div>
 
-                          {/* Assigned Staff */}
+                          {/* Solo direct shop mode: Assigned staff tag omitted
                           <div className="mt-3.5 flex items-center gap-1.5">
                             <span className="text-[10px] text-[#A1A1AA]">Staff:</span>
                             {svc.staffServices.length > 0 ? (
@@ -652,13 +651,14 @@ export default function ServicesPage() {
                               </span>
                             )}
                           </div>
+                          */}
 
                           {/* Addons List */}
                           {svc.addons.length > 0 && (
                             <div className="mt-4 pt-3 border-t border-[#F4F4F6]">
                               <div className="flex items-center justify-between text-[11px] font-bold text-[#1E1E1E] mb-1.5">
                                 <span className="flex items-center gap-1">
-                                  <Sparkles className="w-3 h-3 text-[#71717A]" />
+                                  <Plus className="w-3 h-3 text-[#71717A]" />
                                   <span>Add-ons ({svc.addons.length})</span>
                                 </span>
                               </div>
@@ -895,7 +895,7 @@ export default function ServicesPage() {
             )}
           </div>
 
-          {/* Staff Assignment */}
+          {/* Solo direct shop mode: Staff Assignment picker omitted
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <Label className="mb-0">Who can perform this service?</Label>
@@ -929,6 +929,7 @@ export default function ServicesPage() {
               })}
             </div>
           </div>
+          */}
 
           {/* Active Switch */}
           <div className="flex items-center justify-between p-3 rounded-2xl bg-[#F4F4F6]">

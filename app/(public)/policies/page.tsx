@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { ShieldCheck, Clock, RefreshCw, AlertCircle, Sparkles, ArrowRight } from "lucide-react";
+import { ShieldCheck, Clock, RefreshCw, AlertCircle, Crown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Policies & Terms | Aura Beauty Studio East Legon",
+  title: "Policies & Terms | Becca's Crown Beauty Vault East Legon",
   description:
     "Review our transparent studio policies: 24h cancellations, rescheduling, deposit security, punctuality, and dress rental care in Accra, Ghana.",
 };
@@ -27,7 +27,7 @@ export default function PoliciesPage() {
       desc: "All reservations require a deposit (or full payment) to lock in your artist and time slot. When you select a slot in our booking wizard, it is held for 10 minutes while you complete payment. Payments are processed securely via Paystack with instant MTN MoMo, Telecel Cash, and Card verification.",
     },
     {
-      icon: Sparkles,
+      icon: Crown,
       title: "Hygiene & Sanitation Standards",
       desc: "Your health is paramount. All metal lash and brow implements undergo hospital-grade sterilization between clients. We use disposable spoolies, applicators, and sanitize all studio chairs and high-touch surfaces continuously.",
     },
@@ -37,7 +37,7 @@ export default function PoliciesPage() {
       desc: "Gowns are rented for a standard 3-day window. Professional dry cleaning is included in the rental fee—do not attempt to clean or iron couture garments at home. A refundable security deposit is inspected upon return.",
     },
     {
-      icon: Sparkles,
+      icon: Crown,
       title: "No Account Required",
       desc: "We prioritize your privacy and speed. You will never be asked to create a username, memorize a password, or download an application. Your booking details and SMS notifications are tied directly to your Ghana phone number.",
     },

@@ -15,7 +15,7 @@ import {
   Search,
   Plus,
   Menu,
-  Sparkles,
+  Crown,
   ShieldCheck,
   Palette,
   ChevronDown,
@@ -201,7 +201,8 @@ export function AppShell({
       items: [
         { label: "Users & Roles", href: "/dashboard/users", icon: <ShieldCheck className="w-4 h-4" /> },
         { label: "Services & Pricing", href: "/services", icon: <Scissors className="w-4 h-4" /> },
-        { label: "Staff & Shifts", href: "/staff", icon: <Users className="w-4 h-4" /> },
+        // Solo direct shop mode: Stylist management hidden for direct operation
+        // { label: "Staff & Shifts", href: "/staff", icon: <Users className="w-4 h-4" /> },
         { label: "Design System", href: "/design", icon: <Palette className="w-4 h-4" /> },
       ],
     },
@@ -220,11 +221,11 @@ export function AppShell({
         {/* Brand */}
         <div className="flex items-center gap-2.5 px-3 py-4 mb-4">
           <div className="w-9 h-9 rounded-2xl bg-[#1E1E1E] text-white flex items-center justify-center font-bold text-sm shadow-sm">
-            <Sparkles className="w-4 h-4" />
+            <Crown className="w-4 h-4 text-amber-300" />
           </div>
           <div>
-            <h1 className="text-sm font-extrabold text-[#1E1E1E] tracking-tight">AURA STUDIO</h1>
-            <p className="text-[10px] text-[#71717A] uppercase tracking-wider">Accra, Ghana</p>
+            <h1 className="text-sm font-extrabold text-[#1E1E1E] tracking-tight leading-tight">BECCA&apos;S CROWN</h1>
+            <p className="text-[10px] text-[#71717A] uppercase tracking-wider">Beauty Vault • Accra</p>
           </div>
         </div>
 
@@ -470,7 +471,7 @@ export function AppShell({
           <Drawer
             isOpen={mobileDrawerOpen}
             onClose={() => setMobileDrawerOpen(false)}
-            title="Aura Beauty Studio"
+            title="Becca's Crown Beauty Vault"
             side="left"
           >
             {sidebarContent}
@@ -499,7 +500,7 @@ export function AppShell({
             <Search className="w-4 h-4 text-[#71717A] absolute left-3.5 top-3.5 pointer-events-none" />
             <Input
               autoFocus
-              placeholder="Type customer name, +233 phone, or AURA-2026..."
+              placeholder="Type customer name, +233 phone, or BK-..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 h-11 text-xs rounded-2xl"

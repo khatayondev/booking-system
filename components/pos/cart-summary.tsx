@@ -8,7 +8,7 @@ import {
   Zap,
   Calendar,
   CreditCard,
-  Sparkles,
+  Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label, Input } from "@/components/ui/controls";
@@ -100,9 +100,9 @@ export function CartSummary({
           )}
         </div>
 
-        {/* Staff & Timing Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-2xl border border-zinc-100 dark:border-zinc-800/60">
-          {/* Staff selection */}
+        {/* Timing Controls (Solo shop mode: Stylist selection omitted) */}
+        <div className="p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-2xl border border-zinc-100 dark:border-zinc-800/60">
+          {/* Solo direct shop mode: Assigned Staff selector omitted
           <div>
             <Label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block mb-1">
               Assigned Staff
@@ -119,6 +119,7 @@ export function CartSummary({
               ))}
             </select>
           </div>
+          */}
 
           {/* Walk-in vs Scheduled */}
           <div>
@@ -198,7 +199,7 @@ export function CartSummary({
                           key={aIdx}
                           className="text-[10px] text-zinc-600 dark:text-zinc-400 flex items-center gap-1 pl-1"
                         >
-                          <Sparkles className="w-2.5 h-2.5 text-amber-500" />
+                          <Plus className="w-2.5 h-2.5 text-amber-500" />
                           <span>{addon.name} (+{formatPesewas(addon.pricePesewas)})</span>
                         </div>
                       ))}

@@ -1,5 +1,5 @@
-// Aura Studio - Service Worker for PWA Offline Caching
-const CACHE_NAME = "aura-studio-cache-v1";
+// Becca's Crown Beauty Vault - Service Worker for PWA Offline Caching
+const CACHE_NAME = "beccascrown-cache-v1";
 const OFFLINE_URLS = ["/favicon.ico"];
 
 self.addEventListener("install", (event) => {
@@ -36,7 +36,7 @@ self.addEventListener("fetch", (event) => {
     fetch(event.request).catch(() => {
       return caches.match(event.request).then((response) => {
         if (response) return response;
-        return new Response("Offline - Aura Studio", {
+        return new Response("Offline - Becca's Crown Beauty Vault", {
           status: 503,
           statusText: "Service Unavailable",
           headers: new Headers({ "Content-Type": "text/plain" }),

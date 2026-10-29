@@ -109,13 +109,16 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Text search (Customer Name, Phone, or Booking Reference)
+    // Text search (Customer Name, Phone, Email, Booking Reference, Service Name, Notes)
     if (searchParam && searchParam.trim()) {
       const q = searchParam.trim();
       where.OR = [
         { reference: { contains: q, mode: "insensitive" } },
         { customer: { name: { contains: q, mode: "insensitive" } } },
         { customer: { phone: { contains: q } } },
+        { customer: { email: { contains: q, mode: "insensitive" } } },
+        { items: { some: { service: { name: { contains: q, mode: "insensitive" } } } } },
+        { notes: { contains: q, mode: "insensitive" } },
       ];
     }
 

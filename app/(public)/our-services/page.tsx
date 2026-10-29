@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { Sparkles, Clock, ArrowRight, Tag } from "lucide-react";
+import { Crown, Clock, ArrowRight, Tag } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { formatPesewas } from "@/lib/money";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Services & Rates | Aura Beauty Studio East Legon",
+  title: "Services & Rates | Becca's Crown Beauty Vault East Legon",
   description:
     "Explore our full beauty menu: bridal makeup, Russian volume lashes, luxury hairstyling, braids and couture dress rentals. View transparent pricing in GH₵.",
 };
@@ -179,7 +179,7 @@ async function OurServicesList({
         services: [
           {
             id: "svc-silk-press",
-            name: "Aura Signature Silk Press & Steam Treatment",
+            name: "Crown Signature Silk Press & Steam Treatment",
             description: "Deep clarifying wash, protein infusion steam treatment, precision trim and glass finish.",
             durationMin: 90,
             bufferMin: 15,
@@ -204,14 +204,14 @@ async function OurServicesList({
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
-          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+          <Crown className="w-3.5 h-3.5 text-amber-500" />
           <span>Transparent Pricing • Ghana Cedi</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-[#1E1E1E] tracking-tight">
           Services & Add-ons Menu
         </h1>
         <p className="text-xs sm:text-sm text-[#71717A] leading-relaxed">
-          Select any service below to begin your booking. Choose optional add-ons, pick your preferred stylist, and hold your slot in real time.
+          Select any service below to begin your booking. Choose optional add-ons, pick your preferred date and time, and hold your slot in real time.
         </p>
       </div>
 
@@ -372,7 +372,7 @@ async function OurServicesList({
         </p>
         <Link href="/book">
           <Button variant="blackPill" size="md" className="gap-2 text-xs font-bold shadow-md cursor-pointer">
-            <Sparkles className="w-4 h-4 text-amber-300" />
+            <Crown className="w-4 h-4 text-amber-300" />
             <span>Launch Multi-Service Wizard</span>
           </Button>
         </Link>

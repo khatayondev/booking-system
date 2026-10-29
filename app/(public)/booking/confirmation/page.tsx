@@ -152,10 +152,12 @@ function BookingConfirmationContent() {
               <span className="text-[#71717A]">Phone:</span>
               <span className="font-bold text-[#1E1E1E]">{b.customerPhone}</span>
             </div>
+            {/* Solo direct shop mode: Stylist row omitted
             <div className="flex justify-between border-b border-black/5 pb-2">
               <span className="text-[#71717A]">Assigned Stylist:</span>
               <span className="font-bold text-[#1E1E1E]">{b.staffName}</span>
             </div>
+            */}
             <div className="flex justify-between border-b border-black/5 pb-2">
               <span className="text-[#71717A]">Date & Time:</span>
               <span className="font-extrabold text-[#1E1E1E]">
@@ -229,7 +231,7 @@ function BookingConfirmationContent() {
           </p>
           <p className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-[#1E1E1E] shrink-0" />
-            <span>Aura Beauty Studio: Lagos Avenue, East Legon, Accra.</span>
+            <span>Becca&apos;s Crown Beauty Vault: Lagos Avenue, East Legon, Accra.</span>
           </p>
           <p className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-[#1E1E1E] shrink-0" />

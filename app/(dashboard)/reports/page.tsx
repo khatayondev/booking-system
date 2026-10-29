@@ -499,7 +499,8 @@ function ReportsContent() {
             [
               { id: "overview", label: "Executive Overview & Timeline" },
               { id: "services", label: "Services & Top Drivers" },
-              { id: "staff", label: "Staff Performance & Utilisation" },
+              // Solo direct shop mode: Staff tab omitted
+              // { id: "staff", label: "Staff Performance & Utilisation" },
               { id: "payments", label: "Payment Channels & Ledger" },
             ] as const
           ).map((tab) => (

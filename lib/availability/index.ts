@@ -130,11 +130,6 @@ export async function getAvailabilitySlots(
       ...staffFilter,
       active: true,
       deletedAt: null,
-      staffServices: {
-        some: {
-          serviceId: { in: input.serviceIds },
-        },
-      },
     },
     include: {
       staffServices: true,
@@ -189,7 +184,11 @@ export async function getAvailabilitySlots(
   });
 
   // Filter staff who offer all selected services
+  // In solo shop mode (or if a staff member has no specific service restrictions), the stylist provides all studio services.
   const fullyQualifiedStaff = staffCandidates.filter((staff) => {
+    if (staffCandidates.length === 1 || staff.staffServices.length === 0) {
+      return true;
+    }
     const offered = new Set(staff.staffServices.map((ss) => ss.serviceId));
     return input.serviceIds.every((sId) => offered.has(sId));
   });

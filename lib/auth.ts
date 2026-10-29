@@ -69,7 +69,7 @@ export function hashToken(token: string): string {
  */
 export function generateTotpSecret(email: string): { secret: string; uri: string } {
   const totp = new OTPAuth.TOTP({
-    issuer: "Aura Beauty Studio",
+    issuer: "Becca's Crown Beauty Vault",
     label: email,
     algorithm: "SHA1",
     digits: 6,
@@ -87,7 +87,7 @@ export function generateTotpSecret(email: string): { secret: string; uri: string
 export function verifyTotpToken(token: string, secret: string): boolean {
   try {
     const totp = new OTPAuth.TOTP({
-      issuer: "Aura Beauty Studio",
+      issuer: "Becca's Crown Beauty Vault",
       algorithm: "SHA1",
       digits: 6,
       period: 30,

@@ -12,7 +12,7 @@ import {
   ArrowRight,
   ExternalLink,
   MessageSquare,
-  Sparkles,
+  Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -54,6 +54,10 @@ export function PublicPaymentRequestClient({ token }: { token: string }) {
       .then((res) => res.json())
       .then((json) => {
         if (!isMounted) return;
+        if (json.success && json.data?.redirectUrl) {
+          window.location.href = json.data.redirectUrl;
+          return;
+        }
         if (json.success && json.data?.paymentRequest) {
           const reqData: PublicPaymentRequestView = json.data.paymentRequest;
           setRequest(reqData);
@@ -170,7 +174,7 @@ export function PublicPaymentRequestClient({ token }: { token: string }) {
               href="/"
               className="inline-flex items-center gap-1.5 text-xs text-zinc-300 hover:text-white underline underline-offset-4"
             >
-              Return to Aura Studio
+              Return to Becca&apos;s Crown
             </Link>
           </div>
         </Card>
@@ -257,7 +261,7 @@ export function PublicPaymentRequestClient({ token }: { token: string }) {
           </h1>
           <p className="text-xs text-zinc-400 leading-relaxed">
             This payment request is no longer active. If you still have an outstanding balance on booking{" "}
-            <strong className="text-white">{request.bookingReference}</strong>, please contact Aura Studio or
+            <strong className="text-white">{request.bookingReference}</strong>, please contact Becca&apos;s Crown or
             visit your private booking page to request a new link.
           </p>
           <div className="pt-2">
@@ -280,8 +284,8 @@ export function PublicPaymentRequestClient({ token }: { token: string }) {
         {/* Salon Branding Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] font-semibold text-zinc-300 tracking-wide">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Aura Studio Accra • Secure Checkout</span>
+            <Crown className="w-3.5 h-3.5 text-amber-400" />
+            <span>Becca&apos;s Crown Beauty Vault • Secure Checkout</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
             Complete Your Payment

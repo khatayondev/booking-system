@@ -80,7 +80,7 @@ class SentryService {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-Sentry-Auth": `Sentry sentry_version=7, sentry_client=aura-studio/1.0, sentry_key=${key}`,
+            "X-Sentry-Auth": `Sentry sentry_version=7, sentry_client=beccas-crown/1.0, sentry_key=${key}`,
           },
           body: JSON.stringify(body),
         }).catch(() => {

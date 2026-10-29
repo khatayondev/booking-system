@@ -275,8 +275,8 @@ export async function sendLookupOtp(reference: string, phone: string, clientIp: 
   try {
     await sendSms({
       recipient: normPhone,
-      message: `Your Aura Beauty Studio self-service verification code is ${code}. It expires in 10 minutes.`,
-      senderId: "AURA STUDIO",
+      message: `Your Becca's Crown Beauty Vault self-service verification code is ${code}. It expires in 10 minutes.`,
+      senderId: "BeccasCrown",
     });
   } catch (err) {
     logger.warn(`Failed to send SMS OTP to ${normPhone}: ${err}`);

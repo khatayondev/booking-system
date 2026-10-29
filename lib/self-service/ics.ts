@@ -46,15 +46,15 @@ export function generateIcsCalendar(options: IcsCalendarOptions): string {
   const dtStamp = formatIcsDate(now);
   const dtStart = formatIcsDate(options.startUtc);
   const dtEnd = formatIcsDate(options.endUtc);
-  const uid = `booking-${options.reference}@aurastudio.com`;
+  const uid = `booking-${options.reference}@beccascrown.gh`;
   const location = options.location || "14 Senchi Street, Airport Residential Area, Accra, Ghana";
-  const organizerName = options.organizerName || "Aura Beauty Studio";
-  const organizerEmail = options.organizerEmail || "hello@aurastudio.com";
+  const organizerName = options.organizerName || "Becca's Crown Beauty Vault";
+  const organizerEmail = options.organizerEmail || "hello@beccascrown.gh";
 
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Aura Beauty Studio//Ghana Booking System//EN",
+    "PRODID:-//Becca's Crown Beauty Vault//Ghana Booking System//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:REQUEST",
     "BEGIN:VEVENT",

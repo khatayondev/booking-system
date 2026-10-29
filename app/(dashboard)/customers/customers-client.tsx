@@ -6,7 +6,7 @@ import {
   Search,
   Plus,
   Download,
-  Sparkles,
+  Crown,
   HeartHandshake,
   AlertTriangle,
   RefreshCw,
@@ -107,7 +107,7 @@ export function CustomersClient() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `aura-customers-${new Date().toISOString().split("T")[0]}.csv`;
+      a.download = `beccascrown-customers-${new Date().toISOString().split("T")[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -182,7 +182,7 @@ export function CustomersClient() {
           <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 shadow-md">
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs font-medium text-amber-400/90">VIP Clients</span>
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <Crown className="w-3.5 h-3.5 text-amber-400" />
             </div>
             <div className="text-2xl font-bold text-amber-300">{vipCount}</div>
           </div>

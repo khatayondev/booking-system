@@ -12,7 +12,7 @@ import {
   CheckCircle2,
   AlertCircle,
   HelpCircle,
-  Sparkles,
+  Plus,
   RefreshCw,
 } from "lucide-react";
 
@@ -47,12 +47,12 @@ const SAMPLE_VARS = {
   service: "Bridal Soft Glam",
   date: "14 Nov 2026",
   time: "10:00 AM",
-  reference: "AURA-2026-884",
-  manageLink: "https://aurastudio.com/manage/AURA-2026-884",
+  reference: "BK-2026-884",
+  manageLink: "https://beccascrown.gh/manage/BK-2026-884",
   amountDue: "GH₵ 150.00",
   amountPaid: "GH₵ 300.00",
   refundAmount: "GH₵ 300.00",
-  businessName: "Aura Beauty Studio",
+  businessName: "Becca's Crown Beauty Vault",
   staffName: "Jessica Kyei",
 };
 
@@ -324,7 +324,7 @@ export function NotificationTemplateEditor({ isManagerOrAbove }: { isManagerOrAb
               {/* Dynamic Variables Chips */}
               <div>
                 <Label className="text-[11px] text-[#71717A] flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-amber-500" />
+                  <Plus className="w-3 h-3 text-amber-500" />
                   <span>Insert Variable (Click to add):</span>
                 </Label>
                 <div className="flex flex-wrap gap-1.5 mt-1.5">
