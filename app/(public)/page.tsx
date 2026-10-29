@@ -124,8 +124,8 @@ export default function CustomerPublicPage() {
       {/* =========================================================================
           HERO SECTION (Full-Width with Thick White Outline & Navbar directly on Hero Image)
       ========================================================================= */}
-      <section className="w-full p-2 sm:p-3 md:p-4 bg-[#141210]">
-        <div className="relative w-full rounded-[28px] sm:rounded-[36px] md:rounded-[44px] border-[6px] sm:border-[10px] md:border-[14px] border-white overflow-hidden shadow-2xl bg-zinc-950 flex flex-col justify-between min-h-[640px] sm:min-h-[720px] lg:min-h-[800px]">
+      <section className="w-full px-2 sm:px-3 md:px-4 pb-2 sm:pb-3 md:pb-4 pt-0 bg-[#141210]">
+        <div className="relative w-full rounded-t-none rounded-b-[28px] sm:rounded-b-[36px] md:rounded-b-[44px] border-[6px] sm:border-[10px] md:border-[14px] border-t-0 border-white overflow-hidden shadow-2xl bg-zinc-950 flex flex-col justify-between min-h-[640px] sm:min-h-[720px] lg:min-h-[800px]">
           {/* Panoramic Ambient Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
