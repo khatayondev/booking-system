@@ -21,7 +21,7 @@ export function PublicNavbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#141210]/95 backdrop-blur-md border-b border-white/10 text-white shadow-xl transition-all">
+    <header className="sticky top-0 z-40 bg-[#141210]/95 backdrop-blur-md text-white shadow-xl transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex items-center justify-between gap-4">
         {/* Brand Logo - Exact same styling as Homepage */}
         <Link href="/" className="flex items-center gap-3 group">
@@ -38,18 +38,18 @@ export function PublicNavbar() {
           </div>
         </Link>
 
-        {/* Center Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-xs font-semibold">
+        {/* Center Desktop Navigation Links in Floating Capsules */}
+        <nav className="hidden md:flex items-center gap-2 lg:gap-3 text-xs font-semibold">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`transition-colors py-1 ${
+                className={`px-4 py-2 rounded-full backdrop-blur-md transition-all duration-200 shadow-xs flex items-center justify-center ${
                   isActive
-                    ? "text-amber-300 font-bold border-b-2 border-amber-300"
-                    : "text-zinc-300 hover:text-white"
+                    ? "bg-white text-zinc-950 font-bold shadow-md scale-105 border border-white"
+                    : "bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/15 hover:scale-105 active:scale-95"
                 }`}
               >
                 {link.label}
@@ -60,7 +60,7 @@ export function PublicNavbar() {
 
         {/* Right Side: Currency, Book Button & Staff Portal */}
         <div className="flex items-center gap-2.5 sm:gap-3">
-          <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] font-bold text-white backdrop-blur-md">
+          <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-[10px] font-bold text-white backdrop-blur-md">
             <span>🇬🇭</span>
             <span>GHS (GH₵)</span>
           </div>
@@ -86,52 +86,64 @@ export function PublicNavbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation Strip (Obsidian Dark) */}
-      <div className="md:hidden border-t border-white/10 bg-[#141210]/95 px-4 py-2.5 flex items-center justify-around text-[11px] font-semibold text-zinc-300 overflow-x-auto">
+      {/* Mobile Navigation Floating Capsules */}
+      <div className="md:hidden bg-[#141210]/95 px-4 py-2.5 flex items-center gap-2 text-[11px] font-semibold overflow-x-auto scrollbar-none">
         <Link
           href="/"
-          className={`whitespace-nowrap px-1.5 py-0.5 rounded-full ${
-            pathname === "/" ? "text-amber-300 font-bold bg-white/10" : "hover:text-white"
+          className={`whitespace-nowrap px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md ${
+            pathname === "/"
+              ? "bg-white text-zinc-950 font-bold shadow-xs"
+              : "bg-white/10 text-white/90 hover:text-white border border-white/15"
           }`}
         >
           Home
         </Link>
         <Link
           href="/our-services"
-          className={`whitespace-nowrap px-1.5 py-0.5 rounded-full ${
-            pathname === "/our-services" ? "text-amber-300 font-bold bg-white/10" : "hover:text-white"
+          className={`whitespace-nowrap px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md ${
+            pathname === "/our-services"
+              ? "bg-white text-zinc-950 font-bold shadow-xs"
+              : "bg-white/10 text-white/90 hover:text-white border border-white/15"
           }`}
         >
           Services
         </Link>
         <Link
           href="/book"
-          className={`whitespace-nowrap px-1.5 py-0.5 rounded-full ${
-            pathname === "/book" ? "text-amber-300 font-bold bg-white/10" : "hover:text-white"
+          className={`whitespace-nowrap px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md ${
+            pathname === "/book"
+              ? "bg-white text-zinc-950 font-bold shadow-xs"
+              : "bg-white/10 text-white/90 hover:text-white border border-white/15"
           }`}
         >
           Book
         </Link>
         <Link
           href="/gallery"
-          className={`whitespace-nowrap px-1.5 py-0.5 rounded-full ${
-            pathname === "/gallery" ? "text-amber-300 font-bold bg-white/10" : "hover:text-white"
+          className={`whitespace-nowrap px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md ${
+            pathname === "/gallery"
+              ? "bg-white text-zinc-950 font-bold shadow-xs"
+              : "bg-white/10 text-white/90 hover:text-white border border-white/15"
           }`}
         >
           Lookbook
         </Link>
         <Link
           href="/policies"
-          className={`whitespace-nowrap px-1.5 py-0.5 rounded-full ${
-            pathname === "/policies" ? "text-amber-300 font-bold bg-white/10" : "hover:text-white"
+          className={`whitespace-nowrap px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md ${
+            pathname === "/policies"
+              ? "bg-white text-zinc-950 font-bold shadow-xs"
+              : "bg-white/10 text-white/90 hover:text-white border border-white/15"
           }`}
         >
           Policies
         </Link>
         <Link
           href="/contact"
-          className={`whitespace-nowrap px-1.5 py-0.5 rounded-full ${
-            pathname === "/contact" ? "text-amber-300 font-bold bg-white/10" : "hover:text-white"
+          className={`whitespace-nowrap px-3.5 py-1.5 rounded-full transition-all backdrop-blur-md ${
+            pathname === "/contact"
+              ? "bg-white text-zinc-950 font-bold shadow-xs"
+              : "bg-white/10 text-white/90 hover:text-white border border-white/15"
           }`}
         >
           Contact

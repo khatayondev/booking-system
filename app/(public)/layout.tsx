@@ -74,7 +74,7 @@ export default function PublicSiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-[#18181B] flex flex-col justify-between selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-white text-[#18181B] flex flex-col justify-between selection:bg-black selection:text-white">
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"

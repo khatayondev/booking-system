@@ -121,12 +121,12 @@ export default function CustomerPublicPage() {
   };
 
   return (
-    <div className="bg-[#FAF9F6] text-[#18181B] selection:bg-black selection:text-white pb-12">
+    <div className="bg-white text-[#18181B] selection:bg-black selection:text-white pb-12">
       {/* =========================================================================
-          HERO SECTION (Full-Width with Thick White Outline & Navbar directly on Hero Image)
+          HERO SECTION (Full-Width, Flush Top, No White Outline, Floating Capsule Navbar)
       ========================================================================= */}
-      <section className="w-full px-2 sm:px-3 md:px-4 pb-2 sm:pb-3 md:pb-4 pt-0 bg-[#FAF9F6]">
-        <div className="relative w-full rounded-t-none rounded-b-[28px] sm:rounded-b-[36px] md:rounded-b-[44px] border-x-[6px] sm:border-x-[10px] md:border-x-[14px] border-b-[6px] sm:border-b-[10px] md:border-b-[14px] border-t-0 border-white overflow-hidden shadow-2xl bg-zinc-950 flex flex-col justify-between min-h-[640px] sm:min-h-[720px] lg:min-h-[800px]">
+      <section className="w-full p-0 bg-white">
+        <div className="relative w-full rounded-t-none rounded-b-[32px] sm:rounded-b-[44px] lg:rounded-b-[56px] overflow-hidden shadow-2xl bg-zinc-950 flex flex-col justify-between min-h-[640px] sm:min-h-[720px] lg:min-h-[800px]">
           {/* Panoramic Ambient Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
@@ -142,9 +142,9 @@ export default function CustomerPublicPage() {
           </div>
 
           {/* ===================================================================
-              NAVBAR ON TOP OF HERO IMAGE (Integrated at Top of Card with White Outline)
+              NAVBAR ON TOP OF HERO IMAGE (Floating Capsules, No Dividing Line)
           =================================================================== */}
-          <div className="relative z-20 w-full px-5 sm:px-8 lg:px-12 pt-5 sm:pt-6 pb-4 border-b border-white/15 border-t-0">
+          <div className="relative z-20 w-full px-5 sm:px-8 lg:px-12 pt-5 sm:pt-6 pb-2">
             <div className="flex items-center justify-between gap-4">
               {/* Brand Logo */}
               <Link href="/" className="flex items-center gap-3 group">
@@ -161,25 +161,37 @@ export default function CustomerPublicPage() {
                 </div>
               </Link>
 
-              {/* Center Navigation Links (Matching Models, Our Mission, Locations in Reference) */}
-              <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-white/85">
-                <Link href="/our-services" className="hover:text-white transition-colors">
+              {/* Center Navigation Links in Floating Capsules */}
+              <nav className="hidden md:flex items-center gap-2 lg:gap-3 text-xs font-semibold">
+                <Link
+                  href="/our-services"
+                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white backdrop-blur-md border border-white/15 shadow-xs transition-all hover:scale-105 active:scale-95"
+                >
                   Services & Menu
                 </Link>
-                <Link href="/gallery" className="hover:text-white transition-colors">
+                <Link
+                  href="/gallery"
+                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white backdrop-blur-md border border-white/15 shadow-xs transition-all hover:scale-105 active:scale-95"
+                >
                   Lookbook
                 </Link>
-                <Link href="/policies" className="hover:text-white transition-colors">
+                <Link
+                  href="/policies"
+                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white backdrop-blur-md border border-white/15 shadow-xs transition-all hover:scale-105 active:scale-95"
+                >
                   Policies
                 </Link>
-                <Link href="/contact" className="hover:text-white transition-colors">
+                <Link
+                  href="/contact"
+                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white backdrop-blur-md border border-white/15 shadow-xs transition-all hover:scale-105 active:scale-95"
+                >
                   Contact
                 </Link>
               </nav>
 
               {/* Right Side: Currency & Staff Portal */}
               <div className="flex items-center gap-3">
-                <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] font-bold text-white backdrop-blur-md">
+                <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-[10px] font-bold text-white backdrop-blur-md">
                   <span>🇬🇭</span>
                   <span>GHS (GH₵)</span>
                 </div>
@@ -192,6 +204,40 @@ export default function CustomerPublicPage() {
                   </button>
                 </Link>
               </div>
+            </div>
+
+            {/* Mobile Floating Capsule Navigation */}
+            <div className="md:hidden flex items-center gap-2 pt-3 pb-1 overflow-x-auto scrollbar-none">
+              <Link
+                href="/our-services"
+                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold backdrop-blur-md border border-white/15 shadow-xs transition-all active:scale-95"
+              >
+                Services
+              </Link>
+              <Link
+                href="/book"
+                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white text-zinc-950 text-[11px] font-bold shadow-xs transition-all active:scale-95"
+              >
+                Book
+              </Link>
+              <Link
+                href="/gallery"
+                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold backdrop-blur-md border border-white/15 shadow-xs transition-all active:scale-95"
+              >
+                Lookbook
+              </Link>
+              <Link
+                href="/policies"
+                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold backdrop-blur-md border border-white/15 shadow-xs transition-all active:scale-95"
+              >
+                Policies
+              </Link>
+              <Link
+                href="/contact"
+                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold backdrop-blur-md border border-white/15 shadow-xs transition-all active:scale-95"
+              >
+                Contact
+              </Link>
             </div>
           </div>
 
