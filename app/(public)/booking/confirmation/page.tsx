@@ -231,7 +231,7 @@ function BookingConfirmationContent() {
           </p>
           <p className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-[#1E1E1E] shrink-0" />
-            <span>Becca&apos;s Crown: Lagos Avenue, East Legon, Accra.</span>
+            <span>Becca&apos;s Crown Beauty Vault: Lagos Avenue, East Legon, Accra.</span>
           </p>
           <p className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-[#1E1E1E] shrink-0" />

@@ -154,9 +154,14 @@ export default function CustomerPublicPage() {
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
                   <Crown className="w-3.5 h-3.5 text-amber-300" />
                 </div>
-                <span className="text-white text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
-                  BECCA&apos;S CROWN
-                </span>
+                <div>
+                  <span className="text-white text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
+                    BECCA&apos;S CROWN
+                  </span>
+                  <span className="text-[8px] sm:text-[9px] text-amber-200 tracking-wider block font-bold uppercase mt-0.5">
+                    Beauty Vault
+                  </span>
+                </div>
               </Link>
 
               {/* Center Navigation Links in Apple Liquid Glass Capsules */}

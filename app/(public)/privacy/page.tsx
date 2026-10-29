@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Shield, Lock, Eye, FileText, CheckCircle2, ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Privacy Policy | Becca's Crown Accra",
+  title: "Privacy Policy | Becca's Crown Beauty Vault",
   description:
-    "Privacy Policy and Data Protection standards for Becca's Crown in accordance with the Ghana Data Protection Act 2012 (Act 843).",
+    "Privacy Policy and Data Protection standards for Becca's Crown Beauty Vault in accordance with the Ghana Data Protection Act 2012 (Act 843).",
 };
 
 export default function PrivacyPolicyPage() {
@@ -98,7 +98,7 @@ export default function PrivacyPolicyPage() {
             If you have questions about our privacy practices, wish to review your booking records, or request profile anonymization, please contact our studio reception:
           </p>
           <div className="bg-[#F4F4F6] p-4 rounded-2xl space-y-1 text-xs">
-            <p className="font-bold text-[#1E1E1E]">Becca&apos;s Crown Accra</p>
+            <p className="font-bold text-[#1E1E1E]">Becca&apos;s Crown Beauty Vault</p>
             <p className="text-[#71717A]">14 Senchi Street, Airport Residential Area / East Legon, Accra, Ghana</p>
             <p className="text-[#71717A]">Phone: +233 24 000 0000 • Email: privacy@beccascrown.gh</p>
           </div>

@@ -7,10 +7,11 @@ import { PublicNavbar } from "@/components/layout/public-navbar";
 import { ScrollProgressBar } from "@/components/ui/scroll-reveal";
 
 export const metadata: Metadata = {
-  title: "Becca's Crown | Premier Beauty Studio in Accra, Ghana",
+  title: "Becca's Crown Beauty Vault | Premier Beauty Studio in Accra, Ghana",
   description:
-    "Book premier beauty services in East Legon, Accra with Becca's Crown. Certified lash artists, master bridal makeup, luxury hair styling, and aesthetics. Instant guest checkout with Mobile Money and card.",
+    "Book premier beauty services in East Legon, Accra with Becca's Crown Beauty Vault. Certified lash artists, master bridal makeup, luxury hair styling, and aesthetics. Instant guest checkout with Mobile Money and card.",
   keywords: [
+    "Becca's Crown Beauty Vault",
     "Becca's Crown",
     "beauty salon Accra",
     "bridal makeup Ghana",
@@ -20,10 +21,10 @@ export const metadata: Metadata = {
     "beauty booking Ghana",
   ],
   openGraph: {
-    title: "Becca's Crown | Accra, Ghana",
+    title: "Becca's Crown Beauty Vault | Accra, Ghana",
     description: "Book premier beauty services in East Legon, Accra. Guest checkout via Mobile Money.",
     url: "https://beccascrown.gh",
-    siteName: "Becca's Crown",
+    siteName: "Becca's Crown Beauty Vault",
     locale: "en_GH",
     type: "website",
   },
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BeautySalon",
-  name: "Becca's Crown",
+  name: "Becca's Crown Beauty Vault",
   image: "https://beccascrown.gh/images/hero_bridal_glam.jpg",
   telephone: "+233241112233",
   url: "https://beccascrown.gh",
@@ -102,9 +103,14 @@ export default function PublicSiteLayout({
                 <div className="w-8 h-8 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white">
                   <Crown className="w-4 h-4 text-amber-300" />
                 </div>
-                <h3 className="font-black text-sm tracking-widest text-white uppercase leading-none">
-                  BECCA&apos;S CROWN
-                </h3>
+                <div>
+                  <h3 className="font-black text-sm tracking-widest text-white uppercase leading-none">
+                    BECCA&apos;S CROWN
+                  </h3>
+                  <span className="text-[9px] text-amber-300 uppercase tracking-wider font-bold block mt-0.5">
+                    Beauty Vault
+                  </span>
+                </div>
               </div>
               <p className="text-xs text-zinc-400 max-w-sm leading-relaxed">
                 14 Senchi Street, Airport Residential Area / East Legon, Accra, Ghana
@@ -207,7 +213,7 @@ export default function PublicSiteLayout({
 
           {/* Bottom Row: Legal, Socials, Copyright */}
           <div className="pt-8 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
-            <p>© 2026 Becca&apos;s Crown. All rights reserved. Accra, Ghana.</p>
+            <p>© 2026 Becca&apos;s Crown Beauty Vault. All rights reserved. Accra, Ghana.</p>
             <div className="flex items-center gap-5 text-zinc-400">
               <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
               <Link href="/privacy" className="hover:text-white transition-colors">Privacy policy</Link>

@@ -185,7 +185,7 @@ export async function createPaymentRequest(
   }
 
   // 11. Dispatch SMS with short link to customer
-  const smsMessage = `Becca's Crown: Payment request of ${formatPesewas(
+  const smsMessage = `Becca's Crown Beauty Vault: Payment request of ${formatPesewas(
     amountPesewas
   )} for booking ${booking.reference}. Pay securely: ${shortUrl}${
     input.message ? ` (${input.message})` : ""
@@ -536,7 +536,7 @@ export async function payPaymentRequest(
   try {
     await sendSms({
       recipient: result.customerPhone,
-      message: `Becca's Crown: Payment of ${formatPesewas(
+      message: `Becca's Crown Beauty Vault: Payment of ${formatPesewas(
         pr.amountPesewas
       )} received for booking ${result.bookingReference}. Receipt #${result.receiptNumber}. Thank you!`,
       senderId: "BeccasCrown",
@@ -702,7 +702,7 @@ export async function resendPaymentRequest(
   const shortUrl = `${baseUrl}/pay/r/${updated.shortCode}`;
 
   // Resend SMS
-  const smsMessage = `Becca's Crown: Payment request of ${formatPesewas(
+  const smsMessage = `Becca's Crown Beauty Vault: Payment request of ${formatPesewas(
     updated.amountPesewas
   )} for booking ${pr.booking.reference}. Pay securely: ${shortUrl}${
     updated.message ? ` (${updated.message})` : ""

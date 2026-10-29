@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export const metadata = {
-  title: "Services & Rates | Becca's Crown Accra",
+  title: "Services & Rates | Becca's Crown Beauty Vault",
   description:
     "Explore our full beauty menu: bridal makeup, Russian volume lashes, luxury hairstyling, braids and couture dress rentals. View transparent pricing in GH₵.",
 };

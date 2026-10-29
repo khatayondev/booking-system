@@ -471,7 +471,7 @@ export function AppShell({
           <Drawer
             isOpen={mobileDrawerOpen}
             onClose={() => setMobileDrawerOpen(false)}
-            title="Becca's Crown"
+            title="Becca's Crown Beauty Vault"
             side="left"
           >
             {sidebarContent}

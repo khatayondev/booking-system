@@ -335,7 +335,7 @@ export default function SettingsPage() {
                       required
                       value={businessName}
                       onChange={(e) => setBusinessName(e.target.value)}
-                      placeholder="e.g. Becca's Crown"
+                      placeholder="e.g. Becca's Crown Beauty Vault"
                     />
                   </div>
 

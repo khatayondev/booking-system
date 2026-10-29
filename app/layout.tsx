@@ -16,13 +16,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Becca's Crown | Booking, Payments & POS",
+  title: "Becca's Crown Beauty Vault | Booking, Payments & POS",
   description: "Premier beauty, makeup, lash artistry, hair, and aesthetics in Accra, Ghana.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Becca's Crown",
+    title: "Becca's Crown Beauty Vault",
   },
   icons: {
     icon: "/favicon.ico",

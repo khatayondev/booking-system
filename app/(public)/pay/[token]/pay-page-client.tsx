@@ -174,7 +174,7 @@ export function PublicPaymentRequestClient({ token }: { token: string }) {
               href="/"
               className="inline-flex items-center gap-1.5 text-xs text-zinc-300 hover:text-white underline underline-offset-4"
             >
-              Return to Becca&apos;s Crown
+              Return to Becca&apos;s Crown Beauty Vault
             </Link>
           </div>
         </Card>
@@ -285,7 +285,7 @@ export function PublicPaymentRequestClient({ token }: { token: string }) {
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] font-semibold text-zinc-300 tracking-wide">
             <Crown className="w-3.5 h-3.5 text-amber-400" />
-            <span>Becca&apos;s Crown • Secure Checkout</span>
+            <span>Becca&apos;s Crown Beauty Vault • Secure Checkout</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
             Complete Your Payment

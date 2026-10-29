@@ -24,13 +24,13 @@ export function ThermalReceipt({
 
   const cleanPhone = receipt.customerPhone.replace(/\D/g, "");
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
-    `✨ Becca's Crown Receipt (${receipt.receiptNumber})\nTotal: ${formatPesewas(
+    `✨ Becca's Crown Beauty Vault Receipt (${receipt.receiptNumber})\nTotal: ${formatPesewas(
       receipt.totalPesewas
-    )}\nThank you for choosing Becca's Crown, East Legon!`
+    )}\nThank you for choosing Becca's Crown Beauty Vault!`
   )}`;
 
   const smsUrl = `sms:${receipt.customerPhone}?body=${encodeURIComponent(
-    `Becca's Crown Receipt ${receipt.receiptNumber}. Total: ${formatPesewas(
+    `Becca's Crown Beauty Vault Receipt ${receipt.receiptNumber}. Total: ${formatPesewas(
       receipt.totalPesewas
     )}. Thank you for your visit!`
   )}`;
@@ -283,7 +283,7 @@ export function ThermalReceipt({
 
         {/* Studio Footer */}
         <div className="text-center space-y-1 text-[10px] text-[#71717A]">
-          <p className="font-semibold text-zinc-800">Thank you for visiting Becca&apos;s Crown!</p>
+          <p className="font-semibold text-zinc-800">Thank you for visiting Becca&apos;s Crown Beauty Vault!</p>
           <p>All services subject to salon care & refund policies.</p>
           <p>Instagram: @beccascrown • www.beccascrown.gh</p>
         </div>
