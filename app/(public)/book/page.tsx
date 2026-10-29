@@ -740,7 +740,7 @@ function BookingWizardContent() {
   }
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden flex items-center justify-center p-2 sm:p-4 lg:p-6 bg-zinc-950">
+    <div className="relative h-[100dvh] w-full overflow-hidden flex items-center justify-center p-0 sm:p-4 lg:p-6 bg-zinc-950">
       {/* =========================================================================
           DYNAMIC BACKGROUND IMAGES (Changes with each step with smooth cross-fade)
       ========================================================================= */}
@@ -806,49 +806,51 @@ function BookingWizardContent() {
             RIGHT COLUMN: THE FROSTED GLASS CARD (Fitted to Screen Height)
         ========================================================================= */}
         <div className="lg:col-span-6 w-full h-full flex items-center justify-center">
-          <div className="w-full max-w-[480px] h-full max-h-[calc(100dvh-1rem)] sm:max-h-[calc(100dvh-2rem)] lg:max-h-[720px] rounded-[28px] sm:rounded-[36px] bg-zinc-950/80 backdrop-blur-3xl border border-white/20 p-4 sm:p-6 shadow-2xl text-white flex flex-col justify-between overflow-hidden transition-all duration-300">
+          <div className="w-full max-w-lg h-full max-h-full sm:max-h-[calc(100dvh-2rem)] lg:max-h-[740px] rounded-none sm:rounded-[36px] bg-zinc-950/90 sm:bg-zinc-950/80 backdrop-blur-3xl border-0 sm:border border-white/20 p-3.5 sm:p-6 shadow-2xl text-white flex flex-col justify-between overflow-hidden transition-all duration-300">
             {/* Top Bar inside the Glass: Studio Brand Capsule & Step Indicator */}
-            <div className="flex items-center justify-between pb-3.5 border-b border-white/10">
+            <div className="flex items-center justify-between pb-2.5 sm:pb-3.5 border-b border-white/10 shrink-0">
               {/* Studio Capsule */}
-              <div className="flex items-center gap-2.5 bg-white/10 border border-white/15 pl-1.5 pr-3.5 py-1 rounded-full backdrop-blur-md">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 text-zinc-950 font-black text-[11px] flex items-center justify-center shadow-xs">
+              <Link
+                href="/"
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 pl-1.5 pr-3 py-1 rounded-full backdrop-blur-md transition-colors"
+              >
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 text-zinc-950 font-black text-[10px] sm:text-[11px] flex items-center justify-center shadow-xs">
                   GB
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold block leading-none text-white">
+                  <span className="text-[10px] sm:text-[11px] font-bold block leading-none text-white">
                     Ghana and Beyond
                   </span>
-                  <span className="text-[9px] text-amber-200 block leading-tight">
+                  <span className="text-[8px] sm:text-[9px] text-amber-200 block leading-tight">
                     Beauty Vault
                   </span>
                 </div>
-              </div>
+              </Link>
 
-              {/* Step indicator & Reset */}
+              {/* Step indicator & Return to Home Button */}
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-white/10 border border-white/10 text-zinc-300">
                   Step {step} of 4
                 </span>
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  title="Start Over"
+                <Link
+                  href="/"
+                  title="Return to Home"
                   className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
-                </button>
+                </Link>
               </div>
             </div>
 
             {/* Dynamic Step Header inside Glass */}
-            <div className="pt-3 pb-1 space-y-1">
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">
+            <div className="pt-2 sm:pt-3 pb-1 space-y-0.5 sm:space-y-1 shrink-0">
+              <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight leading-snug">
                 {step === 1 && "Book Your Crown Experience"}
                 {step === 2 && "Choose Your Date & Time"}
                 {step === 3 && "Your Contact Details"}
                 {step === 4 && "Review & Confirm Slot"}
               </h2>
-              <p className="text-xs text-zinc-400 line-clamp-2">
+              <p className="text-[11px] sm:text-xs text-zinc-400 line-clamp-1 sm:line-clamp-2">
                 {step === 1 && "Select the signature treatments you wish to reserve today."}
                 {step === 2 && "Pick your day and live time slot. Instant 10-minute calendar lock."}
                 {step === 3 && "No password needed. SMS confirmations sent straight to your phone."}
@@ -856,31 +858,32 @@ function BookingWizardContent() {
               </p>
             </div>
 
-            {/* Smart Search Bar (Instantly search treatments, styles & add-ons) */}
-            <div className="my-2 space-y-1.5">
-              <div className="relative flex items-center">
-                <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 pointer-events-none" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    if (step !== 1) setStep(1);
-                  }}
-                  placeholder="Smart Search treatments (e.g. frontal, soft glam, lashes)..."
-                  className="w-full h-10 pl-10 pr-9 rounded-2xl bg-white/10 border border-white/20 text-xs text-white placeholder-zinc-400 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all backdrop-blur-md"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3 text-zinc-400 hover:text-white p-0.5 rounded-full cursor-pointer"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
+            {/* Smart Search Bar (Only shown on Step 1 for maximum mobile height) */}
+            {step === 1 && (
+              <div className="my-1.5 sm:my-2 space-y-1 shrink-0">
+                <div className="relative flex items-center">
+                  <Search className="w-4 h-4 text-zinc-400 absolute left-3 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                    }}
+                    placeholder="Smart Search treatments (e.g. frontal, soft glam, lashes)..."
+                    className="w-full h-9 sm:h-10 pl-9 pr-8 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 text-xs text-white placeholder-zinc-400 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all backdrop-blur-md"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-2.5 text-zinc-400 hover:text-white p-0.5 rounded-full cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Hold Timer Alert if Active */}
             {hold && holdSecondsLeft !== null && (
@@ -1109,9 +1112,9 @@ function BookingWizardContent() {
                     </div>
 
                     {slotsLoading ? (
-                      <div className="grid grid-cols-4 gap-2">
+                      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => (
-                          <div key={n} className="h-10 rounded-xl bg-white/10 animate-pulse" />
+                          <div key={n} className="h-11 rounded-xl bg-white/10 animate-pulse" />
                         ))}
                       </div>
                     ) : slotsError ? (
@@ -1125,7 +1128,7 @@ function BookingWizardContent() {
                         <p className="text-[10px] text-zinc-400">Please choose another day above.</p>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-4 gap-2">
+                      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                         {availableSlots.map((slot, idx) => {
                           const isSelectedSlot =
                             selectedSlot?.startUtc === slot.startUtc &&
@@ -1146,7 +1149,7 @@ function BookingWizardContent() {
                                 setSelectedSlot(slot);
                                 await createHoldForSlot(slot);
                               }}
-                              className={`h-10 rounded-xl text-center text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+                              className={`h-11 min-h-[44px] rounded-xl text-center text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
                                 isSelectedSlot
                                   ? "bg-white text-zinc-950 font-black shadow-lg ring-2 ring-white scale-102"
                                   : "bg-white/10 hover:bg-white/20 text-white/90 border border-white/10"
@@ -1178,7 +1181,7 @@ function BookingWizardContent() {
                         placeholder="e.g. Ama Mensah"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
-                        className="w-full h-11 px-4 rounded-2xl bg-white/10 border border-white/20 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                        className="w-full h-11 px-4 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
                       />
                     </div>
                   </div>
@@ -1198,32 +1201,14 @@ function BookingWizardContent() {
                           if (phoneError) validatePhone(e.target.value);
                         }}
                         onBlur={() => validatePhone(customerPhone)}
-                        className={`w-full h-11 px-4 rounded-2xl bg-white/10 border text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors ${
+                        className={`w-full h-11 px-4 rounded-xl sm:rounded-2xl bg-white/10 border text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors ${
                           phoneError ? "border-rose-500" : "border-white/20"
                         }`}
                       />
                     </div>
                     {phoneError ? (
                       <p className="text-[10px] text-rose-400">{phoneError}</p>
-                    ) : filteredCategories.length === 0 ? (
-                    <div className="p-6 rounded-2xl border border-dashed border-white/15 bg-white/5 text-center space-y-2">
-                      <Search className="w-6 h-6 text-zinc-500 mx-auto" />
-                      <p className="text-xs font-bold text-white">No treatments found</p>
-                      <p className="text-[10px] text-zinc-400">
-                        No treatments match &ldquo;{searchQuery}&rdquo;. Try another term or clear filter.
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSearchQuery("");
-                          setActiveCategoryFilter("ALL");
-                        }}
-                        className="mt-1 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[10px] text-amber-200 font-bold transition-colors cursor-pointer"
-                      >
-                        Clear Search & Filters
-                      </button>
-                    </div>
-                  ) : (
+                    ) : (
                       <p className="text-[10px] text-zinc-400">
                         Normalized automatically for your SMS booking confirmation.
                       </p>
@@ -1239,7 +1224,7 @@ function BookingWizardContent() {
                       placeholder="ama@example.com (for calendar invite)"
                       value={customerEmail}
                       onChange={(e) => setCustomerEmail(e.target.value)}
-                      className="w-full h-11 px-4 rounded-2xl bg-white/10 border border-white/20 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                      className="w-full h-11 px-4 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
                     />
                   </div>
 
@@ -1252,7 +1237,7 @@ function BookingWizardContent() {
                       placeholder="Hair texture, dress sizing, lash preferences..."
                       value={customerNotes}
                       onChange={(e) => setCustomerNotes(e.target.value)}
-                      className="w-full p-3 rounded-2xl bg-white/10 border border-white/20 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                      className="w-full p-3 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
                     />
                   </div>
                 </div>
@@ -1372,38 +1357,87 @@ function BookingWizardContent() {
             </div>
 
             {/* =====================================================================
-                BOTTOM ACTION BUTTON INSIDE GLASS (Matches Screenshot Call Button)
+                BOTTOM ACTION BAR (Sticky & Visible at all times with Live Cart Total)
             ===================================================================== */}
-            <div className="pt-3 border-t border-white/10 flex items-center gap-2.5">
+            <div className="pt-2.5 sm:pt-3 border-t border-white/10 flex items-center gap-2 shrink-0 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
               {step > 1 && (
                 <button
                   type="button"
                   onClick={() => setStep((step - 1) as 1 | 2 | 3 | 4)}
-                  className="h-12 px-4 rounded-full bg-white/10 hover:bg-white/15 text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                  className="h-11 sm:h-12 px-4 rounded-full bg-white/10 hover:bg-white/15 text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer shrink-0"
                 >
                   Back
                 </button>
               )}
 
-              {step < 4 ? (
+              {step === 1 && (
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="flex-1 h-12 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+                  disabled={selectedServiceIds.length === 0}
+                  className={`flex-1 h-11 sm:h-12 rounded-full font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-between px-4 sm:px-5 cursor-pointer ${
+                    selectedServiceIds.length > 0
+                      ? "bg-white text-zinc-950 hover:bg-zinc-100"
+                      : "bg-white/15 text-zinc-400 cursor-not-allowed opacity-60"
+                  }`}
                 >
-                  <span>
-                    {step === 1 && "Select Date & Time"}
-                    {step === 2 && "Enter Your Details"}
-                    {step === 3 && "Proceed to Confirmation"}
+                  <span className="font-bold text-[11px] sm:text-xs truncate mr-2">
+                    {selectedServiceIds.length === 0
+                      ? "Select treatment to continue"
+                      : `${selectedServiceIds.length} selected • ${formatPesewas(subtotalPesewas)}`}
                   </span>
-                  <ArrowRight className="w-4 h-4" />
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span>Date & Time</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
                 </button>
-              ) : (
+              )}
+
+              {step === 2 && (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  disabled={!selectedSlot}
+                  className={`flex-1 h-11 sm:h-12 rounded-full font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-between px-4 sm:px-5 cursor-pointer ${
+                    selectedSlot
+                      ? "bg-white text-zinc-950 hover:bg-zinc-100"
+                      : "bg-white/15 text-zinc-400 cursor-not-allowed opacity-60"
+                  }`}
+                >
+                  <span className="font-bold text-[11px] sm:text-xs truncate mr-2">
+                    {selectedSlot
+                      ? new Date(selectedSlot.startUtc).toLocaleTimeString("en-GB", {
+                          timeZone: "Africa/Accra",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: false,
+                        })
+                      : "Choose a time slot"}
+                  </span>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span>Client Details</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
+                </button>
+              )}
+
+              {step === 3 && (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="flex-1 h-11 sm:h-12 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>Review Booking</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+
+              {step === 4 && (
                 <button
                   type="button"
                   disabled={submittingBooking || !policyAgreed || holdExpired}
                   onClick={handleFinalSubmit}
-                  className="flex-1 h-12 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 h-11 sm:h-12 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <CreditCard className="w-4 h-4" />
                   <span>

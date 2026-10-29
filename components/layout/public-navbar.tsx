@@ -8,8 +8,8 @@ import { Crown, Calendar, ArrowUpRight } from "lucide-react";
 export function PublicNavbar() {
   const pathname = usePathname();
 
-  // On the homepage, the hero starts right at the top with the integrated navbar inside the hero banner
-  if (pathname === "/") {
+  // On the homepage (integrated hero navbar) and booking wizard (dedicated full-screen funnel), hide the global navbar
+  if (pathname === "/" || pathname === "/book") {
     return null;
   }
 
