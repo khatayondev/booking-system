@@ -146,10 +146,10 @@ export default function CustomerPublicPage() {
           =================================================================== */}
           <div className="relative z-20 w-full px-5 sm:px-8 lg:px-12 pt-5 sm:pt-6 pb-2">
             <div className="flex items-center justify-between gap-4">
-              {/* Brand Logo in Floating Capsule */}
+              {/* Brand Logo in Apple Liquid Glass Capsule */}
               <Link
                 href="/"
-                className="flex items-center gap-2.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/15 backdrop-blur-md shadow-xs group transition-all"
+                className="apple-glass-pill-dark flex items-center gap-2.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full group cursor-pointer hover:scale-105 active:scale-95"
               >
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
                   <Crown className="w-3.5 h-3.5 text-amber-300" />
@@ -164,44 +164,44 @@ export default function CustomerPublicPage() {
                 </div>
               </Link>
 
-              {/* Center Navigation Links in Floating Capsules */}
+              {/* Center Navigation Links in Apple Liquid Glass Capsules */}
               <nav className="hidden md:flex items-center gap-2 lg:gap-3 text-xs font-semibold">
                 <Link
                   href="/our-services"
-                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white backdrop-blur-md border border-white/15 shadow-xs transition-all hover:scale-105 active:scale-95"
+                  className="apple-glass-pill-dark px-4 py-2 rounded-full text-white/95 hover:text-white cursor-pointer hover:scale-105 active:scale-95"
                 >
                   Services & Menu
                 </Link>
                 <Link
                   href="/gallery"
-                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white backdrop-blur-md border border-white/15 shadow-xs transition-all hover:scale-105 active:scale-95"
+                  className="apple-glass-pill-dark px-4 py-2 rounded-full text-white/95 hover:text-white cursor-pointer hover:scale-105 active:scale-95"
                 >
                   Lookbook
                 </Link>
                 <Link
                   href="/policies"
-                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white backdrop-blur-md border border-white/15 shadow-xs transition-all hover:scale-105 active:scale-95"
+                  className="apple-glass-pill-dark px-4 py-2 rounded-full text-white/95 hover:text-white cursor-pointer hover:scale-105 active:scale-95"
                 >
                   Policies
                 </Link>
                 <Link
                   href="/contact"
-                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white backdrop-blur-md border border-white/15 shadow-xs transition-all hover:scale-105 active:scale-95"
+                  className="apple-glass-pill-dark px-4 py-2 rounded-full text-white/95 hover:text-white cursor-pointer hover:scale-105 active:scale-95"
                 >
                   Contact
                 </Link>
               </nav>
 
-              {/* Right Side: Currency & Staff Portal */}
+              {/* Right Side: Currency & Staff Portal in Liquid Glass Capsules */}
               <div className="flex items-center gap-3">
-                <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-[10px] font-bold text-white backdrop-blur-md">
+                <div className="apple-glass-pill-dark hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold text-white">
                   <span>🇬🇭</span>
                   <span>GHS (GH₵)</span>
                 </div>
                 <Link href="/login">
                   <button
                     type="button"
-                    className="px-3.5 py-1.5 rounded-full border border-white/25 bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold backdrop-blur-md transition-colors cursor-pointer"
+                    className="apple-glass-pill-dark px-3.5 py-1.5 rounded-full text-white text-[11px] font-semibold transition-all cursor-pointer hover:scale-105 active:scale-95"
                   >
                     Staff Portal
                   </button>
@@ -209,35 +209,35 @@ export default function CustomerPublicPage() {
               </div>
             </div>
 
-            {/* Mobile Floating Capsule Navigation */}
+            {/* Mobile Floating Liquid Glass Capsule Navigation */}
             <div className="md:hidden flex items-center gap-2 pt-3 pb-1 overflow-x-auto scrollbar-none">
               <Link
                 href="/our-services"
-                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold backdrop-blur-md border border-white/15 shadow-xs transition-all active:scale-95"
+                className="apple-glass-pill-dark whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-semibold active:scale-95 cursor-pointer"
               >
                 Services
               </Link>
               <Link
                 href="/book"
-                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white text-zinc-950 text-[11px] font-bold shadow-xs transition-all active:scale-95"
+                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white text-zinc-950 text-[11px] font-bold shadow-md transition-all active:scale-95 cursor-pointer hover:scale-105"
               >
                 Book
               </Link>
               <Link
                 href="/gallery"
-                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold backdrop-blur-md border border-white/15 shadow-xs transition-all active:scale-95"
+                className="apple-glass-pill-dark whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-semibold active:scale-95 cursor-pointer"
               >
                 Lookbook
               </Link>
               <Link
                 href="/policies"
-                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold backdrop-blur-md border border-white/15 shadow-xs transition-all active:scale-95"
+                className="apple-glass-pill-dark whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-semibold active:scale-95 cursor-pointer"
               >
                 Policies
               </Link>
               <Link
                 href="/contact"
-                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold backdrop-blur-md border border-white/15 shadow-xs transition-all active:scale-95"
+                className="apple-glass-pill-dark whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-semibold active:scale-95 cursor-pointer"
               >
                 Contact
               </Link>
