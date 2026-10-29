@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Becca's Crown Beauty Vault",
-    short_name: "Becca's Crown",
+    name: "Ghana and Beyond",
+    short_name: "Ghana and Beyond",
     description: "Luxury Beauty Studio Booking & Business Management System in Accra, Ghana",
     start_url: "/dashboard",
     display: "standalone",

@@ -6,10 +6,11 @@ import { Button } from "@/components/ui/button";
 import { PublicNavbar } from "@/components/layout/public-navbar";
 
 export const metadata: Metadata = {
-  title: "Becca's Crown Beauty Vault | Makeup, Lashes, Hair & Aesthetics in Accra, Ghana",
+  title: "Ghana and Beyond | Premier Beauty Studio in Accra, Ghana",
   description:
-    "Book premier beauty services in East Legon, Accra. Certified lash artists, master bridal makeup, luxury hair styling, and aesthetics. Instant guest checkout with Mobile Money and card.",
+    "Book premier beauty services in East Legon, Accra with Ghana and Beyond. Certified lash artists, master bridal makeup, luxury hair styling, and aesthetics. Instant guest checkout with Mobile Money and card.",
   keywords: [
+    "Ghana and Beyond",
     "beauty salon Accra",
     "bridal makeup Ghana",
     "lash extensions Accra",
@@ -18,10 +19,10 @@ export const metadata: Metadata = {
     "beauty booking Ghana",
   ],
   openGraph: {
-    title: "Becca's Crown Beauty Vault | Accra, Ghana",
+    title: "Ghana and Beyond | Accra, Ghana",
     description: "Book premier beauty services in East Legon, Accra. Guest checkout via Mobile Money.",
     url: "https://beccascrown.gh",
-    siteName: "Becca's Crown Beauty Vault",
+    siteName: "Ghana and Beyond",
     locale: "en_GH",
     type: "website",
   },
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BeautySalon",
-  name: "Becca's Crown Beauty Vault",
+  name: "Ghana and Beyond",
   image: "https://beccascrown.gh/images/hero_bridal_glam.jpg",
   telephone: "+233241112233",
   url: "https://beccascrown.gh",
@@ -202,7 +203,7 @@ export default function PublicSiteLayout({
 
           {/* Bottom Row: Legal, Socials, Copyright */}
           <div className="pt-8 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
-            <p>© 2026 Becca&apos;s Crown Beauty Vault. All rights reserved. Accra, Ghana.</p>
+            <p>© 2026 Ghana and Beyond. All rights reserved. Accra, Ghana.</p>
             <div className="flex items-center gap-5 text-zinc-400">
               <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
               <Link href="/privacy" className="hover:text-white transition-colors">Privacy policy</Link>

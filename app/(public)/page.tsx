@@ -124,13 +124,13 @@ export default function CustomerPublicPage() {
       {/* =========================================================================
           HERO SECTION (Full-Width with Thick White Outline & Navbar directly on Hero Image)
       ========================================================================= */}
-      <section className="w-full px-2 sm:px-3 md:px-4 pb-2 sm:pb-3 md:pb-4 pt-0 bg-[#141210]">
-        <div className="relative w-full rounded-t-none rounded-b-[28px] sm:rounded-b-[36px] md:rounded-b-[44px] border-[6px] sm:border-[10px] md:border-[14px] border-t-0 border-white overflow-hidden shadow-2xl bg-zinc-950 flex flex-col justify-between min-h-[640px] sm:min-h-[720px] lg:min-h-[800px]">
+      <section className="w-full px-2 sm:px-3 md:px-4 pb-2 sm:pb-3 md:pb-4 pt-0 bg-[#FAF9F6]">
+        <div className="relative w-full rounded-t-none rounded-b-[28px] sm:rounded-b-[36px] md:rounded-b-[44px] border-x-[6px] sm:border-x-[10px] md:border-x-[14px] border-b-[6px] sm:border-b-[10px] md:border-b-[14px] border-t-0 border-white overflow-hidden shadow-2xl bg-zinc-950 flex flex-col justify-between min-h-[640px] sm:min-h-[720px] lg:min-h-[800px]">
           {/* Panoramic Ambient Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
               src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=2400&q=85"
-              alt="Becca's Crown Beauty Vault Studio Accra"
+              alt="Ghana and Beyond Studio Accra"
               fill
               priority
               className="object-cover object-center scale-105 transform hover:scale-100 transition-transform duration-1000 opacity-65"
@@ -143,7 +143,7 @@ export default function CustomerPublicPage() {
           {/* ===================================================================
               NAVBAR ON TOP OF HERO IMAGE (Integrated at Top of Card with White Outline)
           =================================================================== */}
-          <div className="relative z-20 w-full px-5 sm:px-8 lg:px-12 pt-5 sm:pt-6 pb-4 border-b border-white/15">
+          <div className="relative z-20 w-full px-5 sm:px-8 lg:px-12 pt-5 sm:pt-6 pb-4 border-b border-white/15 border-t-0">
             <div className="flex items-center justify-between gap-4">
               {/* Brand Logo */}
               <Link href="/" className="flex items-center gap-3 group">
@@ -152,7 +152,7 @@ export default function CustomerPublicPage() {
                 </div>
                 <div>
                   <span className="text-white text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
-                    BECCA&apos;S CROWN
+                    GHANA AND BEYOND
                   </span>
                   <span className="text-[9px] text-zinc-300 tracking-wider block font-medium uppercase mt-0.5">
                     East Legon Flagship
@@ -210,7 +210,7 @@ export default function CustomerPublicPage() {
                     <ArrowDownRight className="w-5 h-5 sm:w-6 sm:h-6" />
                   </span>
                 </div>
-                <div>Accra experiences beauty</div>
+                <div>Ghana and beyond experiences beauty</div>
               </h1>
             </div>
 
@@ -489,7 +489,7 @@ export default function CustomerPublicPage() {
           {/* Left Text Column */}
           <div className="lg:col-span-4 space-y-6">
             <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-normal">
-              Experience the height of luxury and privacy with Becca&apos;s Crown Beauty Vault at our East Legon flagship lounge. Private VIP treatment suites, chilled champagne, hospital-grade sanitized instruments, and prompt on-time service.
+              Experience the height of luxury and privacy with Ghana and Beyond at our East Legon flagship lounge. Private VIP treatment suites, chilled champagne, hospital-grade sanitized instruments, and prompt on-time service.
             </p>
             <div>
               <Link href="/book">

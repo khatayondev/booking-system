@@ -149,7 +149,7 @@ function StaffLoginForm() {
             Staff Portal
           </h1>
           <p className="text-xs text-[#71717A] mt-1">
-            Becca&apos;s Crown Beauty Vault • Accra, Ghana
+            Ghana and Beyond • Accra, Ghana
           </p>
         </div>
 

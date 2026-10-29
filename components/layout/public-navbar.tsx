@@ -23,10 +23,10 @@ export function PublicNavbar() {
           </div>
           <div>
             <span className="text-sm sm:text-base font-black text-[#1E1E1E] tracking-tight block">
-              BECCA&apos;S CROWN
+              GHANA AND BEYOND
             </span>
             <span className="text-[10px] text-[#71717A] tracking-wider block font-semibold uppercase">
-              Beauty Vault • East Legon
+              Beauty Studio • East Legon
             </span>
           </div>
         </Link>
