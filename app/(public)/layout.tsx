@@ -73,7 +73,7 @@ export default function PublicSiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col justify-between selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-[#FAF9F6] text-[#18181B] flex flex-col justify-between selection:bg-black selection:text-white">
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
@@ -94,18 +94,23 @@ export default function PublicSiteLayout({
           {/* Top Row: Brand & VIP Newsletter */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 border-b border-zinc-800/80 items-start">
             <div className="lg:col-span-5 space-y-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-amber-300">
-                  <Crown className="w-4 h-4" />
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white">
+                  <Crown className="w-4 h-4 text-amber-300" />
                 </div>
-                <h3 className="font-black text-base tracking-wider text-white uppercase">
-                  BECCA&apos;S CROWN BEAUTY VAULT
-                </h3>
+                <div>
+                  <h3 className="font-black text-sm tracking-widest text-white uppercase leading-none">
+                    GHANA AND BEYOND
+                  </h3>
+                  <span className="text-[9px] text-zinc-400 uppercase tracking-wider font-semibold block mt-0.5">
+                    East Legon Flagship Studio
+                  </span>
+                </div>
               </div>
               <p className="text-xs text-zinc-400 max-w-sm leading-relaxed">
                 14 Senchi Street, Airport Residential Area / East Legon, Accra, Ghana
                 <br />
-                hello@beccascrown.gh • +233 24 111 9988
+                hello@ghanaandbeyond.com • +233 24 111 9988
               </p>
               <div className="flex items-center gap-2 pt-1 text-[11px] text-zinc-400">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />

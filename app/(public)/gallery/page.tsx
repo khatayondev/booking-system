@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Gallery & Studio Looks | Becca's Crown Beauty Vault East Legon",
+  title: "Gallery & Studio Looks | Ghana and Beyond East Legon",
   description:
     "Explore our lookbook: bridal transformations, Russian volume lash sets, couture evening gown rentals, and our modern Accra beauty salon.",
 };

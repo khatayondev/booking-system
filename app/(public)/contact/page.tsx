@@ -84,7 +84,7 @@ export default function ContactPage() {
                 </p>
                 <div className="pt-2">
                   <a
-                    href="https://wa.me/233241112233?text=Hello%20Becca's%20Crown%20Beauty%20Vault,%20I%20would%20like%20to%20inquire%20about%20a%20booking"
+                    href="https://wa.me/233241112233?text=Hello%20Ghana%20and%20Beyond,%20I%20would%20like%20to%20inquire%20about%20a%20booking"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

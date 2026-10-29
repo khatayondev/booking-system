@@ -14,7 +14,7 @@ export async function GET(
     const primaryService = booking.services[0]?.name || "Beauty Appointment";
     const googleCalendarUrl = generateGoogleCalendarUrl({
       reference: booking.reference,
-      summary: `${primaryService} - Becca's Crown Beauty Vault`,
+      summary: `${primaryService} - Ghana and Beyond`,
       description: `Appointment for ${booking.customerName}\nReference: ${booking.reference}\nStaff: ${booking.staffName}\nManage Link: ${req.nextUrl.origin}/manage/${token}`,
       startUtc: new Date(booking.startUtc),
       endUtc: new Date(booking.endUtc),

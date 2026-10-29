@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Scale, Clock, RefreshCw, ShieldCheck, AlertCircle, ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Terms of Service | Becca's Crown Beauty Vault Accra",
+  title: "Terms of Service | Ghana and Beyond Accra",
   description:
-    "Terms of Service, booking terms, deposit refund windows, dress rental agreements, and studio guidelines for Becca's Crown Beauty Vault in Accra, Ghana.",
+    "Terms of Service, booking terms, deposit refund windows, dress rental agreements, and studio guidelines for Ghana and Beyond in Accra, Ghana.",
 };
 
 export default function TermsOfServicePage() {

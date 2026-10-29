@@ -335,7 +335,7 @@ export default function SettingsPage() {
                       required
                       value={businessName}
                       onChange={(e) => setBusinessName(e.target.value)}
-                      placeholder="e.g. Becca's Crown Beauty Vault"
+                      placeholder="e.g. Ghana and Beyond"
                     />
                   </div>
 
@@ -789,7 +789,7 @@ export default function SettingsPage() {
                     required
                     value={smsSenderId}
                     onChange={(e) => setSmsSenderId(e.target.value.toUpperCase())}
-                    placeholder="e.g. BeccasCrown"
+                    placeholder="e.g. GhanaAndBeyond"
                     className="font-mono tracking-wider"
                   />
                   <p className="text-[10px] text-[#A1A1AA]">

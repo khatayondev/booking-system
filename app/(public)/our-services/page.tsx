@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Services & Rates | Becca's Crown Beauty Vault East Legon",
+  title: "Services & Rates | Ghana and Beyond East Legon",
   description:
     "Explore our full beauty menu: bridal makeup, Russian volume lashes, luxury hairstyling, braids and couture dress rentals. View transparent pricing in GH₵.",
 };

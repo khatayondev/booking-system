@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Policies & Terms | Becca's Crown Beauty Vault East Legon",
+  title: "Policies & Terms | Ghana and Beyond East Legon",
   description:
     "Review our transparent studio policies: 24h cancellations, rescheduling, deposit security, punctuality, and dress rental care in Accra, Ghana.",
 };
