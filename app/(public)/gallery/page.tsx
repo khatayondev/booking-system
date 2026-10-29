@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export const metadata = {
-  title: "Gallery & Studio Looks | Becca's Crown East Legon",
+  title: "Gallery & Studio Looks | Becca's Crown Accra",
   description:
     "Explore our lookbook: bridal transformations, Russian volume lash sets, couture evening gown rentals, and our modern Accra beauty salon.",
 };
@@ -60,7 +60,7 @@ export default function GalleryPage() {
             Studio Gallery
           </h1>
           <p className="text-xs sm:text-sm text-[#71717A] leading-relaxed">
-            Real artistry from our master stylists, lash technicians, and luxury gown collection at our East Legon flagship.
+            Real artistry from our master stylists, lash technicians, and luxury gown collection at our Accra studio.
           </p>
         </div>
       </ScrollReveal>
@@ -97,7 +97,7 @@ export default function GalleryPage() {
 
                 <div className="pt-3 border-t border-black/5 flex items-center justify-between">
                   <span className="text-xs text-[#71717A] font-medium">
-                    East Legon Flagship
+                    Accra Studio
                   </span>
                   <Link href={`/book?serviceId=${item.serviceId}`}>
                     <Button

@@ -102,14 +102,9 @@ export default function PublicSiteLayout({
                 <div className="w-8 h-8 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white">
                   <Crown className="w-4 h-4 text-amber-300" />
                 </div>
-                <div>
-                  <h3 className="font-black text-sm tracking-widest text-white uppercase leading-none">
-                    BECCA&apos;S CROWN
-                  </h3>
-                  <span className="text-[9px] text-zinc-400 uppercase tracking-wider font-semibold block mt-0.5">
-                    East Legon Flagship Studio
-                  </span>
-                </div>
+                <h3 className="font-black text-sm tracking-widest text-white uppercase leading-none">
+                  BECCA&apos;S CROWN
+                </h3>
               </div>
               <p className="text-xs text-zinc-400 max-w-sm leading-relaxed">
                 14 Senchi Street, Airport Residential Area / East Legon, Accra, Ghana

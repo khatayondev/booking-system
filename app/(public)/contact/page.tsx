@@ -56,7 +56,7 @@ export default function ContactPage() {
                 <MapPin className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-sm font-bold text-[#1E1E1E]">East Legon Flagship</h3>
+                <h3 className="text-sm font-bold text-[#1E1E1E]">Studio Location</h3>
                 <p className="text-xs text-[#71717A] leading-relaxed">
                   Lagos Avenue, East Legon, Accra, Ghana
                 </p>

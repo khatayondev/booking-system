@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export const metadata = {
-  title: "Policies & Terms | Becca's Crown East Legon",
+  title: "Policies & Terms | Becca's Crown Accra",
   description:
     "Review our transparent studio policies: 24h cancellations, rescheduling, deposit security, punctuality, and dress rental care in Accra, Ghana.",
 };

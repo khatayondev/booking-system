@@ -31,14 +31,9 @@ export function PublicNavbar() {
           <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/5 border border-black/10 flex items-center justify-center text-zinc-900 group-hover:scale-105 transition-transform">
             <Crown className="w-3.5 h-3.5 text-amber-500" />
           </div>
-          <div>
-            <span className="text-zinc-900 text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
-              BECCA&apos;S CROWN
-            </span>
-            <span className="text-[8px] sm:text-[9px] text-zinc-500 tracking-wider block font-medium uppercase mt-0.5">
-              East Legon Flagship
-            </span>
-          </div>
+          <span className="text-zinc-900 text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
+            BECCA&apos;S CROWN
+          </span>
         </Link>
 
         {/* Center Desktop Navigation Links in Apple Liquid Glass Capsules */}
