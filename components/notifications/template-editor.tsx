@@ -52,7 +52,7 @@ const SAMPLE_VARS = {
   amountDue: "GH₵ 150.00",
   amountPaid: "GH₵ 300.00",
   refundAmount: "GH₵ 300.00",
-  businessName: "Ghana and Beyond",
+  businessName: "Becca's Crown",
   staffName: "Jessica Kyei",
 };
 

@@ -16,13 +16,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Ghana and Beyond | Booking, Payments & POS",
+  title: "Becca's Crown | Booking, Payments & POS",
   description: "Premier beauty, makeup, lash artistry, hair, and aesthetics in Accra, Ghana.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Ghana and Beyond",
+    title: "Becca's Crown",
   },
   icons: {
     icon: "/favicon.ico",

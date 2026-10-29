@@ -33,7 +33,7 @@ export function PublicNavbar() {
           </div>
           <div>
             <span className="text-zinc-900 text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
-              GHANA AND BEYOND
+              BECCA&apos;S CROWN
             </span>
             <span className="text-[8px] sm:text-[9px] text-zinc-500 tracking-wider block font-medium uppercase mt-0.5">
               East Legon Flagship

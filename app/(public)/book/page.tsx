@@ -674,7 +674,7 @@ function BookingWizardContent() {
         <div className="fixed inset-0 z-0">
           <Image
             src="/images/hero_bridal_glam.jpg"
-            alt="Ghana and Beyond"
+            alt="Becca's Crown"
             fill
             className="object-cover object-center scale-105 opacity-40 mix-blend-luminosity"
           />
@@ -815,11 +815,11 @@ function BookingWizardContent() {
                 className="flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 pl-1.5 pr-3 py-1 rounded-full backdrop-blur-md transition-colors"
               >
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 text-zinc-950 font-black text-[10px] sm:text-[11px] flex items-center justify-center shadow-xs">
-                  GB
+                  BC
                 </div>
                 <div>
                   <span className="text-[10px] sm:text-[11px] font-bold block leading-none text-white">
-                    Ghana and Beyond
+                    Becca&apos;s Crown
                   </span>
                   <span className="text-[8px] sm:text-[9px] text-amber-200 block leading-tight">
                     Beauty Vault

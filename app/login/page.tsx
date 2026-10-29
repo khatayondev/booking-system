@@ -149,7 +149,7 @@ function StaffLoginForm() {
             Staff Portal
           </h1>
           <p className="text-xs text-[#71717A] mt-1">
-            Ghana and Beyond • Accra, Ghana
+            Becca&apos;s Crown • Accra, Ghana
           </p>
         </div>
 

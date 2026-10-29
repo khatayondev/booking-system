@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Shield, Lock, Eye, FileText, CheckCircle2, ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Privacy Policy | Ghana and Beyond Accra",
+  title: "Privacy Policy | Becca's Crown Accra",
   description:
-    "Privacy Policy and Data Protection standards for Ghana and Beyond in accordance with the Ghana Data Protection Act 2012 (Act 843).",
+    "Privacy Policy and Data Protection standards for Becca's Crown in accordance with the Ghana Data Protection Act 2012 (Act 843).",
 };
 
 export default function PrivacyPolicyPage() {
@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
             <span>1. Information We Collect (PII Minimisation)</span>
           </h2>
           <p>
-            Ghana and Beyond adheres to strict data minimisation principles. When you book an appointment, make a payment, or rent a luxury gown, we only collect the minimum details necessary to deliver our services:
+            Becca&apos;s Crown adheres to strict data minimisation principles. When you book an appointment, make a payment, or rent a luxury gown, we only collect the minimum details necessary to deliver our services:
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-[#71717A]">
             <li><strong>Full Name:</strong> To address you and identify your appointment upon arrival.</li>
@@ -53,7 +53,7 @@ export default function PrivacyPolicyPage() {
             All electronic payments (Visa, Mastercard, MTN Mobile Money, Telecel Cash, AT Money) are processed securely through <strong>Paystack Ghana</strong>, a PCI-DSS Level 1 certified payment service provider.
           </p>
           <p>
-            <strong>Ghana and Beyond never stores, transmits, or has access to your debit card PAN, CVV security codes, or Mobile Money PINs.</strong> All transactions are conducted over encrypted TLS 1.3 tunnels with direct gateway tokenization.
+            <strong>Becca&apos;s Crown never stores, transmits, or has access to your debit card PAN, CVV security codes, or Mobile Money PINs.</strong> All transactions are conducted over encrypted TLS 1.3 tunnels with direct gateway tokenization.
           </p>
         </section>
 
@@ -98,7 +98,7 @@ export default function PrivacyPolicyPage() {
             If you have questions about our privacy practices, wish to review your booking records, or request profile anonymization, please contact our studio reception:
           </p>
           <div className="bg-[#F4F4F6] p-4 rounded-2xl space-y-1 text-xs">
-            <p className="font-bold text-[#1E1E1E]">Ghana and Beyond East Legon</p>
+            <p className="font-bold text-[#1E1E1E]">Becca&apos;s Crown East Legon</p>
             <p className="text-[#71717A]">14 Senchi Street, Airport Residential Area / East Legon, Accra, Ghana</p>
             <p className="text-[#71717A]">Phone: +233 24 000 0000 • Email: privacy@beccascrown.gh</p>
           </div>

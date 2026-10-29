@@ -34,7 +34,7 @@ export async function POST(
     const serviceName = booking.items[0]?.service.name || "beauty appointment";
 
     // Dispatch SMS reminder via gateway
-    const message = `Hello ${booking.customer.name}, friendly reminder from Ghana and Beyond for your ${serviceName}. Please complete your pending payment of ${formatPesewas(pendingPesewas)} to secure your slot. Reference: ${booking.reference}.`;
+    const message = `Hello ${booking.customer.name}, friendly reminder from Becca's Crown for your ${serviceName}. Please complete your pending payment of ${formatPesewas(pendingPesewas)} to secure your slot. Reference: ${booking.reference}.`;
     await sendSms({
       recipient: booking.customer.phone,
       message,

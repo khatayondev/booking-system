@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export const metadata = {
-  title: "Gallery & Studio Looks | Ghana and Beyond East Legon",
+  title: "Gallery & Studio Looks | Becca's Crown East Legon",
   description:
     "Explore our lookbook: bridal transformations, Russian volume lash sets, couture evening gown rentals, and our modern Accra beauty salon.",
 };

@@ -7,11 +7,11 @@ import { PublicNavbar } from "@/components/layout/public-navbar";
 import { ScrollProgressBar } from "@/components/ui/scroll-reveal";
 
 export const metadata: Metadata = {
-  title: "Ghana and Beyond | Premier Beauty Studio in Accra, Ghana",
+  title: "Becca's Crown | Premier Beauty Studio in Accra, Ghana",
   description:
-    "Book premier beauty services in East Legon, Accra with Ghana and Beyond. Certified lash artists, master bridal makeup, luxury hair styling, and aesthetics. Instant guest checkout with Mobile Money and card.",
+    "Book premier beauty services in East Legon, Accra with Becca's Crown. Certified lash artists, master bridal makeup, luxury hair styling, and aesthetics. Instant guest checkout with Mobile Money and card.",
   keywords: [
-    "Ghana and Beyond",
+    "Becca's Crown",
     "beauty salon Accra",
     "bridal makeup Ghana",
     "lash extensions Accra",
@@ -20,10 +20,10 @@ export const metadata: Metadata = {
     "beauty booking Ghana",
   ],
   openGraph: {
-    title: "Ghana and Beyond | Accra, Ghana",
+    title: "Becca's Crown | Accra, Ghana",
     description: "Book premier beauty services in East Legon, Accra. Guest checkout via Mobile Money.",
     url: "https://beccascrown.gh",
-    siteName: "Ghana and Beyond",
+    siteName: "Becca's Crown",
     locale: "en_GH",
     type: "website",
   },
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BeautySalon",
-  name: "Ghana and Beyond",
+  name: "Becca's Crown",
   image: "https://beccascrown.gh/images/hero_bridal_glam.jpg",
   telephone: "+233241112233",
   url: "https://beccascrown.gh",
@@ -104,7 +104,7 @@ export default function PublicSiteLayout({
                 </div>
                 <div>
                   <h3 className="font-black text-sm tracking-widest text-white uppercase leading-none">
-                    GHANA AND BEYOND
+                    BECCA&apos;S CROWN
                   </h3>
                   <span className="text-[9px] text-zinc-400 uppercase tracking-wider font-semibold block mt-0.5">
                     East Legon Flagship Studio
@@ -114,7 +114,7 @@ export default function PublicSiteLayout({
               <p className="text-xs text-zinc-400 max-w-sm leading-relaxed">
                 14 Senchi Street, Airport Residential Area / East Legon, Accra, Ghana
                 <br />
-                hello@ghanaandbeyond.com • +233 24 111 9988
+                hello@beccascrown.gh • +233 24 111 9988
               </p>
               <div className="flex items-center gap-2 pt-1 text-[11px] text-zinc-400">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -212,7 +212,7 @@ export default function PublicSiteLayout({
 
           {/* Bottom Row: Legal, Socials, Copyright */}
           <div className="pt-8 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
-            <p>© 2026 Ghana and Beyond. All rights reserved. Accra, Ghana.</p>
+            <p>© 2026 Becca&apos;s Crown. All rights reserved. Accra, Ghana.</p>
             <div className="flex items-center gap-5 text-zinc-400">
               <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
               <Link href="/privacy" className="hover:text-white transition-colors">Privacy policy</Link>

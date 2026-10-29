@@ -471,7 +471,7 @@ export function AppShell({
           <Drawer
             isOpen={mobileDrawerOpen}
             onClose={() => setMobileDrawerOpen(false)}
-            title="Ghana and Beyond"
+            title="Becca's Crown"
             side="left"
           >
             {sidebarContent}

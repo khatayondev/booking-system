@@ -131,7 +131,7 @@ export default function CustomerPublicPage() {
           <div className="absolute inset-0 z-0">
             <Image
               src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=2400&q=85"
-              alt="Ghana and Beyond Studio Accra"
+              alt="Becca's Crown Studio Accra"
               fill
               priority
               className="object-cover object-center scale-105 transform hover:scale-100 transition-transform duration-1000 opacity-65"
@@ -156,7 +156,7 @@ export default function CustomerPublicPage() {
                 </div>
                 <div>
                   <span className="text-white text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
-                    GHANA AND BEYOND
+                    BECCA&apos;S CROWN
                   </span>
                   <span className="text-[8px] sm:text-[9px] text-zinc-300 tracking-wider block font-medium uppercase mt-0.5">
                     East Legon Flagship
@@ -260,7 +260,7 @@ export default function CustomerPublicPage() {
                     <ArrowDownRight className="w-5 h-5 sm:w-6 sm:h-6" />
                   </span>
                 </div>
-                <div>Ghana and beyond experiences beauty</div>
+                <div>Ghana experiences beauty</div>
               </h1>
             </div>
 
@@ -538,67 +538,69 @@ export default function CustomerPublicPage() {
       </section>
 
       {/* =========================================================================
-          SECTION 03: THE STUDIO EXPERIENCE (Numbered 03 with Vertical Story Cards)
+          SECTION 03: THE STUDIO EXPERIENCE (Full Width, Full Black Background)
       ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-16 lg:py-24 space-y-12 border-t border-zinc-200/60">
-        {/* Section Header with 03 Numeral */}
-        <ScrollReveal variant="fade-up">
-          <div className="flex items-center gap-6 sm:gap-10">
-            <span className="text-4xl sm:text-6xl font-serif text-zinc-300 font-light select-none">
-              03
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight">
-              The studio experience
-            </h2>
-          </div>
-        </ScrollReveal>
-
-        {/* Split Layout: Editorial Left + 5 Vertical Story Cards Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left Text Column */}
-          <ScrollReveal variant="fade-right" className="lg:col-span-4 space-y-6">
-            <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-normal">
-              Experience the height of luxury and privacy with Ghana and Beyond at our East Legon flagship lounge. Private VIP treatment suites, chilled champagne, hospital-grade sanitized instruments, and prompt on-time service.
-            </p>
-            <div>
-              <Link href="/book">
-                <Button
-                  className="bg-[#FACC15] hover:bg-[#EAB308] text-black font-extrabold rounded-xl px-6 h-10 text-xs uppercase tracking-wider cursor-pointer shadow-xs"
-                >
-                  Reserve Suite
-                </Button>
-              </Link>
+      <section className="w-full bg-[#141210] text-white py-20 lg:py-28 my-16 lg:my-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
+          {/* Section Header with 03 Numeral */}
+          <ScrollReveal variant="fade-up">
+            <div className="flex items-center gap-6 sm:gap-10">
+              <span className="text-4xl sm:text-6xl font-serif text-zinc-600 font-light select-none">
+                03
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                The studio experience
+              </h2>
             </div>
           </ScrollReveal>
 
-          {/* Right Column: 5 Vertical Rounded Cards */}
-          <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-5 gap-3">
-            {VAULT_SUITES.map((suite, idx) => (
-              <ScrollReveal key={idx} variant="fade-up" delayMs={idx * 75}>
-                <div
-                  className="group relative rounded-2xl overflow-hidden aspect-[9/18] bg-zinc-900 shadow-sm"
-                >
-                  <Image
-                    src={suite.image}
-                    alt={suite.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-700 opacity-80"
-                    sizes="(max-width: 768px) 50vw, 20vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
-                  {/* Top Pill Tag */}
-                  <div className="absolute top-2.5 left-2.5 right-2.5">
-                    <span className="block text-center px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-[9px] font-bold text-white border border-white/20">
-                      {suite.title}
-                    </span>
+          {/* Split Layout: Editorial Left + 5 Vertical Story Cards Right */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            {/* Left Text Column */}
+            <ScrollReveal variant="fade-right" className="lg:col-span-4 space-y-6">
+              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
+                Experience the height of luxury and privacy with Becca&apos;s Crown at our East Legon flagship lounge. Private VIP treatment suites, chilled champagne, hospital-grade sanitized instruments, and prompt on-time service.
+              </p>
+              <div>
+                <Link href="/book">
+                  <Button
+                    className="bg-[#FACC15] hover:bg-[#EAB308] text-black font-extrabold rounded-xl px-6 h-10 text-xs uppercase tracking-wider cursor-pointer shadow-xs"
+                  >
+                    Reserve Suite
+                  </Button>
+                </Link>
+              </div>
+            </ScrollReveal>
+
+            {/* Right Column: 5 Vertical Rounded Cards */}
+            <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {VAULT_SUITES.map((suite, idx) => (
+                <ScrollReveal key={idx} variant="fade-up" delayMs={idx * 75}>
+                  <div
+                    className="group relative rounded-2xl overflow-hidden aspect-[9/18] bg-zinc-900 border border-white/10 shadow-lg"
+                  >
+                    <Image
+                      src={suite.image}
+                      alt={suite.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-700 opacity-80"
+                      sizes="(max-width: 768px) 50vw, 20vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/35" />
+                    {/* Top Pill Tag */}
+                    <div className="absolute top-2.5 left-2.5 right-2.5">
+                      <span className="block text-center px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-[9px] font-bold text-white border border-white/25">
+                        {suite.title}
+                      </span>
+                    </div>
+                    {/* Bottom Label */}
+                    <div className="absolute bottom-2.5 left-2 right-2 text-center text-white">
+                      <p className="text-[10px] font-bold text-amber-300">{suite.subtitle}</p>
+                    </div>
                   </div>
-                  {/* Bottom Label */}
-                  <div className="absolute bottom-2.5 left-2 right-2 text-center text-white">
-                    <p className="text-[10px] font-bold text-amber-200">{suite.subtitle}</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              ))}
+            </div>
           </div>
         </div>
       </section>
