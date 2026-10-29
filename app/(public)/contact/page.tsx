@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input, Label, Textarea } from "@/components/ui/controls";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export default function ContactPage() {
   const [formSubmitted, setFormSubmitted] = React.useState(false);
@@ -31,22 +32,24 @@ export default function ContactPage() {
   return (
     <div className="space-y-10 sm:space-y-14 py-6 sm:py-8 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
-          <MapPin className="w-3.5 h-3.5 text-[#1E1E1E]" />
-          <span>East Legon • Greater Accra</span>
+      <ScrollReveal variant="fade-up">
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
+            <MapPin className="w-3.5 h-3.5 text-[#1E1E1E]" />
+            <span>East Legon • Greater Accra</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-black text-[#1E1E1E] tracking-tight">
+            Get in Touch
+          </h1>
+          <p className="text-xs sm:text-sm text-[#71717A] leading-relaxed">
+            Questions about bridal bookings, gown fittings, or custom appointments? We are here to assist you daily.
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-[#1E1E1E] tracking-tight">
-          Get in Touch
-        </h1>
-        <p className="text-xs sm:text-sm text-[#71717A] leading-relaxed">
-          Questions about bridal bookings, gown fittings, or custom appointments? We are here to assist you daily.
-        </p>
-      </div>
+      </ScrollReveal>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Contact Info Cards */}
-        <div className="lg:col-span-5 space-y-4">
+        <ScrollReveal variant="fade-right" className="lg:col-span-5 space-y-4">
           <Card variant="white" className="p-6 space-y-4 rounded-[28px]">
             <div className="flex items-start gap-3.5">
               <div className="w-10 h-10 rounded-2xl bg-[#F4F4F6] text-[#1E1E1E] flex items-center justify-center shrink-0">
@@ -121,10 +124,10 @@ export default function ContactPage() {
               </div>
             </div>
           </Card>
-        </div>
+        </ScrollReveal>
 
         {/* Contact Form */}
-        <div className="lg:col-span-7">
+        <ScrollReveal variant="fade-left" delayMs={150} className="lg:col-span-7">
           <Card variant="glass" className="p-6 sm:p-8 rounded-[32px]">
             {formSubmitted ? (
               <div className="py-12 text-center space-y-4 animate-in fade-in duration-300">
@@ -224,7 +227,7 @@ export default function ContactPage() {
               </form>
             )}
           </Card>
-        </div>
+        </ScrollReveal>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import {
   Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const ALL_SIGNATURE_TREATMENTS = [
   {
@@ -237,114 +238,124 @@ export default function CustomerPublicPage() {
       ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-8 py-20 lg:py-28 space-y-16">
         {/* Section Header with 01 Numeral */}
-        <div className="flex items-center gap-6 sm:gap-10">
-          <span className="text-4xl sm:text-6xl font-serif text-zinc-300 font-light select-none">
-            01
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight">
-            Our services
-          </h2>
-        </div>
+        <ScrollReveal variant="fade-up">
+          <div className="flex items-center gap-6 sm:gap-10">
+            <span className="text-4xl sm:text-6xl font-serif text-zinc-300 font-light select-none">
+              01
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight">
+              Our services
+            </h2>
+          </div>
+        </ScrollReveal>
 
         {/* 3 Image Cards with Rounded Corners & Badges */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {/* Card 1: Hair & Lace */}
-          <div className="group relative rounded-[28px] overflow-hidden aspect-[4/5] bg-zinc-900 shadow-md">
-            <Image
-              src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80"
-              alt="Hair Installation and Lace Melting"
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute top-4 left-4">
-              <span className="px-3 py-1 rounded-full bg-white/95 text-black text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                Lace Installs & Ponies
-              </span>
-            </div>
-            <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
-              <div>
-                <p className="text-xs text-amber-200 uppercase font-semibold tracking-wider">Precision Melting</p>
-                <h3 className="text-lg font-bold">Hair & Lace Artistry</h3>
+          <ScrollReveal variant="fade-up" delayMs={0}>
+            <div className="group relative rounded-[28px] overflow-hidden aspect-[4/5] bg-zinc-900 shadow-md">
+              <Image
+                src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80"
+                alt="Hair Installation and Lace Melting"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute top-4 left-4">
+                <span className="px-3 py-1 rounded-full bg-white/95 text-black text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                  Lace Installs & Ponies
+                </span>
               </div>
-              <Link href="/book?serviceId=a80c50b6-6f94-4aaa-8cff-d7558ffce78d&step=2">
-                <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-[#FACC15] transition-colors cursor-pointer shadow-md">
-                  <ArrowRight className="w-4 h-4" />
+              <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
+                <div>
+                  <p className="text-xs text-amber-200 uppercase font-semibold tracking-wider">Precision Melting</p>
+                  <h3 className="text-lg font-bold">Hair & Lace Artistry</h3>
                 </div>
-              </Link>
+                <Link href="/book?serviceId=a80c50b6-6f94-4aaa-8cff-d7558ffce78d&step=2">
+                  <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-[#FACC15] transition-colors cursor-pointer shadow-md">
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </Link>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 2: Bridal & Glam */}
-          <div className="group relative rounded-[28px] overflow-hidden aspect-[4/5] bg-zinc-900 shadow-md">
-            <Image
-              src="/images/hero_bridal_glam.jpg"
-              alt="Bridal and Editorial Makeup"
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute top-4 left-4">
-              <span className="px-3 py-1 rounded-full bg-white/95 text-black text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                Bridal & Soft Glam
-              </span>
-            </div>
-            <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
-              <div>
-                <p className="text-xs text-amber-200 uppercase font-semibold tracking-wider">High Definition</p>
-                <h3 className="text-lg font-bold">Couture Bridal Makeup</h3>
+          <ScrollReveal variant="fade-up" delayMs={150}>
+            <div className="group relative rounded-[28px] overflow-hidden aspect-[4/5] bg-zinc-900 shadow-md">
+              <Image
+                src="/images/hero_bridal_glam.jpg"
+                alt="Bridal and Editorial Makeup"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute top-4 left-4">
+                <span className="px-3 py-1 rounded-full bg-white/95 text-black text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                  Bridal & Soft Glam
+                </span>
               </div>
-              <Link href="/book?serviceId=fbfb4850-4a54-43f1-97ef-f6833a296bc4&step=2">
-                <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-[#FACC15] transition-colors cursor-pointer shadow-md">
-                  <ArrowRight className="w-4 h-4" />
+              <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
+                <div>
+                  <p className="text-xs text-amber-200 uppercase font-semibold tracking-wider">High Definition</p>
+                  <h3 className="text-lg font-bold">Couture Bridal Makeup</h3>
                 </div>
-              </Link>
+                <Link href="/book?serviceId=fbfb4850-4a54-43f1-97ef-f6833a296bc4&step=2">
+                  <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-[#FACC15] transition-colors cursor-pointer shadow-md">
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </Link>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Card 3: Lashes & Pedicure */}
-          <div className="group relative rounded-[28px] overflow-hidden aspect-[4/5] bg-zinc-900 shadow-md">
-            <Image
-              src="/images/lashes_studio.jpg"
-              alt="Lashes and Spa Pedicure"
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute top-4 left-4">
-              <span className="px-3 py-1 rounded-full bg-white/95 text-black text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                Lashes & Pedicure
-              </span>
-            </div>
-            <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
-              <div>
-                <p className="text-xs text-amber-200 uppercase font-semibold tracking-wider">Russian & Jelly Spa</p>
-                <h3 className="text-lg font-bold">Lashes & Foot Care</h3>
+          <ScrollReveal variant="fade-up" delayMs={300}>
+            <div className="group relative rounded-[28px] overflow-hidden aspect-[4/5] bg-zinc-900 shadow-md">
+              <Image
+                src="/images/lashes_studio.jpg"
+                alt="Lashes and Spa Pedicure"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute top-4 left-4">
+                <span className="px-3 py-1 rounded-full bg-white/95 text-black text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                  Lashes & Pedicure
+                </span>
               </div>
-              <Link href="/book?serviceId=9731e67c-88bf-4124-ac04-3b3a1a1140d4&step=2">
-                <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-[#FACC15] transition-colors cursor-pointer shadow-md">
-                  <ArrowRight className="w-4 h-4" />
+              <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
+                <div>
+                  <p className="text-xs text-amber-200 uppercase font-semibold tracking-wider">Russian & Jelly Spa</p>
+                  <h3 className="text-lg font-bold">Lashes & Foot Care</h3>
                 </div>
-              </Link>
+                <Link href="/book?serviceId=9731e67c-88bf-4124-ac04-3b3a1a1140d4&step=2">
+                  <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-[#FACC15] transition-colors cursor-pointer shadow-md">
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </Link>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* Center Editorial Statement & Button */}
-        <div className="text-center max-w-2xl mx-auto space-y-6 pt-4">
-          <p className="text-base sm:text-lg text-zinc-700 leading-relaxed font-normal">
-            Whether you&apos;re preparing for your bridal aisle, a high-stakes executive gala, or your signature monthly crown refresh, our bespoke beauty vault ensures you arrive in style, confidence, and comfort.
-          </p>
-          <div>
-            <Link href="/book">
-              <Button
-                className="bg-[#FACC15] hover:bg-[#EAB308] text-black font-extrabold rounded-xl px-8 h-11 text-xs uppercase tracking-wider cursor-pointer shadow-sm"
-              >
-                Book Your Treatment
-              </Button>
-            </Link>
+        <ScrollReveal variant="fade-up" delayMs={200}>
+          <div className="text-center max-w-2xl mx-auto space-y-6 pt-4">
+            <p className="text-base sm:text-lg text-zinc-700 leading-relaxed font-normal">
+              Whether you&apos;re preparing for your bridal aisle, a high-stakes executive gala, or your signature monthly crown refresh, our bespoke beauty vault ensures you arrive in style, confidence, and comfort.
+            </p>
+            <div>
+              <Link href="/book">
+                <Button
+                  className="bg-[#FACC15] hover:bg-[#EAB308] text-black font-extrabold rounded-xl px-8 h-11 text-xs uppercase tracking-wider cursor-pointer shadow-sm"
+                >
+                  Book Your Treatment
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* =========================================================================
@@ -352,122 +363,129 @@ export default function CustomerPublicPage() {
       ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-8 py-16 lg:py-24 space-y-12 border-t border-zinc-200/60">
         {/* Section Header with 02 Numeral */}
-        <div className="flex items-center gap-6 sm:gap-10">
-          <span className="text-4xl sm:text-6xl font-serif text-zinc-300 font-light select-none">
-            02
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight">
-            Our vault collection
-          </h2>
-        </div>
+        <ScrollReveal variant="fade-up">
+          <div className="flex items-center gap-6 sm:gap-10">
+            <span className="text-4xl sm:text-6xl font-serif text-zinc-300 font-light select-none">
+              02
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight">
+              Our vault collection
+            </h2>
+          </div>
+        </ScrollReveal>
 
         {/* Category Filter Pills (Matching ALL / SEDAN / LUXURY in Reference) */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          {filterOptions.map((f) => (
-            <button
-              key={f}
-              type="button"
-              onClick={() => {
-                setActiveFilter(f);
-                setCarouselIndex(0);
-              }}
-              className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
-                activeFilter === f
-                  ? "bg-[#18181B] text-white shadow-xs"
-                  : "bg-white hover:bg-zinc-100 text-zinc-600 border border-zinc-200/80"
-              }`}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
+        <ScrollReveal variant="fade-up" delayMs={100}>
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+            {filterOptions.map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => {
+                  setActiveFilter(f);
+                  setCarouselIndex(0);
+                }}
+                className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                  activeFilter === f
+                    ? "bg-[#18181B] text-white shadow-xs"
+                    : "bg-white hover:bg-zinc-100 text-zinc-600 border border-zinc-200/80"
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+        </ScrollReveal>
 
         {/* Horizontal Treatment Spotlight Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTreatments.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-[26px] border border-zinc-200/80 p-5 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
-            >
-              <div>
-                {/* Header Info */}
-                <div className="flex items-start justify-between pb-3">
-                  <div>
-                    <h3 className="font-bold text-sm text-zinc-900 group-hover:text-black">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-zinc-500 font-medium">{item.rate} / {item.duration}</p>
-                  </div>
-                </div>
-
-                {/* Visual Showcase */}
-                <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden my-3 bg-zinc-100">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                  <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-white/95 text-[10px] font-bold text-zinc-800 shadow-xs">
-                    {item.category}
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-xs text-zinc-500 leading-relaxed line-clamp-2 mt-2">
-                  {item.description}
-                </p>
-              </div>
-
-              {/* Card Footer with Gold Circle Button */}
-              <div className="pt-4 mt-2 border-t border-zinc-100 flex items-center justify-between">
-                <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">
-                  Guaranteed Slot
-                </span>
-                <Link href={`/book?serviceId=${item.id}&step=2`}>
-                  <div className="flex items-center gap-2 text-xs font-extrabold text-zinc-900 hover:text-black group/btn cursor-pointer">
-                    <span>Book now</span>
-                    <div className="w-8 h-8 rounded-full bg-[#FACC15] flex items-center justify-center text-black group-hover/btn:scale-110 transition-transform shadow-xs">
-                      <ArrowRight className="w-3.5 h-3.5" />
+          {filteredTreatments.map((item, idx) => (
+            <ScrollReveal key={item.id} variant="fade-up" delayMs={idx * 80}>
+              <div
+                className="bg-white rounded-[26px] border border-zinc-200/80 p-5 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between group h-full"
+              >
+                <div>
+                  {/* Header Info */}
+                  <div className="flex items-start justify-between pb-3">
+                    <div>
+                      <h3 className="font-bold text-sm text-zinc-900 group-hover:text-black">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-zinc-500 font-medium">{item.rate} / {item.duration}</p>
                     </div>
                   </div>
-                </Link>
+
+                  {/* Visual Showcase */}
+                  <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden my-3 bg-zinc-100">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                    <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-white/95 text-[10px] font-bold text-zinc-800 shadow-xs">
+                      {item.category}
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-xs text-zinc-500 leading-relaxed line-clamp-2 mt-2">
+                    {item.description}
+                  </p>
+                </div>
+
+                {/* Card Footer with Gold Circle Button */}
+                <div className="pt-4 mt-2 border-t border-zinc-100 flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">
+                    Guaranteed Slot
+                  </span>
+                  <Link href={`/book?serviceId=${item.id}&step=2`}>
+                    <div className="flex items-center gap-2 text-xs font-extrabold text-zinc-900 hover:text-black group/btn cursor-pointer">
+                      <span>Book now</span>
+                      <div className="w-8 h-8 rounded-full bg-[#FACC15] flex items-center justify-center text-black group-hover/btn:scale-110 transition-transform shadow-xs">
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+                  </Link>
+                </div>
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
 
         {/* Bottom Pagination & Full Menu Link */}
-        <div className="flex items-center justify-between pt-4">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handlePrev}
-              className="w-9 h-9 rounded-full border border-zinc-300 bg-white flex items-center justify-center hover:bg-zinc-100 transition-colors cursor-pointer"
-            >
-              <ChevronLeft className="w-4 h-4 text-zinc-700" />
-            </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              className="w-9 h-9 rounded-full border border-zinc-300 bg-white flex items-center justify-center hover:bg-zinc-100 transition-colors cursor-pointer"
-            >
-              <ChevronRight className="w-4 h-4 text-zinc-700" />
-            </button>
-            <span className="text-xs text-zinc-500 font-medium pl-1">
-              {filteredTreatments.length} treatments available
-            </span>
-          </div>
+        <ScrollReveal variant="fade-up" delayMs={150}>
+          <div className="flex items-center justify-between pt-4">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="w-9 h-9 rounded-full border border-zinc-300 bg-white flex items-center justify-center hover:bg-zinc-100 transition-colors cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4 text-zinc-700" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="w-9 h-9 rounded-full border border-zinc-300 bg-white flex items-center justify-center hover:bg-zinc-100 transition-colors cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4 text-zinc-700" />
+              </button>
+              <span className="text-xs text-zinc-500 font-medium pl-1">
+                {filteredTreatments.length} treatments available
+              </span>
+            </div>
 
-          <Link href="/our-services">
-            <Button
-              className="bg-[#FACC15] hover:bg-[#EAB308] text-black font-extrabold rounded-xl px-5 h-9 text-xs uppercase tracking-wider cursor-pointer shadow-xs"
-            >
-              Open Full Menu
-            </Button>
-          </Link>
-        </div>
+            <Link href="/our-services">
+              <Button
+                className="bg-[#FACC15] hover:bg-[#EAB308] text-black font-extrabold rounded-xl px-5 h-9 text-xs uppercase tracking-wider cursor-pointer shadow-xs"
+              >
+                Open Full Menu
+              </Button>
+            </Link>
+          </div>
+        </ScrollReveal>
       </section>
 
       {/* =========================================================================
@@ -475,19 +493,21 @@ export default function CustomerPublicPage() {
       ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-8 py-16 lg:py-24 space-y-12 border-t border-zinc-200/60">
         {/* Section Header with 03 Numeral */}
-        <div className="flex items-center gap-6 sm:gap-10">
-          <span className="text-4xl sm:text-6xl font-serif text-zinc-300 font-light select-none">
-            03
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight">
-            The studio experience
-          </h2>
-        </div>
+        <ScrollReveal variant="fade-up">
+          <div className="flex items-center gap-6 sm:gap-10">
+            <span className="text-4xl sm:text-6xl font-serif text-zinc-300 font-light select-none">
+              03
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight">
+              The studio experience
+            </h2>
+          </div>
+        </ScrollReveal>
 
         {/* Split Layout: Editorial Left + 5 Vertical Story Cards Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Text Column */}
-          <div className="lg:col-span-4 space-y-6">
+          <ScrollReveal variant="fade-right" className="lg:col-span-4 space-y-6">
             <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-normal">
               Experience the height of luxury and privacy with Ghana and Beyond at our East Legon flagship lounge. Private VIP treatment suites, chilled champagne, hospital-grade sanitized instruments, and prompt on-time service.
             </p>
@@ -500,34 +520,35 @@ export default function CustomerPublicPage() {
                 </Button>
               </Link>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: 5 Vertical Rounded Cards */}
           <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-5 gap-3">
             {VAULT_SUITES.map((suite, idx) => (
-              <div
-                key={idx}
-                className="group relative rounded-2xl overflow-hidden aspect-[9/18] bg-zinc-900 shadow-sm"
-              >
-                <Image
-                  src={suite.image}
-                  alt={suite.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700 opacity-80"
-                  sizes="(max-width: 768px) 50vw, 20vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
-                {/* Top Pill Tag */}
-                <div className="absolute top-2.5 left-2.5 right-2.5">
-                  <span className="block text-center px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-[9px] font-bold text-white border border-white/20">
-                    {suite.title}
-                  </span>
+              <ScrollReveal key={idx} variant="fade-up" delayMs={idx * 75}>
+                <div
+                  className="group relative rounded-2xl overflow-hidden aspect-[9/18] bg-zinc-900 shadow-sm"
+                >
+                  <Image
+                    src={suite.image}
+                    alt={suite.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700 opacity-80"
+                    sizes="(max-width: 768px) 50vw, 20vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+                  {/* Top Pill Tag */}
+                  <div className="absolute top-2.5 left-2.5 right-2.5">
+                    <span className="block text-center px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-[9px] font-bold text-white border border-white/20">
+                      {suite.title}
+                    </span>
+                  </div>
+                  {/* Bottom Label */}
+                  <div className="absolute bottom-2.5 left-2 right-2 text-center text-white">
+                    <p className="text-[10px] font-bold text-amber-200">{suite.subtitle}</p>
+                  </div>
                 </div>
-                {/* Bottom Label */}
-                <div className="absolute bottom-2.5 left-2 right-2 text-center text-white">
-                  <p className="text-[10px] font-bold text-amber-200">{suite.subtitle}</p>
-                </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -537,53 +558,61 @@ export default function CustomerPublicPage() {
           VERIFIED CLIENT TESTIMONIALS
       ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-8 py-12">
-        <div className="bg-white rounded-3xl border border-zinc-200/80 p-8 sm:p-12 space-y-8 shadow-xs">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <div className="flex items-center justify-center gap-1 text-amber-400">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-              ))}
+        <ScrollReveal variant="fade-up">
+          <div className="bg-white rounded-3xl border border-zinc-200/80 p-8 sm:p-12 space-y-8 shadow-xs">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <div className="flex items-center justify-center gap-1 text-amber-400">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <h2 className="text-xl sm:text-3xl font-black text-zinc-900 tracking-tight">
+                Loved by Brides & Tastemakers in Accra
+              </h2>
+              <p className="text-xs text-zinc-500">
+                Real feedback from appointments booked through our verified platform.
+              </p>
             </div>
-            <h2 className="text-xl sm:text-3xl font-black text-zinc-900 tracking-tight">
-              Loved by Brides & Tastemakers in Accra
-            </h2>
-            <p className="text-xs text-zinc-500">
-              Real feedback from appointments booked through our verified platform.
-            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <ScrollReveal variant="fade-up" delayMs={0}>
+                <div className="p-5 rounded-2xl bg-zinc-50 border border-zinc-100 space-y-3 flex flex-col justify-between h-full">
+                  <p className="text-xs text-zinc-700 italic leading-relaxed">
+                    &ldquo;Held my bridal glam slot right from my phone and paid with MoMo. The team at East Legon was prompt and stunning.&rdquo;
+                  </p>
+                  <div>
+                    <p className="text-xs font-bold text-zinc-900">Akosua Mensah</p>
+                    <p className="text-[10px] text-zinc-400">Bride • Airport Residential</p>
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              <ScrollReveal variant="fade-up" delayMs={150}>
+                <div className="p-5 rounded-2xl bg-zinc-50 border border-zinc-100 space-y-3 flex flex-col justify-between h-full">
+                  <p className="text-xs text-zinc-700 italic leading-relaxed">
+                    &ldquo;Best frontal melting in Accra! My install lasted over a month with no lifting. Zero waiting time—they start right on the dot.&rdquo;
+                  </p>
+                  <div>
+                    <p className="text-xs font-bold text-zinc-900">Nana Yaa Boateng</p>
+                    <p className="text-[10px] text-zinc-400">Event Host • East Legon</p>
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              <ScrollReveal variant="fade-up" delayMs={300}>
+                <div className="p-5 rounded-2xl bg-zinc-50 border border-zinc-100 space-y-3 flex flex-col justify-between h-full">
+                  <p className="text-xs text-zinc-700 italic leading-relaxed">
+                    &ldquo;The jelly pedicure and Russian volume lashes in the private VIP suite were pure bliss. Clean, serene, and ultra-hygienic.&rdquo;
+                  </p>
+                  <div>
+                    <p className="text-xs font-bold text-zinc-900">Dr. Evelyn Addo</p>
+                    <p className="text-[10px] text-zinc-400">Cantonments, Accra</p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-5 rounded-2xl bg-zinc-50 border border-zinc-100 space-y-3 flex flex-col justify-between">
-              <p className="text-xs text-zinc-700 italic leading-relaxed">
-                &ldquo;Held my bridal glam slot right from my phone and paid with MoMo. The team at East Legon was prompt and stunning.&rdquo;
-              </p>
-              <div>
-                <p className="text-xs font-bold text-zinc-900">Akosua Mensah</p>
-                <p className="text-[10px] text-zinc-400">Bride • Airport Residential</p>
-              </div>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-zinc-50 border border-zinc-100 space-y-3 flex flex-col justify-between">
-              <p className="text-xs text-zinc-700 italic leading-relaxed">
-                &ldquo;Best frontal melting in Accra! My install lasted over a month with no lifting. Zero waiting time—they start right on the dot.&rdquo;
-              </p>
-              <div>
-                <p className="text-xs font-bold text-zinc-900">Nana Yaa Boateng</p>
-                <p className="text-[10px] text-zinc-400">Event Host • East Legon</p>
-              </div>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-zinc-50 border border-zinc-100 space-y-3 flex flex-col justify-between">
-              <p className="text-xs text-zinc-700 italic leading-relaxed">
-                &ldquo;The jelly pedicure and Russian volume lashes in the private VIP suite were pure bliss. Clean, serene, and ultra-hygienic.&rdquo;
-              </p>
-              <div>
-                <p className="text-xs font-bold text-zinc-900">Dr. Evelyn Addo</p>
-                <p className="text-[10px] text-zinc-400">Cantonments, Accra</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        </ScrollReveal>
       </section>
     </div>
   );

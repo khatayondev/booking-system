@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { formatPesewas } from "@/lib/money";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export const metadata = {
   title: "Services & Rates | Ghana and Beyond East Legon",
@@ -249,31 +250,32 @@ async function OurServicesList({
       {/* Categories & Services List */}
       <div className="space-y-12">
         {displayedCategories.map((category) => (
-          <div key={category.id} className="space-y-6">
-            <div className="border-b border-black/10 pb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-1">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-black text-[#1E1E1E]">
-                  {category.name}
-                </h2>
-                {category.description && (
-                  <p className="text-xs text-[#71717A] mt-0.5">{category.description}</p>
-                )}
+          <ScrollReveal key={category.id} variant="fade-up">
+            <div className="space-y-6">
+              <div className="border-b border-black/10 pb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-1">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-black text-[#1E1E1E]">
+                    {category.name}
+                  </h2>
+                  {category.description && (
+                    <p className="text-xs text-[#71717A] mt-0.5">{category.description}</p>
+                  )}
+                </div>
+                <span className="text-xs text-[#71717A] font-semibold">
+                  {category.services?.length || 0} Available
+                </span>
               </div>
-              <span className="text-xs text-[#71717A] font-semibold">
-                {category.services?.length || 0} Available
-              </span>
-            </div>
 
-            {/* Services Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {category.services?.map((svc) => {
-                const priceFormatted = formatPesewas(svc.pricePesewas);
+              {/* Services Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {category.services?.map((svc, sIdx) => {
+                  const priceFormatted = formatPesewas(svc.pricePesewas);
 
-                return (
-                  <div
-                    key={svc.id}
-                    className="group rounded-[28px] border border-black/5 bg-white p-6 shadow-sm hover:shadow-md hover:border-black/15 transition-all flex flex-col justify-between"
-                  >
+                  return (
+                    <ScrollReveal key={svc.id} variant="fade-up" delayMs={sIdx * 80}>
+                      <div
+                        className="group rounded-[28px] border border-black/5 bg-white p-6 shadow-sm hover:shadow-md hover:border-black/15 transition-all flex flex-col justify-between h-full"
+                      >
                     <div className="space-y-4">
                       {/* Top Row: Title, Duration, Price */}
                       <div className="flex items-start justify-between gap-4">
@@ -355,28 +357,32 @@ async function OurServicesList({
                       </Link>
                     </div>
                   </div>
+                </ScrollReveal>
                 );
               })}
             </div>
           </div>
+        </ScrollReveal>
         ))}
       </div>
 
       {/* Bottom Booking Banner */}
-      <Card variant="glass" className="p-8 text-center space-y-4 rounded-[32px]">
-        <h3 className="text-lg sm:text-xl font-black text-[#1E1E1E]">
-          Want to combine multiple services?
-        </h3>
-        <p className="text-xs text-[#71717A] max-w-md mx-auto">
-          Our mobile booking wizard allows you to multi-select hair, lash, makeup, and add-ons in a single visit with synchronized artist scheduling.
-        </p>
-        <Link href="/book">
-          <Button variant="blackPill" size="md" className="gap-2 text-xs font-bold shadow-md cursor-pointer">
-            <Crown className="w-4 h-4 text-amber-300" />
-            <span>Launch Multi-Service Wizard</span>
-          </Button>
-        </Link>
-      </Card>
+      <ScrollReveal variant="fade-up">
+        <Card variant="glass" className="p-8 text-center space-y-4 rounded-[32px]">
+          <h3 className="text-lg sm:text-xl font-black text-[#1E1E1E]">
+            Want to combine multiple services?
+          </h3>
+          <p className="text-xs text-[#71717A] max-w-md mx-auto">
+            Our mobile booking wizard allows you to multi-select hair, lash, makeup, and add-ons in a single visit with synchronized artist scheduling.
+          </p>
+          <Link href="/book">
+            <Button variant="blackPill" size="md" className="gap-2 text-xs font-bold shadow-md cursor-pointer">
+              <Crown className="w-4 h-4 text-amber-300" />
+              <span>Launch Multi-Service Wizard</span>
+            </Button>
+          </Link>
+        </Card>
+      </ScrollReveal>
     </div>
   );
 }

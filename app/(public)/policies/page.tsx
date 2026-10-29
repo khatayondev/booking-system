@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ShieldCheck, Clock, RefreshCw, AlertCircle, Crown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export const metadata = {
   title: "Policies & Terms | Ghana and Beyond East Legon",
@@ -46,61 +47,66 @@ export default function PoliciesPage() {
   return (
     <div className="space-y-10 sm:space-y-14 py-6 sm:py-8 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Fair & Transparent Standards</span>
+      <ScrollReveal variant="fade-up">
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Fair & Transparent Standards</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-black text-[#1E1E1E] tracking-tight">
+            Studio Policies
+          </h1>
+          <p className="text-xs sm:text-sm text-[#71717A] max-w-xl mx-auto leading-relaxed">
+            Our policies are designed to ensure seamless service, zero double-booking, and an exceptional luxury experience for every client.
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-[#1E1E1E] tracking-tight">
-          Studio Policies
-        </h1>
-        <p className="text-xs sm:text-sm text-[#71717A] max-w-xl mx-auto leading-relaxed">
-          Our policies are designed to ensure seamless service, zero double-booking, and an exceptional luxury experience for every client.
-        </p>
-      </div>
+      </ScrollReveal>
 
       {/* Policies Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {policies.map((p, idx) => {
           const Icon = p.icon;
           return (
-            <Card
-              key={idx}
-              variant="white"
-              className="p-6 sm:p-7 space-y-3 hover:border-black/20 transition-all rounded-[28px]"
-            >
-              <div className="w-10 h-10 rounded-2xl bg-[#F4F4F6] text-[#1E1E1E] flex items-center justify-center">
-                <Icon className="w-5 h-5" />
-              </div>
-              <h2 className="text-base font-bold text-[#1E1E1E]">{p.title}</h2>
-              <p className="text-xs text-[#71717A] leading-relaxed">{p.desc}</p>
-            </Card>
+            <ScrollReveal key={idx} variant="fade-up" delayMs={idx * 75}>
+              <Card
+                variant="white"
+                className="p-6 sm:p-7 space-y-3 hover:border-black/20 transition-all rounded-[28px] h-full"
+              >
+                <div className="w-10 h-10 rounded-2xl bg-[#F4F4F6] text-[#1E1E1E] flex items-center justify-center">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <h2 className="text-base font-bold text-[#1E1E1E]">{p.title}</h2>
+                <p className="text-xs text-[#71717A] leading-relaxed">{p.desc}</p>
+              </Card>
+            </ScrollReveal>
           );
         })}
       </div>
 
       {/* Questions CTA */}
-      <Card variant="glass" className="p-8 text-center space-y-4 rounded-[32px]">
-        <h2 className="text-lg sm:text-xl font-black text-[#1E1E1E]">
-          Have questions about your upcoming event or booking?
-        </h2>
-        <p className="text-xs text-[#71717A] max-w-md mx-auto">
-          Our studio concierge is available daily via WhatsApp or phone call to assist with group bookings, custom bridal trials, and policy inquiries.
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <Link href="/contact">
-            <Button variant="blackPill" size="md" className="gap-2 text-xs font-bold shadow-md cursor-pointer">
-              <span>Contact Concierge</span>
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </Link>
-          <Link href="/book">
-            <Button variant="outlinePill" size="md" className="text-xs font-semibold bg-white cursor-pointer">
-              <span>Proceed to Booking</span>
-            </Button>
-          </Link>
-        </div>
-      </Card>
+      <ScrollReveal variant="fade-up">
+        <Card variant="glass" className="p-8 text-center space-y-4 rounded-[32px]">
+          <h2 className="text-lg sm:text-xl font-black text-[#1E1E1E]">
+            Have questions about your upcoming event or booking?
+          </h2>
+          <p className="text-xs text-[#71717A] max-w-md mx-auto">
+            Our studio concierge is available daily via WhatsApp or phone call to assist with group bookings, custom bridal trials, and policy inquiries.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link href="/contact">
+              <Button variant="blackPill" size="md" className="gap-2 text-xs font-bold shadow-md cursor-pointer">
+                <span>Contact Concierge</span>
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+            <Link href="/book">
+              <Button variant="outlinePill" size="md" className="text-xs font-semibold bg-white cursor-pointer">
+                <span>Proceed to Booking</span>
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      </ScrollReveal>
     </div>
   );
 }

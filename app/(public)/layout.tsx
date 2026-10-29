@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Crown, MapPin, Clock, Calendar, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PublicNavbar } from "@/components/layout/public-navbar";
+import { ScrollProgressBar } from "@/components/ui/scroll-reveal";
 
 export const metadata: Metadata = {
   title: "Ghana and Beyond | Premier Beauty Studio in Accra, Ghana",
@@ -79,6 +80,9 @@ export default function PublicSiteLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {/* Luxury Golden Scroll Progress Indicator */}
+      <ScrollProgressBar />
 
       {/* Dynamic Public Navbar (Hidden on Homepage where integrated into Hero) */}
       <Suspense fallback={null}>
