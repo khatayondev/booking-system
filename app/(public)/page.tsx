@@ -146,16 +146,19 @@ export default function CustomerPublicPage() {
           =================================================================== */}
           <div className="relative z-20 w-full px-5 sm:px-8 lg:px-12 pt-5 sm:pt-6 pb-2">
             <div className="flex items-center justify-between gap-4">
-              {/* Brand Logo */}
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-                  <Crown className="w-4 h-4 text-amber-300" />
+              {/* Brand Logo in Floating Capsule */}
+              <Link
+                href="/"
+                className="flex items-center gap-2.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/15 backdrop-blur-md shadow-xs group transition-all"
+              >
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
+                  <Crown className="w-3.5 h-3.5 text-amber-300" />
                 </div>
                 <div>
                   <span className="text-white text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
                     GHANA AND BEYOND
                   </span>
-                  <span className="text-[9px] text-zinc-300 tracking-wider block font-medium uppercase mt-0.5">
+                  <span className="text-[8px] sm:text-[9px] text-zinc-300 tracking-wider block font-medium uppercase mt-0.5">
                     East Legon Flagship
                   </span>
                 </div>
