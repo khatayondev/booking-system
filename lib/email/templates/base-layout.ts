@@ -130,11 +130,11 @@ export function buildMasterEmailHTML({
             ctaLink
               ? `
           <tr>
-            <td align="center" style="padding:16px 28px 36px 28px; background-color:#ffffff;">
-              <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+            <td align="center" style="padding:20px 28px 36px 28px; background-color:#ffffff;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
                 <tr>
-                  <td align="center" style="background-color:#141006; border-radius:50px;">
-                    <a href="${ctaLink}" style="display:block; padding:14px 28px; color:#ffffff; font-size:13px; font-weight:700; text-decoration:none; text-transform:uppercase; letter-spacing:1px; font-family:'Poppins', sans-serif;">
+                  <td align="center" style="background-color:#141006; border:1px solid #d4af37; border-radius:50px; box-shadow:0 4px 14px rgba(20, 16, 6, 0.2);">
+                    <a href="${ctaLink}" target="_blank" style="display:inline-block; padding:15px 38px; color:#ffffff; font-size:13px; font-weight:700; text-decoration:none; text-transform:uppercase; letter-spacing:1.5px; font-family:'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; border-radius:50px;">
                       ${ctaLabel}
                     </a>
                   </td>
@@ -217,11 +217,11 @@ export function wrapLuxuryEmailHtml(options: EmailLayoutOptions): string {
   const ctaHtml =
     ctaText && ctaUrl
       ? `
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin: 24px 0 8px 0;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin: 28px auto 12px auto;">
       <tr>
-        <td align="center" style="background-color: #141006; border-radius: 50px;">
-          <a href="${ctaUrl}" style="display: block; padding: 14px 28px; color: #ffffff; font-size: 13px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; font-family: 'Poppins', sans-serif;">
-            ${ctaText}
+        <td align="center" style="background-color: #141006; border: 1px solid #d4af37; border-radius: 50px; box-shadow: 0 4px 14px rgba(20, 16, 6, 0.2);">
+          <a href="${ctaUrl}" target="_blank" style="display: inline-block; padding: 15px 38px; color: #ffffff; font-size: 13px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; border-radius: 50px;">
+            ${ctaText} &rarr;
           </a>
         </td>
       </tr>
@@ -229,9 +229,9 @@ export function wrapLuxuryEmailHtml(options: EmailLayoutOptions): string {
         secondaryCtaText && secondaryCtaUrl
           ? `
       <tr>
-        <td align="center" style="padding-top: 12px;">
-          <a href="${secondaryCtaUrl}" style="color: #6b7280; font-size: 12px; text-decoration: underline; font-family: 'Poppins', sans-serif;">
-            ${secondaryCtaText}
+        <td align="center" style="padding-top: 14px;">
+          <a href="${secondaryCtaUrl}" target="_blank" style="display: inline-block; padding: 10px 24px; color: #6b7280; font-size: 12px; font-weight: 600; text-decoration: none; font-family: 'Poppins', sans-serif; border: 1px solid #e5e7eb; border-radius: 50px; background-color: #f9fafb;">
+            ${secondaryCtaText} &rarr;
           </a>
         </td>
       </tr>

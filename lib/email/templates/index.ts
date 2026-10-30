@@ -230,7 +230,7 @@ export function buildAppointmentReminderEmail(params: AppointmentReminderEmailPa
     preheader: `Friendly reminder for your appointment tomorrow at ${params.timeFormatted} (Ref: ${params.reference})`,
     bodyHtml,
     metaFields,
-    ctaText: "View Digital Booking Pass",
+    ctaText: "View & Manage Booking Pass",
     ctaUrl: params.manageUrl,
   });
 
