@@ -28,6 +28,20 @@ import {
 } from "lucide-react";
 import { formatPesewas } from "@/lib/money";
 
+async function parseJsonSafely(res: Response) {
+  try {
+    const text = await res.text();
+    return JSON.parse(text);
+  } catch {
+    return {
+      success: false,
+      error: {
+        message: res.status >= 500 ? "Service temporarily unavailable. Please retry in a moment." : "An unexpected response was received.",
+      },
+    };
+  }
+}
+
 function getTomorrowDate(): string {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -173,7 +187,7 @@ function BookingWizardContent() {
       try {
         setCatalogLoading(true);
         const res = await fetch("/api/catalog");
-        const json = await res.json();
+        const json = await parseJsonSafely(res);
         if (json.success && json.data) {
           setCategories(json.data.categories || []);
 
@@ -321,7 +335,7 @@ function BookingWizardContent() {
     }
 
     fetch(`/api/availability?${params.toString()}`)
-      .then((res) => res.json())
+      .then((res) => parseJsonSafely(res))
       .then((json) => {
         if (!cancelled) {
           if (json.success && json.data) {
@@ -453,7 +467,7 @@ function BookingWizardContent() {
         }),
       });
 
-      const json = await res.json();
+      const json = await parseJsonSafely(res);
       if (json.success && json.data) {
         setHold({
           token: json.data.token,
@@ -486,7 +500,7 @@ function BookingWizardContent() {
           additionalMinutes: 5,
         }),
       });
-      const json = await res.json();
+      const json = await parseJsonSafely(res);
       if (json.success && json.data?.hold) {
         setHold({
           token: json.data.hold.token,
@@ -546,7 +560,7 @@ function BookingWizardContent() {
         }),
       });
 
-      const json = await res.json();
+      const json = await parseJsonSafely(res);
       if (json.success && json.data) {
         localStorage.removeItem(STORAGE_KEY);
 
@@ -560,7 +574,7 @@ function BookingWizardContent() {
               paymentType,
             }),
           });
-          const payJson = await payRes.json();
+          const payJson = await parseJsonSafely(payRes);
           if (payJson.success && payJson.data?.authorizationUrl) {
             window.location.href = payJson.data.authorizationUrl;
             return;

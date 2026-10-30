@@ -184,3 +184,4 @@ export function wrapLuxuryEmailHtml(options: EmailLayoutOptions): string {
 </body>
 </html>`;
 }
+

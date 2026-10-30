@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     const ip = getClientIp(req);
     checkRateLimit(`availability:${ip}`, 60, 60);
 
-    const { searchParams } = new URL(req.url);
+    const searchParams = req.nextUrl?.searchParams || new URL(req.url).searchParams;
 
     // Support comma-separated serviceIds (e.g. ?serviceIds=id1,id2 or multiple ?serviceIds=id1&serviceIds=id2)
     const rawServices = searchParams.getAll("serviceIds");

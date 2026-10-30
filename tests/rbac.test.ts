@@ -120,6 +120,9 @@ describe("Prompt 5: Permission-Based RBAC Test Matrix & Security Guards", () => 
         },
       },
     });
+    await prisma.booking.deleteMany({
+      where: { staffId: { in: [staffMemberId, otherStaffMemberId].filter(Boolean) } },
+    });
     await prisma.staff.deleteMany({
       where: { id: { in: [staffMemberId, otherStaffMemberId].filter(Boolean) } },
     });

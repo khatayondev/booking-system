@@ -174,3 +174,4 @@ Sent to: ${params.recipientEmail} at ${now}.
 
   return { subject, html, text };
 }
+
