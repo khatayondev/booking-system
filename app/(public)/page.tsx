@@ -11,6 +11,9 @@ import {
   ChevronRight,
   Star,
   Crown,
+  Menu,
+  X,
+  Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -101,6 +104,20 @@ const VAULT_SUITES = [
 ];
 
 export default function CustomerPublicPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  // Lock body scroll when mobile menu is open
+  React.useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   // Section 02 Category Filter State
   const [activeFilter, setActiveFilter] = React.useState<string>("ALL");
   const [carouselIndex, setCarouselIndex] = React.useState<number>(0);
@@ -192,13 +209,13 @@ export default function CustomerPublicPage() {
                 </Link>
               </nav>
 
-              {/* Right Side: Currency & Staff Portal in Liquid Glass Capsules */}
-              <div className="flex items-center gap-3">
+              {/* Right Side: Currency, Staff Portal & Mobile Burger Button */}
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="apple-glass-pill-dark hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold text-white">
                   <span>🇬🇭</span>
                   <span>GHS (GH₵)</span>
                 </div>
-                <Link href="/login">
+                <Link href="/login" className="hidden sm:inline-block">
                   <button
                     type="button"
                     className="apple-glass-pill-dark px-3.5 py-1.5 rounded-full text-white text-[11px] font-semibold transition-all cursor-pointer hover:scale-105 active:scale-95"
@@ -206,43 +223,131 @@ export default function CustomerPublicPage() {
                     Staff Portal
                   </button>
                 </Link>
+
+                {/* Mobile Regular Burger Icon Button */}
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="md:hidden apple-glass-pill-dark w-10 h-10 rounded-full flex items-center justify-center text-white hover:text-amber-200 active:scale-90 transition-all cursor-pointer"
+                  aria-label="Toggle navigation menu"
+                >
+                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
               </div>
             </div>
-
-            {/* Mobile Floating Liquid Glass Capsule Navigation */}
-            <div className="md:hidden flex items-center gap-2 pt-3 pb-1 overflow-x-auto scrollbar-none">
-              <Link
-                href="/our-services"
-                className="apple-glass-pill-dark whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-semibold active:scale-95 cursor-pointer"
-              >
-                Services
-              </Link>
-              <Link
-                href="/book"
-                className="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white text-zinc-950 text-[11px] font-bold shadow-md transition-all active:scale-95 cursor-pointer hover:scale-105"
-              >
-                Book
-              </Link>
-              <Link
-                href="/gallery"
-                className="apple-glass-pill-dark whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-semibold active:scale-95 cursor-pointer"
-              >
-                Lookbook
-              </Link>
-              <Link
-                href="/policies"
-                className="apple-glass-pill-dark whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-semibold active:scale-95 cursor-pointer"
-              >
-                Policies
-              </Link>
-              <Link
-                href="/contact"
-                className="apple-glass-pill-dark whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-semibold active:scale-95 cursor-pointer"
-              >
-                Contact
-              </Link>
-            </div>
           </div>
+
+          {/* Mobile Navigation Drawer / Dropdown Menu on Homepage */}
+          {mobileMenuOpen && (
+            <div className="md:hidden fixed inset-0 z-50 flex flex-col justify-start">
+              {/* Backdrop */}
+              <div
+                className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-hidden="true"
+              />
+
+              {/* Sliding Dark Menu Panel */}
+              <div className="relative z-10 bg-[#141210]/95 backdrop-blur-2xl border-b border-white/15 shadow-2xl rounded-b-3xl p-5 pt-5 space-y-5 animate-in slide-in-from-top-4 duration-200 text-white">
+                {/* Top Bar inside Menu */}
+                <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                  <Link
+                    href="/"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2.5"
+                  >
+                    <div className="w-7 h-7 rounded-full bg-white/15 border border-white/20 flex items-center justify-center text-white">
+                      <Crown className="w-3.5 h-3.5 text-amber-300" />
+                    </div>
+                    <div>
+                      <span className="text-white text-xs font-black tracking-widest uppercase block leading-none">
+                        BECCA&apos;S CROWN
+                      </span>
+                      <span className="text-[8px] text-amber-300 font-bold tracking-wider block uppercase mt-0.5">
+                        Beauty Vault
+                      </span>
+                    </div>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white active:scale-90 transition-all"
+                    aria-label="Close menu"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Navigation Links */}
+                <nav className="flex flex-col gap-1.5">
+                  <Link
+                    href="/"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between bg-white/10 text-white shadow-xs"
+                  >
+                    <span>Home</span>
+                    <ArrowRight className="w-4 h-4 opacity-50" />
+                  </Link>
+                  <Link
+                    href="/our-services"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
+                  >
+                    <span>Services & Menu</span>
+                    <ArrowRight className="w-4 h-4 opacity-50" />
+                  </Link>
+                  <Link
+                    href="/gallery"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
+                  >
+                    <span>Lookbook</span>
+                    <ArrowRight className="w-4 h-4 opacity-50" />
+                  </Link>
+                  <Link
+                    href="/policies"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
+                  >
+                    <span>Policies</span>
+                    <ArrowRight className="w-4 h-4 opacity-50" />
+                  </Link>
+                  <Link
+                    href="/contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
+                  >
+                    <span>Contact</span>
+                    <ArrowRight className="w-4 h-4 opacity-50" />
+                  </Link>
+                </nav>
+
+                {/* Actions: Book Now & Staff Portal */}
+                <div className="pt-2 border-t border-white/10 space-y-2.5">
+                  <Link href="/book" onClick={() => setMobileMenuOpen(false)}>
+                    <button
+                      type="button"
+                      className="w-full bg-[#FACC15] hover:bg-[#EAB308] text-black font-extrabold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg cursor-pointer active:scale-95 transition-transform"
+                    >
+                      <Calendar className="w-4 h-4" />
+                      <span>Book Appointment</span>
+                    </button>
+                  </Link>
+
+                  <div className="flex items-center justify-between text-xs text-zinc-400 pt-1 px-1">
+                    <span className="font-semibold text-[11px]">🇬🇭 Ghana • GHS (GH₵)</span>
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="font-bold text-[11px] text-zinc-300 hover:text-white"
+                    >
+                      Staff Portal →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* ===================================================================
               BOTTOM AREA: EDITORIAL HEADLINE (LEFT) & BOOK BUTTON (RIGHT)
