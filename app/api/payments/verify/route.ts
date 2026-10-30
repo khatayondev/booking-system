@@ -57,9 +57,15 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // 1. Fetch provider status
-    const provider = getPaymentProvider();
-    const providerResult = await provider.verify(reference);
+    // 1. Fetch provider status safely
+    let providerResult;
+    try {
+      const provider = getPaymentProvider();
+      providerResult = await provider.verify(reference);
+    } catch (providerErr: unknown) {
+      const msg = providerErr instanceof Error ? providerErr.message : "Payment verification failed";
+      return errorResponse(msg, "PAYMENT_NOT_FOUND", 404);
+    }
 
     // 2. Reconcile with atomic row locking
     const reconcileResult = await reconcilePaymentTransaction({
