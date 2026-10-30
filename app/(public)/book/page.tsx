@@ -117,7 +117,7 @@ const STEP_BACKGROUNDS: Record<number, { image: string; title: string; subtitle:
   2: {
     image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=2400&q=85",
     title: "Prime Appointments",
-    subtitle: "Pick an available date and 10-minute hold slot.",
+    subtitle: "Pick your preferred date and time slot.",
   },
   3: {
     image: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=2400&q=85",
@@ -126,7 +126,7 @@ const STEP_BACKGROUNDS: Record<number, { image: string; title: string; subtitle:
   },
   4: {
     image: "/images/hero_bridal_glam.jpg",
-    title: "Secure Your Hold",
+    title: "Confirm & Pay",
     subtitle: "MoMo and Card encrypted checkout.",
   },
 };
@@ -170,11 +170,10 @@ function BookingWizardContent() {
   const [customerNotes, setCustomerNotes] = React.useState("");
   const [phoneError, setPhoneError] = React.useState<string | null>(null);
 
-  // Hold State
+  // Hold State (Backdoor concurrency protection)
   const [hold, setHold] = React.useState<SlotHoldData | null>(null);
   const [holdSecondsLeft, setHoldSecondsLeft] = React.useState<number | null>(null);
   const [holdExpired, setHoldExpired] = React.useState(false);
-  const [extendingHold, setExtendingHold] = React.useState(false);
 
   // Review & Payment
   const [paymentType, setPaymentType] = React.useState<"DEPOSIT" | "FULL">("DEPOSIT");
@@ -489,42 +488,6 @@ function BookingWizardContent() {
     }
   };
 
-  // Extend slot hold (+5 min)
-  const handleExtendHold = async () => {
-    if (!hold?.token) return;
-    try {
-      setExtendingHold(true);
-      const res = await fetch("/api/availability/hold/extend", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          token: hold.token,
-          additionalMinutes: 5,
-        }),
-      });
-      const json = await parseJsonSafely(res);
-      if (json.success && json.data?.hold) {
-        setHold({
-          token: json.data.hold.token,
-          expiresAt: json.data.hold.expiresAt,
-          extendedCount: json.data.hold.extendedCount || 1,
-        });
-        setHoldExpired(false);
-        const sec = Math.floor(
-          (new Date(json.data.hold.expiresAt).getTime() - Date.now()) / 1000
-        );
-        setHoldSecondsLeft(sec);
-      } else {
-        alert(json.error?.message || "Could not extend hold");
-      }
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : "Failed to extend hold";
-      alert(msg);
-    } finally {
-      setExtendingHold(false);
-    }
-  };
-
   // Submit Final Booking
   const handleFinalSubmit = async () => {
     if (!selectedSlot || selectedServiceIds.length === 0) return;
@@ -534,6 +497,11 @@ function BookingWizardContent() {
     }
     if (!policyAgreed) {
       setBookingError("Please accept the cancellation policy to proceed.");
+      return;
+    }
+    if (holdExpired) {
+      setBookingError("Your selected time slot has timed out. Please select an available slot to continue.");
+      setStep(2);
       return;
     }
 
@@ -643,12 +611,6 @@ function BookingWizardContent() {
       }
       setStep(4);
     }
-  };
-
-  const formatTimer = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
   // Format month and year from selected date for Step 2
@@ -810,7 +772,7 @@ function BookingWizardContent() {
             <span>•</span>
             <div className="flex items-center gap-1.5">
               <Lock className="w-4 h-4 text-emerald-400" />
-              <span>Live Slot Hold</span>
+              <span>Instant Confirmation</span>
             </div>
             <span>•</span>
             <div className="flex items-center gap-1.5">
@@ -900,40 +862,6 @@ function BookingWizardContent() {
                     </button>
                   )}
                 </div>
-              </div>
-            )}
-
-            {/* Hold Timer Alert if Active */}
-            {hold && holdSecondsLeft !== null && (
-              <div
-                className={`my-2 p-2.5 rounded-2xl border text-xs flex items-center justify-between gap-2 ${
-                  holdExpired
-                    ? "bg-rose-500/20 border-rose-500/40 text-rose-200"
-                    : "bg-emerald-500/20 border-emerald-500/40 text-emerald-200"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <Lock className="w-3.5 h-3.5 shrink-0" />
-                  <span>
-                    {holdExpired ? (
-                      <strong>Slot expired. Please pick a new slot.</strong>
-                    ) : (
-                      <>
-                        Slot held for: <strong className="font-mono">{formatTimer(holdSecondsLeft)}</strong>
-                      </>
-                    )}
-                  </span>
-                </div>
-                {!holdExpired && hold.extendedCount < 1 && (
-                  <button
-                    type="button"
-                    onClick={handleExtendHold}
-                    disabled={extendingHold}
-                    className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 hover:bg-white/30 text-white cursor-pointer"
-                  >
-                    {extendingHold ? "..." : "+5 min"}
-                  </button>
-                )}
               </div>
             )}
 
@@ -1490,7 +1418,7 @@ function BookingWizardContent() {
               {step === 4 && (
                 <button
                   type="button"
-                  disabled={submittingBooking || !policyAgreed || holdExpired}
+                  disabled={submittingBooking || !policyAgreed}
                   onClick={handleFinalSubmit}
                   className="flex-1 h-11 sm:h-12 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >

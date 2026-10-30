@@ -212,7 +212,7 @@ async function OurServicesList({
           Services & Add-ons Menu
         </h1>
         <p className="text-xs sm:text-sm text-[#71717A] leading-relaxed">
-          Select any service below to begin your booking. Choose optional add-ons, pick your preferred date and time, and hold your slot in real time.
+          Select any service below to begin your booking. Choose optional add-ons, pick your preferred date and time, and secure your appointment in real time.
         </p>
       </div>
 
@@ -344,7 +344,7 @@ async function OurServicesList({
                     {/* Bottom CTA Button */}
                     <div className="pt-5 mt-4 border-t border-black/5 flex items-center justify-between">
                       <span className="text-[11px] text-[#71717A]">
-                        Live slot hold in checkout
+                        Instant confirmation
                       </span>
                       <Link href={`/book?serviceId=${svc.id}`}>
                         <Button
