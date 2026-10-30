@@ -670,7 +670,7 @@ function BookingWizardContent() {
   // CONFIRMATION VIEW
   if (bookingResult) {
     return (
-      <div className="relative min-h-[calc(100vh-140px)] w-full py-12 sm:py-16 flex items-center justify-center p-4 sm:p-8 bg-zinc-950">
+      <div className="relative min-h-[calc(100dvh-5rem)] w-full py-6 sm:py-10 flex items-center justify-center p-4 sm:p-8 bg-zinc-950">
         <div className="fixed inset-0 z-0">
           <Image
             src="/images/ghanaian_hero_beauty.jpg"
@@ -740,7 +740,7 @@ function BookingWizardContent() {
   }
 
   return (
-    <div className="relative min-h-[calc(100vh-140px)] w-full py-8 sm:py-12 lg:py-16 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-zinc-950">
+    <div className="relative min-h-[calc(100dvh-5rem)] lg:h-[calc(100dvh-5rem)] w-full py-2 sm:py-4 lg:py-3 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-zinc-950">
       {/* =========================================================================
           DYNAMIC BACKGROUND IMAGES (Changes with each step with smooth cross-fade)
       ========================================================================= */}
@@ -766,11 +766,11 @@ function BookingWizardContent() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-black/70" />
       </div>
 
-      <div className="relative z-10 max-w-6xl w-full h-full max-h-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
+      <div className="relative z-10 max-w-6xl w-full h-full max-h-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
         {/* =========================================================================
             LEFT COLUMN (Minimalist Editorial Typography - Changes with Step)
         ========================================================================= */}
-        <div className="hidden lg:flex lg:col-span-6 flex-col justify-between h-full max-h-[660px] py-6 text-white pr-6">
+        <div className="hidden lg:flex lg:col-span-5 flex-col justify-between h-full max-h-[min(650px,calc(100dvh-7rem))] py-4 text-white pr-4">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold text-amber-200">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
@@ -805,8 +805,8 @@ function BookingWizardContent() {
         {/* =========================================================================
             RIGHT COLUMN: THE FROSTED GLASS CARD (Fitted to Screen Height)
         ========================================================================= */}
-        <div className="lg:col-span-6 w-full flex items-center justify-center">
-          <div className="w-full max-w-lg min-h-[580px] h-[640px] sm:h-[680px] lg:h-[720px] rounded-[32px] sm:rounded-[36px] bg-zinc-950/90 sm:bg-zinc-950/80 backdrop-blur-3xl border border-white/20 p-4 sm:p-6 shadow-2xl text-white flex flex-col justify-between overflow-hidden transition-all duration-300">
+        <div className="lg:col-span-7 w-full flex items-center justify-center h-full">
+          <div className="w-full max-w-xl min-h-[500px] h-[calc(100dvh-7rem)] max-h-[640px] sm:max-h-[660px] lg:max-h-[680px] rounded-[28px] sm:rounded-[36px] bg-zinc-950/90 sm:bg-zinc-950/80 backdrop-blur-3xl border border-white/20 p-4 sm:p-5 lg:p-6 shadow-2xl text-white flex flex-col justify-between overflow-hidden transition-all duration-300">
             {/* Top Bar inside the Glass: Studio Brand Capsule & Step Indicator */}
             <div className="flex items-center justify-between pb-2.5 sm:pb-3.5 border-b border-white/10 shrink-0">
               {/* Studio Capsule */}
