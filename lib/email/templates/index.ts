@@ -1,4 +1,6 @@
-import { wrapLuxuryEmailHtml } from "./base-layout";
+import { wrapLuxuryEmailHtml, buildMasterEmailHTML } from "./base-layout";
+
+export { buildMasterEmailHTML };
 
 export interface BookingConfirmationEmailParams {
   customerName: string;
