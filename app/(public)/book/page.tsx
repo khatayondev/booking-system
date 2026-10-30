@@ -25,6 +25,8 @@ import {
   Mail,
   FileText,
   Star,
+  Gift,
+  Sparkles,
 } from "lucide-react";
 import { formatPesewas } from "@/lib/money";
 
@@ -47,6 +49,11 @@ function getTomorrowDate(): string {
   tomorrow.setDate(tomorrow.getDate() + 1);
   return tomorrow.toISOString().split("T")[0];
 }
+
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 interface ServiceAddon {
   id: string;
@@ -167,8 +174,16 @@ function BookingWizardContent() {
   const [customerEmail, setCustomerEmail] = React.useState("");
   const [customerBirthdayMonth, setCustomerBirthdayMonth] = React.useState<number | "">("");
   const [customerBirthdayDay, setCustomerBirthdayDay] = React.useState<number | "">("");
+  const [showBirthdayPicker, setShowBirthdayPicker] = React.useState(false);
   const [customerNotes, setCustomerNotes] = React.useState("");
   const [phoneError, setPhoneError] = React.useState<string | null>(null);
+
+  const daysInSelectedMonth = React.useMemo(() => {
+    if (!customerBirthdayMonth) return 31;
+    if (customerBirthdayMonth === 2) return 29;
+    if ([4, 6, 9, 11].includes(Number(customerBirthdayMonth))) return 30;
+    return 31;
+  }, [customerBirthdayMonth]);
 
   // Hold State (Backdoor concurrency protection)
   const [hold, setHold] = React.useState<SlotHoldData | null>(null);
@@ -219,6 +234,8 @@ function BookingWizardContent() {
                 if (saved.customerName) setCustomerName(saved.customerName);
                 if (saved.customerPhone) setCustomerPhone(saved.customerPhone);
                 if (saved.customerEmail) setCustomerEmail(saved.customerEmail);
+                if (saved.customerBirthdayMonth) setCustomerBirthdayMonth(saved.customerBirthdayMonth);
+                if (saved.customerBirthdayDay) setCustomerBirthdayDay(saved.customerBirthdayDay);
                 if (saved.customerNotes) setCustomerNotes(saved.customerNotes);
                 if (saved.step && saved.step >= 1 && saved.step <= 4) setStep(saved.step as 1 | 2 | 3 | 4);
 
@@ -269,6 +286,8 @@ function BookingWizardContent() {
       customerName,
       customerPhone,
       customerEmail,
+      customerBirthdayMonth,
+      customerBirthdayDay,
       customerNotes,
       hold,
     };
@@ -287,6 +306,8 @@ function BookingWizardContent() {
     customerName,
     customerPhone,
     customerEmail,
+    customerBirthdayMonth,
+    customerBirthdayDay,
     customerNotes,
     hold,
     bookingResult,
@@ -1112,116 +1133,260 @@ function BookingWizardContent() {
               )}
 
               {/* ---------------------------------------------------------------
-                  STEP 3: GUEST CLIENT INFORMATION (Matches Glass Inputs)
+                  STEP 3: GUEST CLIENT INFORMATION (Minimalist Luxury Form)
               --------------------------------------------------------------- */}
               {step === 3 && (
-                <div className="space-y-3.5 animate-in fade-in duration-300">
+                <div className="space-y-3 animate-in fade-in duration-300">
+                  {/* Full Name */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">
-                      Full Name *
+                    <label className="text-[11px] font-semibold tracking-wide text-zinc-300 flex items-center justify-between">
+                      <span>Full Name</span>
+                      <span className="text-[10px] text-zinc-500 font-normal">Required</span>
                     </label>
-                    <div className="relative">
+                    <div className="relative flex items-center rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 focus-within:border-amber-400/80 focus-within:bg-zinc-900/90 focus-within:ring-2 focus-within:ring-amber-400/20 transition-all">
+                      <User className="w-4 h-4 text-zinc-400 shrink-0 ml-3.5" />
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Ama Mensah"
+                        placeholder="Ama Mensah"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
-                        className="w-full h-11 px-4 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                        className="w-full h-11 pl-2.5 pr-4 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none"
                       />
                     </div>
                   </div>
 
+                  {/* Ghana Phone Number */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">
-                      Ghana Phone Number (MTN / Telecel / AT) *
+                    <label className="text-[11px] font-semibold tracking-wide text-zinc-300 flex items-center justify-between">
+                      <span>Ghana Mobile Number</span>
+                      <span className="text-[10px] text-zinc-500 font-normal">MTN • Telecel • AT</span>
                     </label>
-                    <div className="relative">
+                    <div className={`relative flex items-center rounded-xl bg-white/[0.04] border transition-all ${
+                      phoneError
+                        ? "border-rose-500 bg-rose-500/5 focus-within:ring-2 focus-within:ring-rose-500/20"
+                        : "border-white/10 hover:border-white/20 focus-within:border-amber-400/80 focus-within:bg-zinc-900/90 focus-within:ring-2 focus-within:ring-amber-400/20"
+                    }`}>
+                      <Phone className="w-4 h-4 text-zinc-400 shrink-0 ml-3.5" />
+                      <span className="text-xs font-semibold text-zinc-400 pl-2 shrink-0 select-none">🇬🇭</span>
                       <input
                         type="tel"
                         required
-                        placeholder="024 000 1111 or +233 24 000 1111"
+                        placeholder="024 123 4567"
                         value={customerPhone}
                         onChange={(e) => {
                           setCustomerPhone(e.target.value);
                           if (phoneError) validatePhone(e.target.value);
                         }}
                         onBlur={() => validatePhone(customerPhone)}
-                        className={`w-full h-11 px-4 rounded-xl sm:rounded-2xl bg-white/10 border text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors ${
-                          phoneError ? "border-rose-500" : "border-white/20"
-                        }`}
+                        className="w-full h-11 pl-2 pr-4 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none"
                       />
                     </div>
                     {phoneError ? (
-                      <p className="text-[10px] text-rose-400">{phoneError}</p>
+                      <p className="text-[10px] text-rose-400 font-medium pl-1">{phoneError}</p>
                     ) : (
-                      <p className="text-[10px] text-zinc-400">
-                        Normalized automatically for your SMS booking confirmation.
+                      <p className="text-[10px] text-zinc-400 flex items-center gap-1.5 pl-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                        <span>Instant SMS appointment reminder sent here</span>
                       </p>
                     )}
                   </div>
 
+                  {/* Email Address */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">
-                      Email Address (Optional)
+                    <label className="text-[11px] font-semibold tracking-wide text-zinc-300 flex items-center justify-between">
+                      <span>Email Address</span>
+                      <span className="text-[10px] text-zinc-500 font-normal">Optional</span>
                     </label>
-                    <input
-                      type="email"
-                      placeholder="ama@example.com (for calendar invite)"
-                      value={customerEmail}
-                      onChange={(e) => setCustomerEmail(e.target.value)}
-                      className="w-full h-11 px-4 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
-                    />
+                    <div className="relative flex items-center rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 focus-within:border-amber-400/80 focus-within:bg-zinc-900/90 focus-within:ring-2 focus-within:ring-amber-400/20 transition-all">
+                      <Mail className="w-4 h-4 text-zinc-400 shrink-0 ml-3.5" />
+                      <input
+                        type="email"
+                        placeholder="ama@example.com (for calendar pass)"
+                        value={customerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                        className="w-full h-11 pl-2.5 pr-4 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none"
+                      />
+                    </div>
                   </div>
 
-                  {/* Optional VIP Birthday Perk */}
-                  <div className="space-y-1.5 p-3 rounded-2xl bg-white/5 border border-white/10">
+                  {/* Luxury VIP Birthday Crown Perk Card */}
+                  <div className="rounded-2xl bg-gradient-to-b from-white/[0.05] to-white/[0.02] border border-white/10 p-3.5 space-y-2.5 transition-all">
                     <div className="flex items-center justify-between">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block">
-                        VIP Birthday Month &amp; Day (Optional)
-                      </label>
-                      <span className="text-[10px] font-bold text-amber-300/80">Birthday Crown Gift 🎁</span>
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-amber-400/15 border border-amber-400/30 flex items-center justify-center text-amber-300 shrink-0 shadow-xs">
+                          <Gift className="w-4 h-4 text-amber-300" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-white">VIP Birthday Perk</span>
+                            <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                              Optional
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-zinc-400 leading-tight">
+                            Unlock complimentary birthday styling perks and gifts.
+                          </p>
+                        </div>
+                      </div>
+
+                      {customerBirthdayMonth && customerBirthdayDay ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCustomerBirthdayMonth("");
+                            setCustomerBirthdayDay("");
+                          }}
+                          className="text-[10px] text-zinc-400 hover:text-rose-400 underline cursor-pointer shrink-0"
+                        >
+                          Clear
+                        </button>
+                      ) : null}
                     </div>
-                    <p className="text-[10px] text-zinc-400 leading-tight">
-                      Share your birth month &amp; day to unlock exclusive treatments and anniversary perks.
-                    </p>
-                    <div className="grid grid-cols-2 gap-2 pt-1">
-                      <select
-                        aria-label="Birthday Month"
-                        value={customerBirthdayMonth}
-                        onChange={(e) => setCustomerBirthdayMonth(e.target.value ? parseInt(e.target.value, 10) : "")}
-                        className="h-10 px-3 rounded-xl bg-zinc-900 border border-white/20 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer"
+
+                    {/* Active Selected Birthday Pill */}
+                    {customerBirthdayMonth && customerBirthdayDay && !showBirthdayPicker && (
+                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-amber-400/10 border border-amber-400/25 text-xs">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                          <span className="font-bold text-amber-200">
+                            {MONTH_NAMES[customerBirthdayMonth - 1]} {customerBirthdayDay}
+                          </span>
+                          <span className="text-[10px] text-amber-300/80">• Birthday Perk Active 👑</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowBirthdayPicker(true)}
+                          className="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer"
+                        >
+                          Change
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Trigger Button if not selected and not open */}
+                    {(!customerBirthdayMonth || !customerBirthdayDay) && !showBirthdayPicker && (
+                      <button
+                        type="button"
+                        onClick={() => setShowBirthdayPicker(true)}
+                        className="w-full h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-amber-200 hover:text-white flex items-center justify-center gap-2 transition-all cursor-pointer"
                       >
-                        <option value="">Select Month</option>
-                        {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((m, idx) => (
-                          <option key={m} value={idx + 1}>{m}</option>
-                        ))}
-                      </select>
-                      <select
-                        aria-label="Birthday Day"
-                        value={customerBirthdayDay}
-                        onChange={(e) => setCustomerBirthdayDay(e.target.value ? parseInt(e.target.value, 10) : "")}
-                        className="h-10 px-3 rounded-xl bg-zinc-900 border border-white/20 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer"
-                      >
-                        <option value="">Select Day</option>
-                        {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
-                          <option key={d} value={d}>Day {d}</option>
-                        ))}
-                      </select>
-                    </div>
+                        <CalendarIcon className="w-3.5 h-3.5 text-amber-300" />
+                        <span>Tap to Pick Birthday Month &amp; Day</span>
+                      </button>
+                    )}
+
+                    {/* Interactive Visual UI Picker */}
+                    {showBirthdayPicker && (
+                      <div className="pt-2 border-t border-white/10 space-y-3 animate-in fade-in duration-200">
+                        {/* Step A: Month Pills */}
+                        <div>
+                          <div className="flex items-center justify-between pb-1.5">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                              1. Birth Month:
+                            </span>
+                            {customerBirthdayMonth ? (
+                              <span className="text-[10px] font-bold text-amber-300">
+                                {MONTH_NAMES[customerBirthdayMonth - 1]}
+                              </span>
+                            ) : null}
+                          </div>
+                          <div className="grid grid-cols-4 sm:grid-cols-6 gap-1">
+                            {MONTH_NAMES.map((name, idx) => {
+                              const mNum = idx + 1;
+                              const isSelected = customerBirthdayMonth === mNum;
+                              return (
+                                <button
+                                  key={name}
+                                  type="button"
+                                  onClick={() => {
+                                    setCustomerBirthdayMonth(mNum);
+                                    if (customerBirthdayDay && customerBirthdayDay > 28) {
+                                      if (mNum === 2 && customerBirthdayDay > 29) setCustomerBirthdayDay(29);
+                                      if ([4, 6, 9, 11].includes(mNum) && customerBirthdayDay > 30) setCustomerBirthdayDay(30);
+                                    }
+                                  }}
+                                  className={`h-8 rounded-lg text-[11px] font-semibold transition-all cursor-pointer flex items-center justify-center ${
+                                    isSelected
+                                      ? "bg-amber-400 text-zinc-950 font-bold shadow-sm"
+                                      : "bg-zinc-900/80 hover:bg-white/10 text-zinc-300 border border-white/10"
+                                  }`}
+                                >
+                                  {name.slice(0, 3)}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Step B: Day Grid */}
+                        <div>
+                          <div className="flex items-center justify-between pb-1.5">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                              2. Day:
+                            </span>
+                            {customerBirthdayDay ? (
+                              <span className="text-[10px] font-bold text-amber-300">
+                                Day {customerBirthdayDay}
+                              </span>
+                            ) : null}
+                          </div>
+                          <div className="grid grid-cols-7 gap-1">
+                            {Array.from({ length: daysInSelectedMonth }, (_, i) => i + 1).map((d) => {
+                              const isSelected = customerBirthdayDay === d;
+                              return (
+                                <button
+                                  key={d}
+                                  type="button"
+                                  onClick={() => {
+                                    if (!customerBirthdayMonth) {
+                                      setCustomerBirthdayMonth(new Date().getMonth() + 1);
+                                    }
+                                    setCustomerBirthdayDay(d);
+                                  }}
+                                  className={`h-7 rounded-md text-[10px] font-medium transition-all cursor-pointer flex items-center justify-center ${
+                                    isSelected
+                                      ? "bg-amber-400 text-zinc-950 font-bold shadow-xs scale-105"
+                                      : "bg-zinc-900/60 hover:bg-white/10 text-zinc-300 border border-white/5"
+                                  }`}
+                                >
+                                  {d}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Done / Collapse Action */}
+                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-white/5">
+                          <button
+                            type="button"
+                            onClick={() => setShowBirthdayPicker(false)}
+                            className="px-3.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-xs font-bold text-white transition-all cursor-pointer"
+                          >
+                            {customerBirthdayMonth && customerBirthdayDay ? "Save & Close" : "Cancel"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
+                  {/* Styling Notes */}
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">
-                      Styling Notes / Special Requests (Optional)
+                    <label className="text-[11px] font-semibold tracking-wide text-zinc-300 flex items-center justify-between">
+                      <span>Styling Notes &amp; Special Requests</span>
+                      <span className="text-[10px] text-zinc-500 font-normal">Optional</span>
                     </label>
-                    <textarea
-                      rows={2}
-                      placeholder="Hair texture, dress sizing, lash preferences..."
-                      value={customerNotes}
-                      onChange={(e) => setCustomerNotes(e.target.value)}
-                      className="w-full p-3 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
-                    />
+                    <div className="relative flex items-start rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 focus-within:border-amber-400/80 focus-within:bg-zinc-900/90 focus-within:ring-2 focus-within:ring-amber-400/20 transition-all">
+                      <FileText className="w-4 h-4 text-zinc-400 shrink-0 mt-3 ml-3.5" />
+                      <textarea
+                        rows={2}
+                        placeholder="Hair texture, lash length, allergies, or styling preferences..."
+                        value={customerNotes}
+                        onChange={(e) => setCustomerNotes(e.target.value)}
+                        className="w-full p-2.5 pl-2.5 pr-4 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none resize-none"
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -1273,6 +1438,16 @@ function BookingWizardContent() {
                         <span>Duration:</span>
                         <span className="font-bold text-white">{totalDurationMin} minutes</span>
                       </div>
+                      {customerBirthdayMonth && customerBirthdayDay && (
+                        <div className="flex justify-between items-center text-amber-300">
+                          <span className="flex items-center gap-1">
+                            <Gift className="w-3 h-3" /> VIP Birthday Perk:
+                          </span>
+                          <span className="font-bold">
+                            {MONTH_NAMES[customerBirthdayMonth - 1]} {customerBirthdayDay}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="border-t border-white/15 pt-2 flex justify-between items-center text-sm font-black">
