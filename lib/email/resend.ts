@@ -23,6 +23,10 @@ const DEFAULT_RESEND_FROM = "Becca's Crown Beauty Vault <onboarding@resend.dev>"
  * Resolves the Resend API Key from DB settings or environment variables.
  */
 export async function getResendApiKey(): Promise<string | null> {
+  if (process.env.RESEND_API_KEY?.trim()) {
+    return process.env.RESEND_API_KEY.trim();
+  }
+
   try {
     const setting = await prisma.setting.findUnique({
       where: { key: "resend_api_key" },
@@ -34,7 +38,7 @@ export async function getResendApiKey(): Promise<string | null> {
     // DB not available or table not ready
   }
 
-  return process.env.RESEND_API_KEY?.trim() || null;
+  return null;
 }
 
 /**

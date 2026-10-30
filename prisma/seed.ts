@@ -448,13 +448,29 @@ async function main() {
   // 7. Seed Default Settings & Receipt Counter
   await prisma.setting.upsert({
     where: { key: "salon_name" },
-    update: {},
+    update: {
+      value: "Becca's Crown Beauty Vault",
+    },
     create: {
       key: "salon_name",
-      value: "Aura Beauty Studio",
+      value: "Becca's Crown Beauty Vault",
       description: "Official business trade name",
     },
   });
+
+  if (process.env.RESEND_API_KEY) {
+    await prisma.setting.upsert({
+      where: { key: "resend_api_key" },
+      update: {
+        value: process.env.RESEND_API_KEY,
+      },
+      create: {
+        key: "resend_api_key",
+        value: process.env.RESEND_API_KEY,
+        description: "Resend Transactional Email API Key",
+      },
+    });
+  }
 
   await prisma.setting.upsert({
     where: { key: "slot_hold_minutes" },
