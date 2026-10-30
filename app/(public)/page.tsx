@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   ArrowDownRight,
@@ -14,9 +15,55 @@ import {
   Menu,
   X,
   Calendar,
+  Heart,
+  ShoppingBag,
+  Search,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+
+const HERO_HOTSPOTS = [
+  {
+    id: "bya" as const,
+    name: "Bya",
+    tagline: "Japan style soft knotless",
+    price: "GH₵ 350.00",
+    serviceId: "834b6107-a2b3-4742-ab1f-fa6e4a6e3d10",
+    colors: [
+      { name: "Warm Amber", hex: "#F59E0B" },
+      { name: "Emerald Glaze", hex: "#14B8A6" },
+      { name: "Graphite Noir", hex: "#4B5563" },
+    ],
+    pinStyle: { top: "67%", left: "23%" },
+  },
+  {
+    id: "melt" as const,
+    name: "Melt",
+    tagline: "HD lace frontal installation",
+    price: "GH₵ 200.00",
+    serviceId: "a80c50b6-6f94-4aaa-8cff-d7558ffce78d",
+    colors: [
+      { name: "Natural 1B", hex: "#1F2937" },
+      { name: "Honey Caramel", hex: "#D97706" },
+      { name: "Chestnut", hex: "#78350F" },
+    ],
+    pinStyle: { top: "68%", left: "59%" },
+  },
+  {
+    id: "lashes" as const,
+    name: "Volume",
+    tagline: "Russian fluffy mega fan lashes",
+    price: "GH₵ 260.00",
+    serviceId: "9731e67c-88bf-4124-ac04-3b3a1a1140d4",
+    colors: [
+      { name: "Midnight Black", hex: "#111827" },
+      { name: "Soft Mink", hex: "#4B5563" },
+      { name: "Espresso Tint", hex: "#37271E" },
+    ],
+    pinStyle: { top: "41%", left: "80%" },
+  },
+];
 
 const ALL_SIGNATURE_TREATMENTS = [
   {
@@ -104,7 +151,25 @@ const VAULT_SUITES = [
 ];
 
 export default function CustomerPublicPage() {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [activeHotspotId, setActiveHotspotId] = React.useState<"bya" | "melt" | "lashes">("bya");
+  const [selectedColorIndex, setSelectedColorIndex] = React.useState<number>(0);
+  const [liked, setLiked] = React.useState(false);
+
+  const activeHotspot = React.useMemo(() => {
+    return HERO_HOTSPOTS.find((h) => h.id === activeHotspotId) || HERO_HOTSPOTS[0];
+  }, [activeHotspotId]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/our-services?q=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      router.push("/our-services");
+    }
+  };
 
   // Lock body scroll when mobile menu is open
   React.useEffect(() => {
@@ -140,133 +205,137 @@ export default function CustomerPublicPage() {
   return (
     <div className="w-full max-w-full overflow-x-hidden bg-white text-[#18181B] selection:bg-black selection:text-white pb-12">
       {/* =========================================================================
-          HERO SECTION (Full-Width, Flush Top, No White Outline, Floating Capsule Navbar)
+          HERO SECTION (Minimalistic & Modern Minimalist Studio with Hotspots & Glass Card)
       ========================================================================= */}
-      <section className="w-full max-w-full overflow-x-hidden p-0 bg-white">
-        <div className="relative w-full rounded-t-none rounded-b-[32px] sm:rounded-b-[44px] lg:rounded-b-[56px] overflow-hidden shadow-2xl bg-zinc-950 flex flex-col justify-between min-h-[640px] sm:min-h-[720px] lg:min-h-[800px]">
-          {/* Panoramic Ambient Background Image */}
+      <section className="w-full max-w-full overflow-x-hidden p-0 bg-zinc-950">
+        <div className="relative w-full overflow-hidden shadow-2xl bg-[#18191c] flex flex-col justify-between min-h-[740px] sm:min-h-[820px] lg:min-h-[880px]">
+          {/* Minimalist Studio Interior Background (Deep graphite wall with amber sofa) */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/ghanaian_hero_beauty.jpg"
-              alt="Becca's Crown Beauty Vault Accra"
+              src="/images/minimalist_studio_hero.jpg"
+              alt="Becca's Crown Beauty Vault Minimalist Studio"
               fill
               priority
-              className="object-cover object-center scale-105 transform hover:scale-100 transition-transform duration-1000 opacity-75"
+              className="object-cover object-bottom scale-100"
             />
-            {/* Cinematic Gradient Overlays for Crystal Clear Contrast */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-black/70" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/30 to-transparent" />
+            {/* Ambient Vignette for Crisp Contrast */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/25 to-black/35" />
           </div>
 
           {/* ===================================================================
-              NAVBAR ON TOP OF HERO IMAGE (Floating Capsules, No Dividing Line)
+              NAVBAR (Sleek, Minimalist, Floating at Top matching reference)
           =================================================================== */}
-          <div className="relative z-20 w-full px-5 sm:px-8 lg:px-12 pt-5 sm:pt-6 pb-2">
-            <div className="flex items-center justify-between gap-4">
-              {/* Brand Logo in Apple Liquid Glass Capsule */}
+          <header className="relative z-30 w-full px-5 sm:px-10 lg:px-14 pt-6 sm:pt-8 pb-3">
+            <div className="flex items-center justify-between gap-6 max-w-7xl mx-auto">
+              {/* Brand Logo in Clean Modern Sans-Serif */}
               <Link
                 href="/"
-                className="apple-glass-pill-dark flex items-center gap-2.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full group cursor-pointer hover:scale-105 active:scale-95"
+                className="flex items-center gap-2 group cursor-pointer"
               >
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-                  <Crown className="w-3.5 h-3.5 text-amber-300" />
-                </div>
-                <div>
-                  <span className="text-white text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
-                    BECCA&apos;S CROWN
-                  </span>
-                  <span className="text-[8px] sm:text-[9px] text-amber-200 tracking-wider block font-bold uppercase mt-0.5">
-                    Beauty Vault
-                  </span>
-                </div>
+                <span className="text-white text-xl sm:text-2xl font-black tracking-tight group-hover:text-zinc-200 transition-colors">
+                  Becca&apos;s Crown
+                </span>
               </Link>
 
-              {/* Center Navigation Links in Apple Liquid Glass Capsules */}
-              <nav className="hidden md:flex items-center gap-2 lg:gap-3 text-xs font-semibold">
+              {/* Center Navigation Links matching reference */}
+              <nav className="hidden md:flex items-center gap-7 lg:gap-10 text-xs sm:text-sm font-medium">
                 <Link
                   href="/our-services"
-                  className="apple-glass-pill-dark px-4 py-2 rounded-full text-white/95 hover:text-white cursor-pointer hover:scale-105 active:scale-95"
+                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
                 >
-                  Services & Menu
+                  Treatments
                 </Link>
                 <Link
                   href="/gallery"
-                  className="apple-glass-pill-dark px-4 py-2 rounded-full text-white/95 hover:text-white cursor-pointer hover:scale-105 active:scale-95"
+                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
                 >
                   Lookbook
                 </Link>
                 <Link
+                  href="/contact"
+                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
+                >
+                  About Us
+                </Link>
+                <Link
                   href="/policies"
-                  className="apple-glass-pill-dark px-4 py-2 rounded-full text-white/95 hover:text-white cursor-pointer hover:scale-105 active:scale-95"
+                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
                 >
                   Policies
                 </Link>
                 <Link
                   href="/contact"
-                  className="apple-glass-pill-dark px-4 py-2 rounded-full text-white/95 hover:text-white cursor-pointer hover:scale-105 active:scale-95"
+                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
                 >
                   Contact
                 </Link>
               </nav>
 
-              {/* Right Side: Currency, Staff Portal & Mobile Burger Button */}
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="apple-glass-pill-dark hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold text-white">
-                  <span>🇬🇭</span>
-                  <span>GHS (GH₵)</span>
-                </div>
-                <Link href="/login" className="hidden sm:inline-block">
-                  <button
-                    type="button"
-                    className="apple-glass-pill-dark px-3.5 py-1.5 rounded-full text-white text-[11px] font-semibold transition-all cursor-pointer hover:scale-105 active:scale-95"
-                  >
-                    Staff Portal
-                  </button>
+              {/* Right Icons: Heart, Bag & Staff Portal */}
+              <div className="flex items-center gap-4 sm:gap-6">
+                {/* Wishlist / Heart */}
+                <button
+                  type="button"
+                  onClick={() => setLiked(!liked)}
+                  className="text-white/80 hover:text-white transition-colors cursor-pointer active:scale-90"
+                  aria-label="Wishlist"
+                >
+                  <Heart
+                    className={`w-5 h-5 transition-all ${
+                      liked ? "fill-red-500 text-red-500 scale-110" : "text-white/80 hover:text-white"
+                    }`}
+                  />
+                </button>
+
+                {/* Shopping Bag / Quick Book */}
+                <Link
+                  href="/book"
+                  className="text-white/80 hover:text-white transition-colors cursor-pointer relative active:scale-95"
+                  aria-label="Book an appointment"
+                >
+                  <ShoppingBag className="w-5 h-5" />
+                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400" />
                 </Link>
 
-                {/* Mobile Regular Burger Icon Button */}
+                {/* Staff Subdomain Portal */}
+                <Link
+                  href="https://dashboard.beccascrownbeauty.com"
+                  className="hidden lg:inline-flex items-center px-3 py-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white text-[11px] font-semibold transition-all cursor-pointer"
+                >
+                  Staff
+                </Link>
+
+                {/* Mobile Menu Toggle */}
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="md:hidden apple-glass-pill-dark w-10 h-10 rounded-full flex items-center justify-center text-white hover:text-amber-200 active:scale-90 transition-all cursor-pointer"
+                  className="md:hidden text-white/90 hover:text-white transition-colors cursor-pointer p-1"
                   aria-label="Toggle navigation menu"
                 >
-                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                  {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                 </button>
               </div>
             </div>
-          </div>
+          </header>
 
-          {/* Mobile Navigation Drawer / Dropdown Menu on Homepage */}
+          {/* Mobile Drawer Menu */}
           {mobileMenuOpen && (
             <div className="md:hidden fixed inset-0 z-50 flex flex-col justify-start">
-              {/* Backdrop */}
               <div
-                className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity"
+                className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
                 onClick={() => setMobileMenuOpen(false)}
                 aria-hidden="true"
               />
-
-              {/* Sliding Dark Menu Panel */}
               <div className="relative z-10 bg-[#141210]/95 backdrop-blur-2xl border-b border-white/15 shadow-2xl rounded-b-3xl p-5 pt-5 space-y-5 animate-in slide-in-from-top-4 duration-200 text-white">
-                {/* Top Bar inside Menu */}
                 <div className="flex items-center justify-between pb-3 border-b border-white/10">
                   <Link
                     href="/"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5"
+                    className="flex items-center gap-2"
                   >
-                    <div className="w-7 h-7 rounded-full bg-white/15 border border-white/20 flex items-center justify-center text-white">
-                      <Crown className="w-3.5 h-3.5 text-amber-300" />
-                    </div>
-                    <div>
-                      <span className="text-white text-xs font-black tracking-widest uppercase block leading-none">
-                        BECCA&apos;S CROWN
-                      </span>
-                      <span className="text-[8px] text-amber-300 font-bold tracking-wider block uppercase mt-0.5">
-                        Beauty Vault
-                      </span>
-                    </div>
+                    <span className="text-white text-base font-bold tracking-tight">
+                      Becca&apos;s Crown
+                    </span>
                   </Link>
                   <button
                     type="button"
@@ -278,12 +347,11 @@ export default function CustomerPublicPage() {
                   </button>
                 </div>
 
-                {/* Navigation Links */}
                 <nav className="flex flex-col gap-1.5">
                   <Link
                     href="/"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between bg-white/10 text-white shadow-xs"
+                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between bg-white/10 text-white shadow-xs"
                   >
                     <span>Home</span>
                     <ArrowRight className="w-4 h-4 opacity-50" />
@@ -291,15 +359,15 @@ export default function CustomerPublicPage() {
                   <Link
                     href="/our-services"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
+                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
                   >
-                    <span>Services & Menu</span>
+                    <span>Treatments</span>
                     <ArrowRight className="w-4 h-4 opacity-50" />
                   </Link>
                   <Link
                     href="/gallery"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
+                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
                   >
                     <span>Lookbook</span>
                     <ArrowRight className="w-4 h-4 opacity-50" />
@@ -307,7 +375,7 @@ export default function CustomerPublicPage() {
                   <Link
                     href="/policies"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
+                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
                   >
                     <span>Policies</span>
                     <ArrowRight className="w-4 h-4 opacity-50" />
@@ -315,29 +383,27 @@ export default function CustomerPublicPage() {
                   <Link
                     href="/contact"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
+                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
                   >
                     <span>Contact</span>
                     <ArrowRight className="w-4 h-4 opacity-50" />
                   </Link>
                 </nav>
 
-                {/* Actions: Book Now & Staff Portal */}
                 <div className="pt-2 border-t border-white/10 space-y-2.5">
                   <Link href="/book" onClick={() => setMobileMenuOpen(false)}>
                     <button
                       type="button"
-                      className="w-full bg-[#FACC15] hover:bg-[#EAB308] text-black font-extrabold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg cursor-pointer active:scale-95 transition-transform"
+                      className="w-full bg-amber-400 hover:bg-amber-300 text-black font-extrabold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg cursor-pointer active:scale-95 transition-transform"
                     >
                       <Calendar className="w-4 h-4" />
                       <span>Book Appointment</span>
                     </button>
                   </Link>
-
                   <div className="flex items-center justify-between text-xs text-zinc-400 pt-1 px-1">
                     <span className="font-semibold text-[11px]">🇬🇭 Ghana • GHS (GH₵)</span>
                     <Link
-                      href="/login"
+                      href="https://dashboard.beccascrownbeauty.com"
                       onClick={() => setMobileMenuOpen(false)}
                       className="font-bold text-[11px] text-zinc-300 hover:text-white"
                     >
@@ -350,40 +416,140 @@ export default function CustomerPublicPage() {
           )}
 
           {/* ===================================================================
-              BOTTOM AREA: EDITORIAL HEADLINE (LEFT) & BOOK BUTTON (RIGHT)
+              CENTER EDITORIAL TYPOGRAPHY & PILL SEARCH BAR
           =================================================================== */}
-          <div className="relative z-10 px-5 sm:px-8 lg:px-12 pb-8 sm:pb-12 pt-20 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 w-full max-w-full">
-            {/* Bold Sans-Serif Headline with Reshaping Pill & Red Arrow */}
-            <div className="space-y-3 max-w-2xl w-full min-w-0">
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08] break-words">
-                <div>We&apos;re changing the way</div>
-                <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 my-2 sm:my-3">
-                  <span className="inline-flex items-center px-3.5 sm:px-5 py-1 sm:py-1.5 rounded-full border border-white/35 bg-black/30 backdrop-blur-md text-white text-xs sm:text-xl font-bold tracking-wide">
-                    Reshaping
-                  </span>
-                  <span className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-[#EF4444] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0">
-                    <ArrowDownRight className="w-4 h-4 sm:w-6 sm:h-6" />
-                  </span>
-                </div>
-                <div>Ghana experiences beauty</div>
-              </h1>
+          <div className="relative z-10 px-4 sm:px-6 pt-10 sm:pt-14 pb-48 sm:pb-56 text-center max-w-4xl mx-auto">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
+              Our artistry is
+              <br />
+              minimalistic &amp; modern
+            </h1>
+
+            <p className="mt-4 sm:mt-5 text-xs sm:text-sm lg:text-base text-zinc-300 max-w-xl mx-auto font-normal leading-relaxed">
+              We will be able to provide you with the best beauty experience
+              from the master artisans at Becca&apos;s Crown Beauty Vault
+            </p>
+
+            {/* Pill Search Bar matching reference */}
+            <form
+              onSubmit={handleSearchSubmit}
+              className="mt-6 sm:mt-8 max-w-md sm:max-w-lg mx-auto relative px-2"
+            >
+              <div className="relative flex items-center rounded-full border border-white/25 bg-black/35 backdrop-blur-md shadow-2xl px-5 py-3 transition-all focus-within:border-white/50 focus-within:bg-black/55">
+                <input
+                  type="text"
+                  placeholder="Search for materials, styles, braids, lashes..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-transparent text-xs sm:text-sm text-white placeholder-zinc-400 focus:outline-none pr-12"
+                />
+                <button
+                  type="submit"
+                  aria-label="Search"
+                  className="absolute right-2.5 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-500 hover:bg-amber-400 text-black flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-md cursor-pointer"
+                >
+                  <Search className="w-4 h-4 text-black stroke-[2.5]" />
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* ===================================================================
+              FLOATING GLASSMORPHIC PRODUCT CARD & INTERACTIVE HOTSPOTS
+          =================================================================== */}
+          {/* Glassmorphic Product Card (pinned to left sofa side) */}
+          <div className="absolute top-[43%] sm:top-[46%] left-4 sm:left-10 lg:left-16 z-20 w-56 sm:w-64 rounded-2xl bg-black/45 backdrop-blur-xl border border-white/20 p-4 sm:p-5 shadow-2xl text-white transition-all duration-300">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <h3 className="text-base sm:text-lg font-bold text-white tracking-tight leading-tight">
+                  {activeHotspot.name}
+                </h3>
+                <p className="text-[10px] sm:text-xs text-zinc-300 capitalize mt-0.5 font-normal">
+                  {activeHotspot.tagline}
+                </p>
+              </div>
+              <div className="text-right shrink-0">
+                <span className="text-sm sm:text-base font-extrabold text-white">
+                  {activeHotspot.price}
+                </span>
+              </div>
             </div>
 
-            {/* Single "Book an Appointment" CTA Button */}
-            <div className="sm:self-end w-full sm:w-auto">
-              <Link href="/book" className="block sm:inline-block w-full sm:w-auto">
-                <button
-                  type="button"
-                  className="group w-full sm:w-auto inline-flex items-center justify-between sm:justify-start gap-4 bg-white text-zinc-950 hover:bg-zinc-100 pl-6 sm:pl-7 pr-2.5 py-2.5 rounded-full font-black text-xs sm:text-sm uppercase tracking-wider shadow-2xl transition-all duration-300 active:scale-95 cursor-pointer"
-                >
-                  <span>Book an Appointment</span>
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-zinc-950 text-white flex items-center justify-center group-hover:bg-[#EF4444] transition-colors shadow-sm shrink-0">
-                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                </button>
-              </Link>
+            <div className="my-3 border-t border-white/15" />
+
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-zinc-300 font-medium">Color</span>
+              <div className="flex items-center gap-2">
+                {activeHotspot.colors.map((c, idx) => (
+                  <button
+                    key={c.name}
+                    type="button"
+                    onClick={() => setSelectedColorIndex(idx)}
+                    className={`w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                      selectedColorIndex === idx
+                        ? "ring-2 ring-white scale-110 shadow-sm"
+                        : "opacity-75 hover:opacity-100"
+                    }`}
+                    style={{ backgroundColor: c.hex }}
+                    title={c.name}
+                    aria-label={c.name}
+                  >
+                    {selectedColorIndex === idx && (
+                      <Check className="w-2.5 h-2.5 text-black stroke-[3.5]" />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            <Link
+              href={`/book?serviceId=${activeHotspot.serviceId}&step=2`}
+              className="mt-3.5 block"
+            >
+              <button
+                type="button"
+                className="w-full py-2 px-3 rounded-xl bg-white hover:bg-amber-300 text-zinc-950 font-black text-[11px] uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 shadow-md cursor-pointer active:scale-95"
+              >
+                <span>Book This Style</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </Link>
           </div>
+
+          {/* Interactive Hotspot Pins across the Sofa */}
+          {HERO_HOTSPOTS.map((spot) => {
+            const isActive = activeHotspotId === spot.id;
+            return (
+              <button
+                key={spot.id}
+                type="button"
+                onClick={() => {
+                  setActiveHotspotId(spot.id);
+                  setSelectedColorIndex(0);
+                }}
+                className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group cursor-pointer focus:outline-none"
+                style={spot.pinStyle}
+                aria-label={`Select ${spot.name}`}
+              >
+                <span className="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9">
+                  <span
+                    className={`absolute inline-flex h-full w-full rounded-full bg-white/40 ${
+                      isActive ? "animate-ping opacity-80" : "opacity-30 group-hover:opacity-75"
+                    }`}
+                  />
+                  <span
+                    className={`relative inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-white/80 backdrop-blur-sm transition-transform duration-200 ${
+                      isActive
+                        ? "bg-white/40 scale-110 shadow-lg ring-2 ring-white/60"
+                        : "bg-white/20 group-hover:scale-110 group-hover:bg-white/30"
+                    }`}
+                  >
+                    <span className="w-2 h-2 rounded-full bg-white shadow-xs" />
+                  </span>
+                </span>
+              </button>
+            );
+          })}
         </div>
       </section>
 
