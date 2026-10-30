@@ -25,8 +25,8 @@ export function buildBookingConfirmedEmail(params: BookingConfirmationEmailParam
     <p style="margin: 0 0 14px 0;">
       Your appointment at <strong>Becca&apos;s Crown Beauty Vault</strong> has been confirmed. Our specialists look forward to giving you an unforgettable artistry experience.
     </p>
-    <p style="margin: 0;">
-      Please arrive 10 minutes prior to your scheduled time. If you need to make changes, you may reschedule free of charge up to 24 hours before your slot using your booking pass below.
+    <p style="margin: 0 0 14px 0;">
+      Please arrive 10 minutes prior to your scheduled time. You can easily view your booking details, add to your calendar, settle remaining balance, or reschedule online anytime using your self-service booking pass below.
     </p>
   `;
 
@@ -45,7 +45,7 @@ export function buildBookingConfirmedEmail(params: BookingConfirmationEmailParam
     preheader: `Your booking for ${params.serviceName} on ${params.dateFormatted} is confirmed!`,
     bodyHtml,
     metaFields,
-    ctaText: "View Digital Booking Pass",
+    ctaText: "View & Manage Booking Pass",
     ctaUrl: params.manageUrl,
   });
 
@@ -60,7 +60,7 @@ Reference: ${params.reference}
 Balance Due: ${params.amountDue}
 Location: Becca's Crown Beauty Vault, Ghana
 
-Manage your appointment: ${params.manageUrl}
+View & manage your appointment: ${params.manageUrl}
   `.trim();
 
   return { subject, html, text };

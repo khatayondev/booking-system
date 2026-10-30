@@ -62,11 +62,15 @@ export async function getBookingByManageToken(rawToken: string): Promise<Booking
     throw new AppError("A valid manage token is required.", 400, "INVALID_TOKEN");
   }
 
-  const tokenHash = hashManageToken(rawToken.trim());
+  const tokenTrimmed = rawToken.trim();
+  const tokenHash = hashManageToken(tokenTrimmed);
 
   const booking = await prisma.booking.findFirst({
     where: {
-      manageTokenHash: tokenHash,
+      OR: [
+        { manageTokenHash: tokenHash },
+        { reference: tokenTrimmed.toUpperCase() },
+      ],
       deletedAt: null,
     },
     include: {
@@ -331,9 +335,16 @@ export async function rescheduleBookingByCustomer(
     throw new AppError("Manage token required.", 400, "INVALID_TOKEN");
   }
 
-  const tokenHash = hashManageToken(rawToken.trim());
+  const tokenTrimmed = rawToken.trim();
+  const tokenHash = hashManageToken(tokenTrimmed);
   const booking = await prisma.booking.findFirst({
-    where: { manageTokenHash: tokenHash, deletedAt: null },
+    where: {
+      OR: [
+        { manageTokenHash: tokenHash },
+        { reference: tokenTrimmed.toUpperCase() },
+      ],
+      deletedAt: null,
+    },
     include: {
       customer: true,
       staff: true,
@@ -453,9 +464,16 @@ export async function cancelBookingByCustomer(rawToken: string, reason?: string)
     throw new AppError("Manage token required.", 400, "INVALID_TOKEN");
   }
 
-  const tokenHash = hashManageToken(rawToken.trim());
+  const tokenTrimmed = rawToken.trim();
+  const tokenHash = hashManageToken(tokenTrimmed);
   const booking = await prisma.booking.findFirst({
-    where: { manageTokenHash: tokenHash, deletedAt: null },
+    where: {
+      OR: [
+        { manageTokenHash: tokenHash },
+        { reference: tokenTrimmed.toUpperCase() },
+      ],
+      deletedAt: null,
+    },
     include: {
       customer: true,
       staff: true,

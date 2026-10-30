@@ -239,17 +239,32 @@ function BookingConfirmationContent() {
           </p>
         </div>
 
-        <div className="pt-2 flex flex-col sm:flex-row gap-3">
-          <Link href="/book" className="flex-1">
-            <Button variant="blackPill" size="md" className="w-full text-xs font-bold cursor-pointer">
-              Book Another Appointment
-            </Button>
-          </Link>
-          <Link href="/" className="flex-1">
-            <Button variant="outlinePill" size="md" className="w-full text-xs font-semibold cursor-pointer">
-              Return to Home
-            </Button>
-          </Link>
+        <div className="pt-2 flex flex-col gap-3">
+          {b?.reference && (
+            <Link href={`/manage/${encodeURIComponent(b.reference)}`}>
+              <Button
+                variant="blackPill"
+                size="md"
+                className="w-full text-xs font-bold cursor-pointer bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-md gap-2"
+              >
+                <span>View &amp; Manage Your Booking Pass</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
+            </Link>
+          )}
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link href="/book" className="flex-1">
+              <Button variant="outlinePill" size="md" className="w-full text-xs font-bold cursor-pointer">
+                Book Another Appointment
+              </Button>
+            </Link>
+            <Link href="/" className="flex-1">
+              <Button variant="outlinePill" size="md" className="w-full text-xs font-semibold cursor-pointer">
+                Return to Home
+              </Button>
+            </Link>
+          </div>
         </div>
       </Card>
     </div>

@@ -209,13 +209,16 @@ export async function reconcilePaymentTransaction(
 
       // 7. Dispatch SMS & Resend Email Confirmations
       if (bookingReference && updatedBookingStatus === "CONFIRMED") {
+        const { env } = await import("@/lib/env");
+        const manageUrl = `${env.APP_URL}/manage/${bookingReference}`;
+
         if (customerPhone) {
           try {
             await sendSms({
               recipient: customerPhone,
               message: `Becca's Crown Beauty Vault: Your booking (${bookingReference}) has been confirmed! Payment received: ${formatPesewas(
                 payment.amountPesewas
-              )}. We look forward to welcoming you to our Ghana studio.`,
+              )}. View & manage your booking pass: ${manageUrl}`,
             });
           } catch (smsErr) {
             logger.warn(`Failed to dispatch confirmation SMS for ${bookingReference}`, {
