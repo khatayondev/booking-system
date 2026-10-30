@@ -30,6 +30,7 @@ import { Button } from "@/components/ui/button";
 import { Drawer, Dialog } from "@/components/ui/dialog-and-drawer";
 import { Input, Label } from "@/components/ui/controls";
 import { StatusChip } from "@/components/ui/status-chip";
+import { InstallPwaButton } from "@/components/pwa/install-pwa-button";
 
 interface NavItem {
   label: string;
@@ -263,7 +264,8 @@ export function AppShell({
       </div>
 
       {/* Settings at Bottom */}
-      <div className="pt-4 border-t border-[#F4F4F6]">
+      <div className="pt-4 border-t border-[#F4F4F6] space-y-2">
+        <InstallPwaButton variant="sidebar" />
         <Link
           href="/settings"
           onClick={() => setMobileDrawerOpen(false)}
@@ -310,6 +312,7 @@ export function AppShell({
 
           {/* Top Bar Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
+            <InstallPwaButton variant="header" />
             {/* Search Trigger Button */}
             <Button
               variant="circularIcon"

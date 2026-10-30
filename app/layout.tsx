@@ -9,7 +9,7 @@ const jakartaSans = Plus_Jakarta_Sans({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#1E1E1E",
+  themeColor: "#141006",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -17,15 +17,22 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Becca's Crown Beauty Vault | Booking, Payments & POS",
-  description: "Premier beauty, makeup, lash artistry, hair, and aesthetics in Accra, Ghana.",
+  description: "Premier beauty, makeup, lash artistry, hair, and aesthetics in Ghana.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
-    title: "Becca's Crown Beauty Vault",
+    statusBarStyle: "black-translucent",
+    title: "Becca's Crown",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
@@ -41,9 +48,11 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+              if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').catch(function() {});
+                  navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                    console.debug('ServiceWorker notice:', err);
+                  });
                 });
               }
             `,

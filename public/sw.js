@@ -1,11 +1,17 @@
-// Becca's Crown Beauty Vault - Service Worker for PWA Offline Caching
-const CACHE_NAME = "beccascrown-cache-v1";
-const OFFLINE_URLS = ["/favicon.ico"];
+// Becca's Crown Beauty Vault - High-Performance PWA Service Worker
+const CACHE_NAME = "beccascrown-pwa-v2";
+const PRECACHE_ASSETS = [
+  "/manifest.webmanifest",
+  "/favicon.ico",
+  "/icons/icon-192.png",
+  "/icons/icon-512.png",
+  "/icons/apple-touch-icon.png",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(OFFLINE_URLS);
+      return cache.addAll(PRECACHE_ASSETS);
     })
   );
   self.skipWaiting();
@@ -13,11 +19,11 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then((keys) => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
           }
         })
       );
@@ -27,21 +33,54 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  // Only cache GET requests for non-API assets
-  if (event.request.method !== "GET" || event.request.url.includes("/api/")) {
+  const url = new URL(event.request.url);
+
+  // 1. Never intercept or cache API requests, analytics, or mutation requests
+  if (
+    event.request.method !== "GET" ||
+    url.pathname.startsWith("/api/") ||
+    url.pathname.startsWith("/_next/data/")
+  ) {
     return;
   }
 
-  event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request).then((response) => {
-        if (response) return response;
-        return new Response("Offline - Becca's Crown Beauty Vault", {
-          status: 503,
-          statusText: "Service Unavailable",
-          headers: new Headers({ "Content-Type": "text/plain" }),
-        });
-      });
-    })
-  );
+  // 2. Network-first for navigation (pages) with cache fallback
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(async () => {
+        const cachedResponse = await caches.match(event.request);
+        if (cachedResponse) return cachedResponse;
+        return caches.match("/dashboard") || caches.match("/");
+      })
+    );
+    return;
+  }
+
+  // 3. Stale-while-revalidate for static assets (images, fonts, scripts, css)
+  if (
+    url.pathname.startsWith("/_next/static/") ||
+    url.pathname.startsWith("/icons/") ||
+    url.pathname.endsWith(".png") ||
+    url.pathname.endsWith(".jpg") ||
+    url.pathname.endsWith(".svg") ||
+    url.pathname.endsWith(".ico")
+  ) {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        const fetchPromise = fetch(event.request)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              const responseToCache = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
+            }
+            return networkResponse;
+          })
+          .catch(() => cachedResponse);
+
+        return cachedResponse || fetchPromise;
+      })
+    );
+  }
 });
