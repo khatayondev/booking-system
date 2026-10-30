@@ -43,6 +43,9 @@ export async function POST(req: Request) {
       requiresPasswordChange: result.requiresPasswordChange,
     });
 
+    const host = req.headers.get("host") || "";
+    const isCustomDomain = host.includes("beccascrownbeauty.com");
+
     if (result.sessionToken) {
       response.cookies.set({
         name: SESSION_COOKIE_NAME,
@@ -51,6 +54,7 @@ export async function POST(req: Request) {
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
+        domain: isCustomDomain ? ".beccascrownbeauty.com" : undefined,
         maxAge: SESSION_ABSOLUTE_EXPIRY_HOURS * 60 * 60,
       });
     }

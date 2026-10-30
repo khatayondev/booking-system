@@ -209,5 +209,33 @@ describe("Staff Authentication System", () => {
     const authedRes = middleware(authedReq);
     // Passing next() produces default 200 or next response
     expect(authedRes.status).toBe(200);
+
+    // 5. Dashboard subdomain routing tests
+    // 5a. Unauthenticated visiting root on dashboard subdomain redirects to /login
+    const subRootUnauthed = new NextRequest("https://dashboard.beccascrownbeauty.com/");
+    const subRootUnauthedRes = middleware(subRootUnauthed);
+    expect(subRootUnauthedRes.status).toBe(307);
+    expect(subRootUnauthedRes.headers.get("location")).toBe("https://dashboard.beccascrownbeauty.com/login");
+
+    // 5b. Authenticated visiting root on dashboard subdomain redirects to /dashboard
+    const subRootAuthed = new NextRequest("https://dashboard.beccascrownbeauty.com/", {
+      headers: { cookie: `${SESSION_COOKIE_NAME}=valid_dummy_token` },
+    });
+    const subRootAuthedRes = middleware(subRootAuthed);
+    expect(subRootAuthedRes.status).toBe(307);
+    expect(subRootAuthedRes.headers.get("location")).toBe("https://dashboard.beccascrownbeauty.com/dashboard");
+
+    // 5c. Authenticated visiting /login on dashboard subdomain redirects to /dashboard
+    const subLoginAuthed = new NextRequest("https://dashboard.beccascrownbeauty.com/login", {
+      headers: { cookie: `${SESSION_COOKIE_NAME}=valid_dummy_token` },
+    });
+    const subLoginAuthedRes = middleware(subLoginAuthed);
+    expect(subLoginAuthedRes.status).toBe(307);
+    expect(subLoginAuthedRes.headers.get("location")).toBe("https://dashboard.beccascrownbeauty.com/dashboard");
+
+    // 5d. Unauthenticated visiting /login on dashboard subdomain passes through
+    const subLoginUnauthed = new NextRequest("https://dashboard.beccascrownbeauty.com/login");
+    const subLoginUnauthedRes = middleware(subLoginUnauthed);
+    expect(subLoginUnauthedRes.status).toBe(200);
   });
 });

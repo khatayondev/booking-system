@@ -43,6 +43,20 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
 export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  const host = request.headers.get("host") || request.nextUrl.host || request.nextUrl.hostname || "";
+  const isDashboardSubdomain = host.startsWith("dashboard.");
+
+  // 0. Dashboard subdomain handling for staff login & dashboard
+  if (isDashboardSubdomain) {
+    if (pathname === "/") {
+      const targetUrl = new URL(sessionCookie ? "/dashboard" : "/login", request.url);
+      return applySecurityHeaders(NextResponse.redirect(targetUrl));
+    }
+    if (pathname === "/login" && sessionCookie) {
+      const targetUrl = new URL("/dashboard", request.url);
+      return applySecurityHeaders(NextResponse.redirect(targetUrl));
+    }
+  }
 
   // 1. CSRF Protection for state-changing requests
   const mutatingMethods = ["POST", "PUT", "PATCH", "DELETE"];
