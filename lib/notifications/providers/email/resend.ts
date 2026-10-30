@@ -1,5 +1,6 @@
 import { EmailProvider, EmailSendOptions, EmailSendResult } from "../../types";
 import { logger } from "../../../logger";
+import { getResendFromAddress } from "../../../email/resend";
 
 export class ResendEmailProvider implements EmailProvider {
   name = "Resend";
@@ -8,6 +9,7 @@ export class ResendEmailProvider implements EmailProvider {
 
   async sendEmail(options: EmailSendOptions): Promise<EmailSendResult> {
     try {
+      const from = await getResendFromAddress(options.from);
       const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -15,7 +17,7 @@ export class ResendEmailProvider implements EmailProvider {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: options.from || "Becca's Crown Beauty Vault <notifications@beccascrown.gh>",
+          from,
           to: [options.to],
           subject: options.subject,
           html: options.html,

@@ -103,7 +103,12 @@ export async function reconcilePaymentTransaction(
 
       let updatedBookingStatus: BookingStatusType | undefined;
       let customerPhone: string | undefined;
+      let customerEmail: string | undefined;
+      let customerName: string | undefined;
       let bookingReference: string | undefined;
+      let bookingStartUtc: Date | undefined;
+      let bookingServiceName: string | undefined;
+      let balanceRemainingPesewas = 0;
 
       // 4. Update associated Booking if attached
       if (payment.bookingId) {
@@ -116,12 +121,14 @@ export async function reconcilePaymentTransaction(
             depositRequiredPesewas: number;
             amountPaidPesewas: number;
             customerId: string;
+            startUtc: Date;
           }>
-        >`SELECT id, reference, status, "totalPesewas", "depositRequiredPesewas", "amountPaidPesewas", "customerId" FROM "Booking" WHERE id = ${payment.bookingId} FOR UPDATE`;
+        >`SELECT id, reference, status, "totalPesewas", "depositRequiredPesewas", "amountPaidPesewas", "customerId", "startUtc" FROM "Booking" WHERE id = ${payment.bookingId} FOR UPDATE`;
 
         if (lockedBookings && lockedBookings.length > 0) {
           const booking = lockedBookings[0];
           bookingReference = booking.reference;
+          bookingStartUtc = booking.startUtc;
 
           // Check deposit requirement
           assertCanConfirmBooking(
@@ -131,6 +138,7 @@ export async function reconcilePaymentTransaction(
           );
 
           const newAmountPaid = booking.amountPaidPesewas + payment.amountPesewas;
+          balanceRemainingPesewas = Math.max(0, booking.totalPesewas - newAmountPaid);
           let nextBookingStatus = booking.status;
 
           // If pending payment and deposit satisfied, promote to CONFIRMED
@@ -152,12 +160,27 @@ export async function reconcilePaymentTransaction(
 
           updatedBookingStatus = nextBookingStatus;
 
-          // Fetch customer for confirmation SMS
+          // Fetch customer for confirmation SMS & Email
           const customer = await tx.customer.findUnique({
             where: { id: booking.customerId },
           });
           if (customer?.phone) {
             customerPhone = customer.phone;
+          }
+          if (customer?.email) {
+            customerEmail = customer.email;
+          }
+          if (customer?.name) {
+            customerName = customer.name;
+          }
+
+          // Fetch primary service name
+          const firstItem = await tx.bookingItem.findFirst({
+            where: { bookingId: booking.id },
+            include: { service: true },
+          });
+          if (firstItem?.service?.name) {
+            bookingServiceName = firstItem.service.name;
           }
         }
       }
@@ -184,19 +207,67 @@ export async function reconcilePaymentTransaction(
         },
       });
 
-      // 7. Dispatch SMS Confirmation
-      if (customerPhone && bookingReference && updatedBookingStatus === "CONFIRMED") {
-        try {
-          await sendSms({
-            recipient: customerPhone,
-            message: `Becca's Crown Beauty Vault: Your booking (${bookingReference}) has been confirmed! Payment received: ${formatPesewas(
-              payment.amountPesewas
-            )}. We look forward to welcoming you to our East Legon studio.`,
-          });
-        } catch (smsErr) {
-          logger.warn(`Failed to dispatch confirmation SMS for ${bookingReference}`, {
-            error: smsErr,
-          });
+      // 7. Dispatch SMS & Resend Email Confirmations
+      if (bookingReference && updatedBookingStatus === "CONFIRMED") {
+        if (customerPhone) {
+          try {
+            await sendSms({
+              recipient: customerPhone,
+              message: `Becca's Crown Beauty Vault: Your booking (${bookingReference}) has been confirmed! Payment received: ${formatPesewas(
+                payment.amountPesewas
+              )}. We look forward to welcoming you to our Ghana studio.`,
+            });
+          } catch (smsErr) {
+            logger.warn(`Failed to dispatch confirmation SMS for ${bookingReference}`, {
+              error: smsErr,
+            });
+          }
+        }
+
+        if (customerEmail) {
+          try {
+            const { sendResendEmail } = await import("@/lib/email/resend");
+            const { buildBookingConfirmedEmail } = await import("@/lib/email/templates");
+            const { env } = await import("@/lib/env");
+
+            const dateFormatted = bookingStartUtc
+              ? bookingStartUtc.toLocaleDateString("en-GB", {
+                  timeZone: "Africa/Accra",
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "Upcoming";
+            const timeFormatted = bookingStartUtc
+              ? bookingStartUtc.toLocaleTimeString("en-GB", {
+                  timeZone: "Africa/Accra",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })
+              : "Reserved Time";
+
+            const { subject, html, text } = buildBookingConfirmedEmail({
+              customerName: customerName || "Valued Client",
+              serviceName: bookingServiceName || "Crown Beauty Treatment",
+              dateFormatted,
+              timeFormatted,
+              reference: bookingReference,
+              amountDue: formatPesewas(balanceRemainingPesewas),
+              manageUrl: `${env.APP_URL}/manage/${bookingReference}`,
+            });
+
+            await sendResendEmail({
+              to: customerEmail,
+              subject,
+              html,
+              text,
+            });
+          } catch (emailErr) {
+            logger.warn(`Failed to dispatch confirmation email for ${bookingReference}`, {
+              error: emailErr,
+            });
+          }
         }
       }
 

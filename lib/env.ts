@@ -8,6 +8,8 @@ const envSchema = z.object({
   SMS_API_KEY: z.string().min(1, "SMS_API_KEY is required"),
   APP_URL: z.string().url("APP_URL must be a valid URL"),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  RESEND_API_KEY: z.string().optional(),
+  RESEND_FROM_EMAIL: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

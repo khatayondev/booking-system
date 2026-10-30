@@ -1,3 +1,5 @@
+import { wrapLuxuryEmailHtml } from "../email/templates/base-layout";
+
 export interface DefaultTemplateDefinition {
   slug: string;
   name: string;
@@ -27,8 +29,21 @@ export const DEFAULT_NOTIFICATION_TEMPLATES: DefaultTemplateDefinition[] = [
     channel: "EMAIL",
     event: "booking_confirmed",
     subject: "Booking Confirmed: {{service}} on {{date}} - {{businessName}}",
-    template:
-      "<p>Dear {{name}},</p><p>We are delighted to confirm your appointment for <strong>{{service}}</strong> on <strong>{{date}} at {{time}}</strong>.</p><p><strong>Booking Reference:</strong> {{reference}}<br/><strong>Amount Due:</strong> {{amountDue}}</p><p><a href=\"{{manageLink}}\">Click here to manage your booking</a></p><p>Thank you for choosing {{businessName}}!</p>",
+    template: wrapLuxuryEmailHtml({
+      title: "Appointment Confirmed",
+      badge: "VIP Slot Secured",
+      preheader: "Your appointment for {{service}} on {{date}} is confirmed.",
+      bodyHtml:
+        "<p style=\"margin: 0 0 14px 0;\">Dear <strong>{{name}}</strong>,</p><p style=\"margin: 0 0 14px 0;\">We are delighted to confirm your appointment for <strong>{{service}}</strong> on <strong>{{date}} at {{time}}</strong>.</p><p style=\"margin: 0;\">Thank you for choosing {{businessName}}! Please arrive 10 minutes prior to your scheduled time.</p>",
+      metaFields: [
+        { label: "Treatment", value: "{{service}}" },
+        { label: "Date & Time", value: "{{date}} at {{time}}" },
+        { label: "Booking Reference", value: "{{reference}}" },
+        { label: "Balance Due", value: "{{amountDue}}" },
+      ],
+      ctaText: "Manage Your Booking",
+      ctaUrl: "{{manageLink}}",
+    }),
     variables: ["name", "service", "date", "time", "reference", "amountDue", "manageLink", "businessName"],
     description: "Email confirmation with full appointment details",
   },
