@@ -138,11 +138,11 @@ export default function CustomerPublicPage() {
   };
 
   return (
-    <div className="bg-white text-[#18181B] selection:bg-black selection:text-white pb-12">
+    <div className="w-full max-w-full overflow-x-hidden bg-white text-[#18181B] selection:bg-black selection:text-white pb-12">
       {/* =========================================================================
           HERO SECTION (Full-Width, Flush Top, No White Outline, Floating Capsule Navbar)
       ========================================================================= */}
-      <section className="w-full p-0 bg-white">
+      <section className="w-full max-w-full overflow-x-hidden p-0 bg-white">
         <div className="relative w-full rounded-t-none rounded-b-[32px] sm:rounded-b-[44px] lg:rounded-b-[56px] overflow-hidden shadow-2xl bg-zinc-950 flex flex-col justify-between min-h-[640px] sm:min-h-[720px] lg:min-h-[800px]">
           {/* Panoramic Ambient Background Image */}
           <div className="absolute inset-0 z-0">
@@ -352,17 +352,17 @@ export default function CustomerPublicPage() {
           {/* ===================================================================
               BOTTOM AREA: EDITORIAL HEADLINE (LEFT) & BOOK BUTTON (RIGHT)
           =================================================================== */}
-          <div className="relative z-10 px-5 sm:px-8 lg:px-12 pb-8 sm:pb-12 pt-20 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6">
+          <div className="relative z-10 px-5 sm:px-8 lg:px-12 pb-8 sm:pb-12 pt-20 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 w-full max-w-full">
             {/* Bold Sans-Serif Headline with Reshaping Pill & Red Arrow */}
-            <div className="space-y-3 max-w-2xl">
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
+            <div className="space-y-3 max-w-2xl w-full min-w-0">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08] break-words">
                 <div>We&apos;re changing the way</div>
-                <div className="flex items-center gap-3 my-2 sm:my-3">
-                  <span className="inline-flex items-center px-4 sm:px-5 py-1 sm:py-1.5 rounded-full border border-white/35 bg-black/30 backdrop-blur-md text-white text-sm sm:text-xl font-bold tracking-wide">
+                <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 my-2 sm:my-3">
+                  <span className="inline-flex items-center px-3.5 sm:px-5 py-1 sm:py-1.5 rounded-full border border-white/35 bg-black/30 backdrop-blur-md text-white text-xs sm:text-xl font-bold tracking-wide">
                     Reshaping
                   </span>
-                  <span className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#EF4444] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105">
-                    <ArrowDownRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <span className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-[#EF4444] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0">
+                    <ArrowDownRight className="w-4 h-4 sm:w-6 sm:h-6" />
                   </span>
                 </div>
                 <div>Ghana experiences beauty</div>
@@ -370,14 +370,14 @@ export default function CustomerPublicPage() {
             </div>
 
             {/* Single "Book an Appointment" CTA Button */}
-            <div className="sm:self-end">
-              <Link href="/book">
+            <div className="sm:self-end w-full sm:w-auto">
+              <Link href="/book" className="block sm:inline-block w-full sm:w-auto">
                 <button
                   type="button"
-                  className="group inline-flex items-center gap-4 bg-white text-zinc-950 hover:bg-zinc-100 pl-6 sm:pl-7 pr-2.5 py-2.5 rounded-full font-black text-xs sm:text-sm uppercase tracking-wider shadow-2xl transition-all duration-300 active:scale-95 cursor-pointer"
+                  className="group w-full sm:w-auto inline-flex items-center justify-between sm:justify-start gap-4 bg-white text-zinc-950 hover:bg-zinc-100 pl-6 sm:pl-7 pr-2.5 py-2.5 rounded-full font-black text-xs sm:text-sm uppercase tracking-wider shadow-2xl transition-all duration-300 active:scale-95 cursor-pointer"
                 >
                   <span>Book an Appointment</span>
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-zinc-950 text-white flex items-center justify-center group-hover:bg-[#EF4444] transition-colors shadow-sm">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-zinc-950 text-white flex items-center justify-center group-hover:bg-[#EF4444] transition-colors shadow-sm shrink-0">
                     <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                 </button>
@@ -529,8 +529,8 @@ export default function CustomerPublicPage() {
         </ScrollReveal>
 
         {/* Category Filter Pills (Matching ALL / SEDAN / LUXURY in Reference) */}
-        <ScrollReveal variant="fade-up" delayMs={100}>
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <ScrollReveal variant="fade-up" delayMs={100} className="w-full max-w-full min-w-0 overflow-hidden">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none w-full max-w-full">
             {filterOptions.map((f) => (
               <button
                 key={f}
@@ -645,8 +645,8 @@ export default function CustomerPublicPage() {
       {/* =========================================================================
           SECTION 03: THE STUDIO EXPERIENCE (Full Width, Full Black Background)
       ========================================================================= */}
-      <section className="w-full bg-[#141210] text-white py-20 lg:py-28 my-16 lg:my-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
+      <section className="w-full max-w-full overflow-x-hidden bg-[#141210] text-white py-20 lg:py-28 my-16 lg:my-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12 w-full max-w-full">
           {/* Section Header with 03 Numeral */}
           <ScrollReveal variant="fade-up">
             <div className="flex items-center gap-6 sm:gap-10">
@@ -660,9 +660,9 @@ export default function CustomerPublicPage() {
           </ScrollReveal>
 
           {/* Split Layout: Editorial Left + 5 Vertical Story Cards Right */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center w-full max-w-full">
             {/* Left Text Column */}
-            <ScrollReveal variant="fade-right" className="lg:col-span-4 space-y-6">
+            <ScrollReveal variant="fade-up" className="lg:col-span-4 space-y-6 w-full min-w-0">
               <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
                 Experience the height of luxury and privacy with Becca&apos;s Crown at our private VIP studio lounge. Private suites, chilled champagne, hospital-grade sanitized instruments, and prompt on-time service.
               </p>
@@ -678,7 +678,7 @@ export default function CustomerPublicPage() {
             </ScrollReveal>
 
             {/* Right Column: 5 Vertical Rounded Cards */}
-            <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-5 gap-3 w-full min-w-0">
               {VAULT_SUITES.map((suite, idx) => (
                 <ScrollReveal key={idx} variant="fade-up" delayMs={idx * 75}>
                   <div

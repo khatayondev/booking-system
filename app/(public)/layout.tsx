@@ -75,7 +75,7 @@ export default function PublicSiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-white text-[#18181B] flex flex-col justify-between selection:bg-black selection:text-white">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-white text-[#18181B] flex flex-col justify-between selection:bg-black selection:text-white">
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
@@ -91,10 +91,10 @@ export default function PublicSiteLayout({
       </Suspense>
 
       {/* Main Page Content */}
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>
 
       {/* Ultra-Luxury Obsidian Dark Footer */}
-      <footer className="mt-20 bg-[#141210] text-[#E4E4E7] pt-16 pb-12 border-t border-zinc-800">
+      <footer className="mt-20 w-full max-w-full overflow-x-hidden bg-[#141210] text-[#E4E4E7] pt-16 pb-12 border-t border-zinc-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
           {/* Top Row: Brand & VIP Newsletter */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 border-b border-zinc-800/80 items-start">
@@ -130,11 +130,11 @@ export default function PublicSiteLayout({
               <p className="text-xs text-zinc-400">
                 Subscribe for private booking priority, seasonal lookbooks, and VIP beauty vault invitations.
               </p>
-              <div className="flex items-center gap-2 max-w-md">
+              <div className="flex items-center gap-2 max-w-md w-full">
                 <input
                   type="email"
                   placeholder="Enter your email address..."
-                  className="bg-zinc-900/90 border border-zinc-800 text-xs text-white rounded-xl px-3.5 h-10 w-full focus:outline-none focus:border-amber-400/60 placeholder:text-zinc-500"
+                  className="bg-zinc-900/90 border border-zinc-800 text-xs text-white rounded-xl px-3.5 h-10 w-full min-w-0 focus:outline-none focus:border-amber-400/60 placeholder:text-zinc-500"
                 />
                 <button
                   type="button"
@@ -214,7 +214,7 @@ export default function PublicSiteLayout({
           {/* Bottom Row: Legal, Socials, Copyright */}
           <div className="pt-8 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
             <p>© 2026 Becca&apos;s Crown Beauty Vault. All rights reserved. Accra, Ghana.</p>
-            <div className="flex items-center gap-5 text-zinc-400">
+            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-5 gap-y-2 text-zinc-400">
               <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
               <Link href="/privacy" className="hover:text-white transition-colors">Privacy policy</Link>
               <Link href="/policies" className="hover:text-white transition-colors">Legal notice</Link>

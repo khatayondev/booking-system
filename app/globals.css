@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Universal Mobile Responsive Anti-Overflow Guard */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
 :root {
   --near-black: #1E1E1E;
   --soft-grey-50: #FAFAFB;

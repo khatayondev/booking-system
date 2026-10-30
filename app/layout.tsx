@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${jakartaSans.variable} font-sans h-full antialiased`}>
-      <body className="min-h-full bg-swirl text-[#1E1E1E] flex flex-col">
+      <body className="min-h-full w-full max-w-full overflow-x-hidden bg-swirl text-[#1E1E1E] flex flex-col">
         {children}
         <script
           dangerouslySetInnerHTML={{

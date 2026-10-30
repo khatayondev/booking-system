@@ -90,20 +90,20 @@ export function ScrollReveal({
     };
   }, [threshold]);
 
-  // Variant transformations when hidden
+  // Variant transformations when hidden (mobile-safe: no horizontal translate overflow)
   const getHiddenTransform = () => {
     switch (variant) {
       case "fade-down":
-        return "translate-y-[-32px] opacity-0";
+        return "-translate-y-8 opacity-0";
       case "fade-left":
-        return "translate-x-[-40px] opacity-0";
+        return "-translate-y-4 sm:translate-y-0 sm:-translate-x-8 opacity-0";
       case "fade-right":
-        return "translate-x-[40px] opacity-0";
+        return "-translate-y-4 sm:translate-y-0 sm:translate-x-8 opacity-0";
       case "zoom-in":
-        return "scale-90 opacity-0";
+        return "scale-95 opacity-0";
       case "fade-up":
       default:
-        return "translate-y-12 scale-[0.97] opacity-0";
+        return "translate-y-8 scale-[0.98] opacity-0";
     }
   };
 
@@ -115,7 +115,7 @@ export function ScrollReveal({
         transitionDelay: `${delayMs}ms`,
         transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
       }}
-      className={`transition-all will-change-[transform,opacity] ${
+      className={`transition-all will-change-[transform,opacity] max-w-full overflow-x-clip ${
         isVisible
           ? "translate-y-0 translate-x-0 scale-100 opacity-100"
           : getHiddenTransform()
