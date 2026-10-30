@@ -17,7 +17,9 @@ export interface SendEmailResponse {
   raw?: unknown;
 }
 
-const DEFAULT_RESEND_FROM = "Becca's Crown Beauty Vault <onboarding@resend.dev>";
+const BRANDED_RESEND_FROM = "Becca's Crown Beauty Vault <bookings@beccascrownbeauty.com>";
+const FALLBACK_RESEND_FROM = "Becca's Crown Beauty Vault <onboarding@resend.dev>";
+const DEFAULT_RESEND_FROM = BRANDED_RESEND_FROM;
 
 /**
  * Resolves the Resend API Key from DB settings or environment variables.
@@ -99,6 +101,15 @@ export async function sendResendEmail(options: SendEmailOptions): Promise<SendEm
     const data = await res.json();
 
     if (!res.ok) {
+      // If the domain is still pending verification, auto-fallback to onboarding domain so sending never breaks
+      if (typeof data?.message === "string" && data.message.includes("is not verified") && from !== FALLBACK_RESEND_FROM) {
+        logger.warn(`[Resend] Domain ${from} is pending verification. Retrying with fallback sandbox sender.`);
+        return sendResendEmail({
+          ...options,
+          from: FALLBACK_RESEND_FROM,
+        });
+      }
+
       const errorMsg = data?.message || `Resend HTTP error ${res.status}: ${res.statusText}`;
       logger.error(`[Resend] Send failed: ${errorMsg}`, {
         to: recipients,
