@@ -673,8 +673,8 @@ function BookingWizardContent() {
       <div className="relative h-[100dvh] w-full overflow-hidden flex items-center justify-center p-4 sm:p-8 bg-zinc-950">
         <div className="fixed inset-0 z-0">
           <Image
-            src="/images/hero_bridal_glam.jpg"
-            alt="Becca's Crown"
+            src="/images/ghanaian_hero_beauty.jpg"
+            alt="Becca's Crown Beauty Vault"
             fill
             className="object-cover object-center scale-105 opacity-40 mix-blend-luminosity"
           />

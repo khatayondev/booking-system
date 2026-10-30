@@ -22,7 +22,7 @@ const ALL_SIGNATURE_TREATMENTS = [
     category: "HAIR & INSTALLS",
     rate: "GH₵ 160.00",
     duration: "90 min",
-    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+    image: "/images/ghanaian_hair_install.jpg",
     description: "Bleaching of knots, hairline customization, melting band press & precision sleek styling.",
   },
   {
@@ -31,7 +31,7 @@ const ALL_SIGNATURE_TREATMENTS = [
     category: "BRIDAL GLAM",
     rate: "GH₵ 550.00",
     duration: "90 min",
-    image: "/images/hero_bridal_glam.jpg",
+    image: "/images/ghanaian_bridal_glam.jpg",
     description: "Camera-ready HD soft contour, skin glaze prep, handcrafted lash fan & 24hr sealing setting spray.",
   },
   {
@@ -40,7 +40,7 @@ const ALL_SIGNATURE_TREATMENTS = [
     category: "LASHES",
     rate: "GH₵ 260.00",
     duration: "120 min",
-    image: "/images/lashes_studio.jpg",
+    image: "/images/ghanaian_volume_lashes.jpg",
     description: "Multi-dimensional fluffy volume fans custom mapped to your natural eye shape for supreme drama.",
   },
   {
@@ -58,7 +58,7 @@ const ALL_SIGNATURE_TREATMENTS = [
     category: "HAIR & INSTALLS",
     rate: "GH₵ 200.00",
     duration: "150 min",
-    image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80",
+    image: "/images/ghanaian_hero_beauty.jpg",
     description: "High tension sculpted sleek ponytail with customized ear-to-ear lace frontal melting.",
   },
   {
@@ -67,7 +67,7 @@ const ALL_SIGNATURE_TREATMENTS = [
     category: "HAIR & INSTALLS",
     rate: "GH₵ 350.00",
     duration: "180 min",
-    image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=800&q=80",
+    image: "/images/ghanaian_goddess_braids.jpg",
     description: "Pain-free root feeding with human hair curls woven throughout for a full, lightweight silhouette.",
   },
 ];
@@ -76,17 +76,17 @@ const VAULT_SUITES = [
   {
     title: "Bridal Suite",
     subtitle: "Private Dressing",
-    image: "/images/hero_bridal_glam.jpg",
+    image: "/images/ghanaian_bridal_glam.jpg",
   },
   {
     title: "Hair Vault",
     subtitle: "Lace Stations",
-    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ghanaian_hair_install.jpg",
   },
   {
     title: "Lash Lounge",
     subtitle: "Ergonomic Pods",
-    image: "/images/lashes_studio.jpg",
+    image: "/images/ghanaian_volume_lashes.jpg",
   },
   {
     title: "Nail Bar",
@@ -96,7 +96,7 @@ const VAULT_SUITES = [
   {
     title: "VIP Lounge",
     subtitle: "Champagne Bar",
-    image: "/images/salon_interior_accra.jpg",
+    image: "/images/ghanaian_hero_beauty.jpg",
   },
 ];
 
@@ -130,11 +130,11 @@ export default function CustomerPublicPage() {
           {/* Panoramic Ambient Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=2400&q=85"
-              alt="Becca's Crown Studio Accra"
+              src="/images/ghanaian_hero_beauty.jpg"
+              alt="Becca's Crown Beauty Vault Accra"
               fill
               priority
-              className="object-cover object-center scale-105 transform hover:scale-100 transition-transform duration-1000 opacity-65"
+              className="object-cover object-center scale-105 transform hover:scale-100 transition-transform duration-1000 opacity-75"
             />
             {/* Cinematic Gradient Overlays for Crystal Clear Contrast */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-black/70" />
@@ -304,7 +304,7 @@ export default function CustomerPublicPage() {
           <ScrollReveal variant="fade-up" delayMs={0}>
             <div className="group relative rounded-[28px] overflow-hidden aspect-[4/5] bg-zinc-900 shadow-md">
               <Image
-                src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80"
+                src="/images/ghanaian_hair_install.jpg"
                 alt="Hair Installation and Lace Melting"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
@@ -333,7 +333,7 @@ export default function CustomerPublicPage() {
           <ScrollReveal variant="fade-up" delayMs={150}>
             <div className="group relative rounded-[28px] overflow-hidden aspect-[4/5] bg-zinc-900 shadow-md">
               <Image
-                src="/images/hero_bridal_glam.jpg"
+                src="/images/ghanaian_bridal_glam.jpg"
                 alt="Bridal and Editorial Makeup"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
@@ -362,7 +362,7 @@ export default function CustomerPublicPage() {
           <ScrollReveal variant="fade-up" delayMs={300}>
             <div className="group relative rounded-[28px] overflow-hidden aspect-[4/5] bg-zinc-900 shadow-md">
               <Image
-                src="/images/lashes_studio.jpg"
+                src="/images/ghanaian_volume_lashes.jpg"
                 alt="Lashes and Spa Pedicure"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
