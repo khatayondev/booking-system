@@ -4,6 +4,10 @@ import { prisma } from "@/lib/db";
 import { errorResponse, successResponse, AppError } from "@/lib/api-response";
 import { sendSms } from "@/lib/sms";
 import { formatPesewas } from "@/lib/money";
+import { sendResendEmail } from "@/lib/email/resend";
+import { buildAppointmentReminderEmail } from "@/lib/email/templates";
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
 
 export async function POST(
   _req: Request,
@@ -23,6 +27,7 @@ export async function POST(
       include: {
         customer: true,
         items: { include: { service: true } },
+        staff: { include: { user: true } },
       },
     });
 
@@ -40,6 +45,52 @@ export async function POST(
       message,
     });
 
+    let emailSent = false;
+    if (booking.customer.email) {
+      try {
+        const dateFormatted = booking.startUtc
+          ? booking.startUtc.toLocaleDateString("en-GB", {
+              timeZone: "Africa/Accra",
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })
+          : "Upcoming Date";
+        const timeFormatted = booking.startUtc
+          ? booking.startUtc.toLocaleTimeString("en-GB", {
+              timeZone: "Africa/Accra",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            })
+          : "Scheduled Time";
+
+        const { subject, html, text } = buildAppointmentReminderEmail({
+          customerName: booking.customer.name,
+          serviceName,
+          dateFormatted,
+          timeFormatted,
+          reference: booking.reference,
+          staffName: booking.staff?.user?.name,
+          amountDue: formatPesewas(pendingPesewas),
+          manageUrl: `${env.APP_URL}/manage/${booking.reference}`,
+        });
+
+        const res = await sendResendEmail({
+          to: booking.customer.email,
+          subject,
+          html,
+          text,
+        });
+        emailSent = res.success;
+      } catch (emailErr) {
+        logger.warn(`Failed to dispatch reminder email for ${booking.reference}`, {
+          error: emailErr,
+        });
+      }
+    }
+
     await prisma.auditLog.create({
       data: {
         userId: session.userId,
@@ -48,15 +99,23 @@ export async function POST(
         entityId: bookingId,
         newValues: {
           customerPhone: booking.customer.phone,
+          customerEmail: booking.customer.email || null,
+          emailSent,
           amountPending: pendingPesewas,
         },
       },
     });
 
+    const channels = emailSent
+      ? `SMS (${booking.customer.phone}) and Email (${booking.customer.email})`
+      : `SMS (${booking.customer.phone})`;
+
     return successResponse({
       id: booking.id,
       customerPhone: booking.customer.phone,
-      message: `Reminder sent to ${booking.customer.name} (${booking.customer.phone}) successfully.`,
+      customerEmail: booking.customer.email,
+      emailSent,
+      message: `Reminder sent to ${booking.customer.name} via ${channels} successfully.`,
     });
   } catch (err: unknown) {
     if (err instanceof AppError) {

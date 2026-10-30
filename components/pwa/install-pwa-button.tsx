@@ -138,7 +138,7 @@ function IosInstallDialog({
   onClose: () => void;
 }) {
   return (
-    <Dialog open={open} onClose={onClose} title="Install Becca's Crown Portal">
+    <Dialog isOpen={open} onClose={onClose} title="Install Becca's Crown Portal">
       <div className="space-y-4 py-2">
         <div className="flex items-center gap-3 p-3 rounded-xl bg-[#F9FAFB] border border-[#ECEEEF]">
           <div className="w-10 h-10 rounded-lg bg-[#09090b] flex items-center justify-center shrink-0 border border-[#D4AF37]/30">
@@ -189,7 +189,7 @@ function IosInstallDialog({
         </div>
 
         <div className="pt-3 flex justify-end">
-          <Button variant="primary" size="sm" onClick={onClose}>
+          <Button variant="blackPill" size="sm" onClick={onClose}>
             Got It
           </Button>
         </div>

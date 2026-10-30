@@ -105,6 +105,8 @@ model Customer {
   marketingConsent   Boolean   @default(false)
   marketingConsentAt DateTime?
   preferences        String?
+  birthdayMonth      Int?
+  birthdayDay        Int?
   tags               String[]  @default([])
   bookings           Booking[]
   receipts           Receipt[]

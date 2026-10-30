@@ -2,6 +2,10 @@ import { getCurrentSession } from "@/lib/auth";
 import { requirePermission, PERMISSION_KEYS, can } from "@/lib/rbac";
 import { prisma } from "@/lib/db";
 import { errorResponse, successResponse, AppError } from "@/lib/api-response";
+import { sendResendEmail } from "@/lib/email/resend";
+import { buildPostServiceReviewEmail } from "@/lib/email/templates";
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
 
 export async function POST(
   _req: Request,
@@ -18,6 +22,11 @@ export async function POST(
 
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
+      include: {
+        customer: true,
+        items: { include: { service: true } },
+        staff: { include: { user: true } },
+      },
     });
 
     if (!booking || booking.deletedAt) {
@@ -52,6 +61,32 @@ export async function POST(
 
       return b;
     });
+
+    // If marked as COMPLETED and customer has email, send thank you & review request
+    if (nextStatus === "COMPLETED" && booking.customer?.email) {
+      try {
+        const serviceName = booking.items[0]?.service.name || "Crown Beauty Treatment";
+        const staffName = booking.staff?.user?.name;
+        const { subject, html, text } = buildPostServiceReviewEmail({
+          customerName: booking.customer.name,
+          serviceName,
+          staffName,
+          reviewUrl: `${env.APP_URL}/review`,
+          rebookUrl: `${env.APP_URL}/book`,
+        });
+
+        await sendResendEmail({
+          to: booking.customer.email,
+          subject,
+          html,
+          text,
+        });
+
+        logger.info(`Post-service thank you email sent to ${booking.customer.email} for booking ${booking.reference}`);
+      } catch (err) {
+        logger.warn(`Failed to dispatch post-service review email for ${booking.reference}`, { error: err });
+      }
+    }
 
     return successResponse({
       id: updated.id,

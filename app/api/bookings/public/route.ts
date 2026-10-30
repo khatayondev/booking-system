@@ -20,6 +20,8 @@ const publicBookingSchema = z.object({
     phone: z.string().min(9, "Ghana phone number is required"),
     email: z.string().email("Invalid email address").optional().or(z.literal("")),
     notes: z.string().max(500).optional(),
+    birthdayMonth: z.number().int().min(1).max(12).optional(),
+    birthdayDay: z.number().int().min(1).max(31).optional(),
   }),
   paymentType: z.enum(["DEPOSIT", "FULL"]).default("DEPOSIT"),
   policyAgreed: z.literal(true, {
@@ -150,12 +152,16 @@ export async function POST(req: NextRequest) {
         name: customer.name,
         email: customer.email || undefined,
         notes: customer.notes || undefined,
+        birthdayMonth: customer.birthdayMonth || undefined,
+        birthdayDay: customer.birthdayDay || undefined,
       },
       create: {
         phone: normalizedPhone,
         name: customer.name,
         email: customer.email || undefined,
         notes: customer.notes || undefined,
+        birthdayMonth: customer.birthdayMonth || undefined,
+        birthdayDay: customer.birthdayDay || undefined,
       },
     });
 

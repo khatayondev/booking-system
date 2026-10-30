@@ -5,12 +5,17 @@ import { getPaymentProvider } from "./provider";
 import { reconcilePaymentTransaction } from "./reconciliation";
 import { assertBookingTransition } from "./state-machine";
 import { BookingStatusType } from "./types";
+import { sendResendEmail } from "@/lib/email/resend";
+import { buildAppointmentReminderEmail } from "@/lib/email/templates";
+import { formatPesewas } from "@/lib/money";
+import { env } from "@/lib/env";
 
 export interface MaintenanceJobResult {
   expiredHoldsCount: number;
   cancelledBookingsCount: number;
   reconciledPaymentsCount: number;
   mismatchesDetected: number;
+  remindersSentCount: number;
   details: string[];
 }
 
@@ -144,11 +149,110 @@ export async function runPaymentMaintenanceJobs(options: {
     }
   }
 
+  // Job 4: Automated 24-hour appointment reminders
+  let remindersSentCount = 0;
+  try {
+    const reminderWindowStart = new Date(now.getTime() + 23 * 60 * 60 * 1000);
+    const reminderWindowEnd = new Date(now.getTime() + 25 * 60 * 60 * 1000);
+
+    const upcomingBookings = await prisma.booking.findMany({
+      where: {
+        status: "CONFIRMED",
+        deletedAt: null,
+        startUtc: {
+          gte: reminderWindowStart,
+          lte: reminderWindowEnd,
+        },
+      },
+      include: {
+        customer: true,
+        items: { include: { service: true } },
+        staff: { include: { user: true } },
+      },
+    });
+
+    for (const b of upcomingBookings) {
+      if (!b.customer?.email) continue;
+
+      // Check if reminder was already sent
+      const alreadySent = await prisma.auditLog.findFirst({
+        where: {
+          action: "APPOINTMENT_REMINDER_SENT",
+          entityId: b.id,
+        },
+      });
+
+      if (alreadySent) continue;
+
+      const pendingPesewas = Math.max(0, b.totalPesewas - b.amountPaidPesewas);
+      const serviceName = b.items[0]?.service.name || "beauty treatment";
+
+      const dateFormatted = b.startUtc
+        ? b.startUtc.toLocaleDateString("en-GB", {
+            timeZone: "Africa/Accra",
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })
+        : "Tomorrow";
+      const timeFormatted = b.startUtc
+        ? b.startUtc.toLocaleTimeString("en-GB", {
+            timeZone: "Africa/Accra",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          })
+        : "Scheduled Time";
+
+      const { subject, html, text } = buildAppointmentReminderEmail({
+        customerName: b.customer.name,
+        serviceName,
+        dateFormatted,
+        timeFormatted,
+        reference: b.reference,
+        staffName: b.staff?.user?.name,
+        amountDue: formatPesewas(pendingPesewas),
+        manageUrl: `${env.APP_URL}/manage/${b.reference}`,
+      });
+
+      const res = await sendResendEmail({
+        to: b.customer.email,
+        subject,
+        html,
+        text,
+      });
+
+      if (res.success) {
+        remindersSentCount++;
+        await prisma.auditLog.create({
+          data: {
+            action: "APPOINTMENT_REMINDER_SENT",
+            entityType: "Booking",
+            entityId: b.id,
+            newValues: {
+              reference: b.reference,
+              recipient: b.customer.email,
+              serviceName,
+            },
+          },
+        });
+      }
+    }
+
+    if (remindersSentCount > 0) {
+      details.push(`Sent ${remindersSentCount} automated 24-hour reminder email(s).`);
+    }
+  } catch (err) {
+    logger.error("Error running automated appointment reminders job", { error: err });
+  }
+
   return {
     expiredHoldsCount,
     cancelledBookingsCount,
     reconciledPaymentsCount,
     mismatchesDetected,
+    remindersSentCount,
     details,
   };
 }

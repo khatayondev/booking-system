@@ -177,3 +177,146 @@ Sent to: ${params.recipientEmail} at ${now}.
   return { subject, html, text };
 }
 
+export interface AppointmentReminderEmailParams {
+  customerName: string;
+  serviceName: string;
+  dateFormatted: string;
+  timeFormatted: string;
+  reference: string;
+  staffName?: string;
+  amountDue: string;
+  manageUrl: string;
+}
+
+export function buildAppointmentReminderEmail(params: AppointmentReminderEmailParams): {
+  subject: string;
+  html: string;
+  text: string;
+} {
+  const subject = `Reminder: Your appointment tomorrow at Becca's Crown (${params.timeFormatted})`;
+
+  const bodyHtml = `
+    <p style="margin: 0 0 14px 0;">Dear <strong>${params.customerName}</strong>,</p>
+    <p style="margin: 0 0 14px 0;">
+      Friendly reminder that your luxury artistry session for <strong>${params.serviceName}</strong> is scheduled for <strong>${params.dateFormatted} at ${params.timeFormatted}</strong>.
+    </p>
+    <p style="margin: 0 0 10px 0;">
+      <strong>Studio Preparation Instructions:</strong>
+    </p>
+    <ul style="margin: 0 0 16px 0; padding-left: 20px; line-height: 1.8; color: #4b5563; font-size: 13px;">
+      <li>Please arrive 10 minutes prior to your appointment time.</li>
+      <li>For hair &amp; braids: please arrive with hair thoroughly washed, conditioned, and detangled.</li>
+      <li>For lash artistry: avoid oil-based cleansers and eye makeup prior to your session.</li>
+      <li>Complimentary refreshments await you at our Ghana studio.</li>
+    </ul>
+    <p style="margin: 0;">
+      If you need to adjust your time, you may view or reschedule using your booking pass below.
+    </p>
+  `;
+
+  const metaFields = [
+    { label: "Booking Reference", value: params.reference },
+    { label: "Treatment", value: params.serviceName },
+    { label: "Date & Time", value: `${params.dateFormatted} at ${params.timeFormatted}` },
+    ...(params.staffName ? [{ label: "Your Specialist", value: params.staffName }] : []),
+    { label: "Balance Due at Studio", value: params.amountDue },
+    { label: "Studio Location", value: "Becca's Crown Beauty Vault, Ghana" },
+  ];
+
+  const html = wrapLuxuryEmailHtml({
+    title: "Appointment Tomorrow",
+    badge: "24-Hour Reminder",
+    subtitle: "We look forward to creating your signature crown look",
+    preheader: `Friendly reminder for your appointment tomorrow at ${params.timeFormatted} (Ref: ${params.reference})`,
+    bodyHtml,
+    metaFields,
+    ctaText: "View Digital Booking Pass",
+    ctaUrl: params.manageUrl,
+  });
+
+  const text = `
+BECCA'S CROWN • BEAUTY VAULT
+APPOINTMENT REMINDER
+
+Dear ${params.customerName},
+Your appointment for ${params.serviceName} is tomorrow, ${params.dateFormatted} at ${params.timeFormatted}.
+
+Reference: ${params.reference}
+Assigned Specialist: ${params.staffName || "Studio Specialist"}
+Balance Due: ${params.amountDue}
+Location: Becca's Crown Beauty Vault, Ghana
+
+Please arrive 10 minutes early. View or manage your appointment: ${params.manageUrl}
+  `.trim();
+
+  return { subject, html, text };
+}
+
+export interface PostServiceReviewEmailParams {
+  customerName: string;
+  serviceName: string;
+  staffName?: string;
+  reviewUrl?: string;
+  rebookUrl?: string;
+}
+
+export function buildPostServiceReviewEmail(params: PostServiceReviewEmailParams): {
+  subject: string;
+  html: string;
+  text: string;
+} {
+  const subject = `Thank you for visiting Becca's Crown Beauty Vault ✨`;
+
+  const bodyHtml = `
+    <p style="margin: 0 0 14px 0;">Dear <strong>${params.customerName}</strong>,</p>
+    <p style="margin: 0 0 14px 0;">
+      Thank you for choosing <strong>Becca&apos;s Crown Beauty Vault</strong> today! It was an absolute pleasure pampering you and styling your <strong>${params.serviceName}</strong>.
+    </p>
+    <p style="margin: 0 0 10px 0;">
+      <strong>Aftercare &amp; Crown Maintenance:</strong>
+    </p>
+    <ul style="margin: 0 0 16px 0; padding-left: 20px; line-height: 1.8; color: #4b5563; font-size: 13px;">
+      <li>Wrap your hair with a silk or satin bonnet before sleeping to protect your styling.</li>
+      <li>Keep your scalp moisturized using light oils (argan or jojoba).</li>
+      <li>For lash clients: keep lashes dry for the first 24 hours and avoid oil-based cleansers.</li>
+    </ul>
+    <p style="margin: 0 0 8px 0;">
+      How was your experience? Your feedback helps our artisans maintain world-class standards.
+    </p>
+  `;
+
+  const metaFields = [
+    { label: "Completed Service", value: params.serviceName },
+    ...(params.staffName ? [{ label: "Artisan Specialist", value: params.staffName }] : []),
+    { label: "Experience Rating", value: "⭐⭐⭐⭐⭐ VIP Artistry" },
+  ];
+
+  const reviewLink = params.reviewUrl || "https://booking-system-nu-lemon.vercel.app/review";
+
+  const html = wrapLuxuryEmailHtml({
+    title: "Thank You, Beautiful",
+    badge: "Crown Experience",
+    subtitle: "We loved having you at our Ghana studio today",
+    preheader: `Thank you for visiting Becca's Crown Beauty Vault! Let us know how your experience was.`,
+    bodyHtml,
+    metaFields,
+    ctaText: "Leave Us a 5-Star Review ↗",
+    ctaUrl: reviewLink,
+    secondaryCtaText: "Book Your Next Session Early",
+    secondaryCtaUrl: params.rebookUrl || "https://booking-system-nu-lemon.vercel.app/book",
+  });
+
+  const text = `
+BECCA'S CROWN • BEAUTY VAULT
+THANK YOU FOR VISITING US
+
+Dear ${params.customerName},
+Thank you for trusting us with your ${params.serviceName} today!
+We would love to hear your feedback: ${reviewLink}
+
+Book your next session early: ${params.rebookUrl || "https://booking-system-nu-lemon.vercel.app/book"}
+  `.trim();
+
+  return { subject, html, text };
+}
+

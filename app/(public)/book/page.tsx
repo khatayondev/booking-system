@@ -165,6 +165,8 @@ function BookingWizardContent() {
   const [customerName, setCustomerName] = React.useState("");
   const [customerPhone, setCustomerPhone] = React.useState("");
   const [customerEmail, setCustomerEmail] = React.useState("");
+  const [customerBirthdayMonth, setCustomerBirthdayMonth] = React.useState<number | "">("");
+  const [customerBirthdayDay, setCustomerBirthdayDay] = React.useState<number | "">("");
   const [customerNotes, setCustomerNotes] = React.useState("");
   const [phoneError, setPhoneError] = React.useState<string | null>(null);
 
@@ -554,6 +556,8 @@ function BookingWizardContent() {
             phone: customerPhone,
             email: customerEmail || undefined,
             notes: customerNotes || undefined,
+            birthdayMonth: customerBirthdayMonth ? Number(customerBirthdayMonth) : undefined,
+            birthdayDay: customerBirthdayDay ? Number(customerBirthdayDay) : undefined,
           },
           paymentType,
           policyAgreed: true,
@@ -1240,6 +1244,43 @@ function BookingWizardContent() {
                       onChange={(e) => setCustomerEmail(e.target.value)}
                       className="w-full h-11 px-4 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
                     />
+                  </div>
+
+                  {/* Optional VIP Birthday Perk */}
+                  <div className="space-y-1.5 p-3 rounded-2xl bg-white/5 border border-white/10">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block">
+                        VIP Birthday Month &amp; Day (Optional)
+                      </label>
+                      <span className="text-[10px] font-bold text-amber-300/80">Birthday Crown Gift 🎁</span>
+                    </div>
+                    <p className="text-[10px] text-zinc-400 leading-tight">
+                      Share your birth month &amp; day to unlock exclusive treatments and anniversary perks.
+                    </p>
+                    <div className="grid grid-cols-2 gap-2 pt-1">
+                      <select
+                        aria-label="Birthday Month"
+                        value={customerBirthdayMonth}
+                        onChange={(e) => setCustomerBirthdayMonth(e.target.value ? parseInt(e.target.value, 10) : "")}
+                        className="h-10 px-3 rounded-xl bg-zinc-900 border border-white/20 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer"
+                      >
+                        <option value="">Select Month</option>
+                        {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((m, idx) => (
+                          <option key={m} value={idx + 1}>{m}</option>
+                        ))}
+                      </select>
+                      <select
+                        aria-label="Birthday Day"
+                        value={customerBirthdayDay}
+                        onChange={(e) => setCustomerBirthdayDay(e.target.value ? parseInt(e.target.value, 10) : "")}
+                        className="h-10 px-3 rounded-xl bg-zinc-900 border border-white/20 text-xs text-white focus:outline-none focus:border-amber-400 cursor-pointer"
+                      >
+                        <option value="">Select Day</option>
+                        {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+                          <option key={d} value={d}>Day {d}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
                   <div className="space-y-1">
