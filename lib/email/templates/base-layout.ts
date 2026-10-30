@@ -156,7 +156,7 @@ export function buildMasterEmailHTML({
                 Luxury Braids &bull; Frontal Installations &bull; Lash Artistry &bull; Bridal Glam
               </p>
               <p style="font-size:11px; color:#9ca3af; margin:0 0 12px 0; font-family:'Poppins', sans-serif;">
-                Web: <a href="https://booking-system-nu-lemon.vercel.app" style="color:#d4af37; text-decoration:none; font-weight:600;">booking-system-nu-lemon.vercel.app</a>
+                Web: <a href="https://www.beccascrownbeauty.com" style="color:#d4af37; text-decoration:none; font-weight:600;">beccascrownbeauty.com</a>
               </p>
               <p style="font-size:10px; color:#c1c5cb; margin:0; font-family:'Poppins', sans-serif;">
                 &copy; ${currentYear} Becca&apos;s Crown Beauty Vault Ltd. All rights reserved.
@@ -355,7 +355,7 @@ export function wrapLuxuryEmailHtml(options: EmailLayoutOptions): string {
                 Luxury Braids &bull; Frontal Installations &bull; Lash Artistry &bull; Bridal Glam
               </p>
               <p style="font-size:11px; color:#9ca3af; margin:0 0 12px 0; font-family:'Poppins', sans-serif;">
-                Web: <a href="https://booking-system-nu-lemon.vercel.app" style="color:#d4af37; text-decoration:none; font-weight:600;">booking-system-nu-lemon.vercel.app</a>
+                Web: <a href="https://www.beccascrownbeauty.com" style="color:#d4af37; text-decoration:none; font-weight:600;">beccascrownbeauty.com</a>
               </p>
               <p style="font-size:10px; color:#c1c5cb; margin:0; font-family:'Poppins', sans-serif;">
                 &copy; ${currentYear} Becca&apos;s Crown Beauty Vault Ltd. All rights reserved.

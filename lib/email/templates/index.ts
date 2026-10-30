@@ -291,7 +291,7 @@ export function buildPostServiceReviewEmail(params: PostServiceReviewEmailParams
     { label: "Experience Rating", value: "⭐⭐⭐⭐⭐ VIP Artistry" },
   ];
 
-  const reviewLink = params.reviewUrl || "https://booking-system-nu-lemon.vercel.app/review";
+  const reviewLink = params.reviewUrl || "https://www.beccascrownbeauty.com/review";
 
   const html = wrapLuxuryEmailHtml({
     title: "Thank You, Beautiful",
@@ -303,7 +303,7 @@ export function buildPostServiceReviewEmail(params: PostServiceReviewEmailParams
     ctaText: "Leave Us a 5-Star Review ↗",
     ctaUrl: reviewLink,
     secondaryCtaText: "Book Your Next Session Early",
-    secondaryCtaUrl: params.rebookUrl || "https://booking-system-nu-lemon.vercel.app/book",
+    secondaryCtaUrl: params.rebookUrl || "https://www.beccascrownbeauty.com/book",
   });
 
   const text = `
@@ -314,7 +314,7 @@ Dear ${params.customerName},
 Thank you for trusting us with your ${params.serviceName} today!
 We would love to hear your feedback: ${reviewLink}
 
-Book your next session early: ${params.rebookUrl || "https://booking-system-nu-lemon.vercel.app/book"}
+Book your next session early: ${params.rebookUrl || "https://www.beccascrownbeauty.com/book"}
   `.trim();
 
   return { subject, html, text };
