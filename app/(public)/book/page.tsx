@@ -670,7 +670,7 @@ function BookingWizardContent() {
   // CONFIRMATION VIEW
   if (bookingResult) {
     return (
-      <div className="relative h-[100dvh] w-full overflow-hidden flex items-center justify-center p-4 sm:p-8 bg-zinc-950">
+      <div className="relative min-h-[calc(100vh-140px)] w-full py-12 sm:py-16 flex items-center justify-center p-4 sm:p-8 bg-zinc-950">
         <div className="fixed inset-0 z-0">
           <Image
             src="/images/ghanaian_hero_beauty.jpg"
@@ -740,7 +740,7 @@ function BookingWizardContent() {
   }
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden flex items-center justify-center p-0 sm:p-4 lg:p-6 bg-zinc-950">
+    <div className="relative min-h-[calc(100vh-140px)] w-full py-8 sm:py-12 lg:py-16 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-zinc-950">
       {/* =========================================================================
           DYNAMIC BACKGROUND IMAGES (Changes with each step with smooth cross-fade)
       ========================================================================= */}
@@ -805,8 +805,8 @@ function BookingWizardContent() {
         {/* =========================================================================
             RIGHT COLUMN: THE FROSTED GLASS CARD (Fitted to Screen Height)
         ========================================================================= */}
-        <div className="lg:col-span-6 w-full h-full flex items-center justify-center">
-          <div className="w-full max-w-lg h-full max-h-full sm:max-h-[calc(100dvh-2rem)] lg:max-h-[740px] rounded-none sm:rounded-[36px] bg-zinc-950/90 sm:bg-zinc-950/80 backdrop-blur-3xl border-0 sm:border border-white/20 p-3.5 sm:p-6 shadow-2xl text-white flex flex-col justify-between overflow-hidden transition-all duration-300">
+        <div className="lg:col-span-6 w-full flex items-center justify-center">
+          <div className="w-full max-w-lg min-h-[580px] h-[640px] sm:h-[680px] lg:h-[720px] rounded-[32px] sm:rounded-[36px] bg-zinc-950/90 sm:bg-zinc-950/80 backdrop-blur-3xl border border-white/20 p-4 sm:p-6 shadow-2xl text-white flex flex-col justify-between overflow-hidden transition-all duration-300">
             {/* Top Bar inside the Glass: Studio Brand Capsule & Step Indicator */}
             <div className="flex items-center justify-between pb-2.5 sm:pb-3.5 border-b border-white/10 shrink-0">
               {/* Studio Capsule */}

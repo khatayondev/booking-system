@@ -26,8 +26,8 @@ export function PublicNavbar() {
     };
   }, [mobileMenuOpen]);
 
-  // On the homepage (integrated hero navbar) and booking wizard (dedicated full-screen funnel), hide the global navbar
-  if (pathname === "/" || pathname === "/book") {
+  // On the homepage (integrated hero navbar), hide the global navbar
+  if (pathname === "/") {
     return null;
   }
 

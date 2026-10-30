@@ -94,7 +94,7 @@ export default function PublicSiteLayout({
       <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>
 
       {/* Ultra-Luxury Obsidian Dark Footer */}
-      <footer className="mt-20 w-full max-w-full overflow-x-hidden bg-[#141210] text-[#E4E4E7] pt-16 pb-12 border-t border-zinc-800">
+      <footer className="mt-20 w-full max-w-full overflow-x-hidden bg-[#141210] text-[#E4E4E7] pt-16 pb-12 border-t border-zinc-800 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
           {/* Top Row: Brand & VIP Newsletter */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 border-b border-zinc-800/80 items-start">
