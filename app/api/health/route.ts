@@ -36,7 +36,42 @@ export async function GET() {
     }
   }
 
-  // 3. System Memory & Process Stats
+  // 3. Inspect Database Tables & Catalog State
+  let tables: string[] = [];
+  let catalogDiagnostics: {
+    categoriesCount?: number;
+    servicesCount?: number;
+    staffCount?: number;
+    error?: string;
+  } = {};
+
+  if (dbStatus === "healthy") {
+    try {
+      const rows = await prisma.$queryRaw<{ table_name: string }[]>`
+        SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name ASC;
+      `;
+      tables = rows.map((r) => r.table_name);
+    } catch (e: unknown) {
+      catalogDiagnostics.error = e instanceof Error ? e.message : String(e);
+    }
+
+    try {
+      const [categoriesCount, servicesCount, staffCount] = await Promise.all([
+        prisma.serviceCategory.count(),
+        prisma.service.count(),
+        prisma.staff.count(),
+      ]);
+      catalogDiagnostics = {
+        categoriesCount,
+        servicesCount,
+        staffCount,
+      };
+    } catch (e: unknown) {
+      catalogDiagnostics.error = e instanceof Error ? e.message : String(e);
+    }
+  }
+
+  // 4. System Memory & Process Stats
   const memUsage = process.memoryUsage();
   const uptimeSeconds = Math.round(process.uptime());
 
@@ -54,6 +89,9 @@ export async function GET() {
       database: {
         status: dbStatus,
         latencyMs: dbLatencyMs,
+        tablesCount: tables.length,
+        tables,
+        catalogDiagnostics,
       },
       jobsQueue: {
         status: jobStats.failed > 10 ? "backlogged" : "healthy",
