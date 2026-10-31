@@ -158,14 +158,14 @@ export default function CustomerPublicPage() {
             <div className="mt-8 sm:mt-10 max-w-md sm:max-w-xl mx-auto px-2">
               <Link
                 href="/book"
-                className="group relative flex items-center justify-between rounded-full border border-white/30 hover:border-white/60 bg-black/40 hover:bg-black/60 backdrop-blur-md shadow-2xl pl-6 sm:pl-8 pr-2.5 py-2.5 sm:py-3 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                className="group relative flex items-center justify-center rounded-full border border-white/30 hover:border-white/60 bg-black/40 hover:bg-black/60 backdrop-blur-md shadow-2xl px-12 sm:px-14 py-3 sm:py-3.5 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
-                <span className="text-sm sm:text-base font-semibold text-white group-hover:text-amber-200 transition-colors tracking-tight">
-                  Book an Appointment Now
+                <span className="text-center text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-amber-200 transition-colors tracking-wider uppercase">
+                  BOOK AN APPOINTMENT NOW
                 </span>
 
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-amber-500 group-hover:bg-amber-400 text-black flex items-center justify-center transition-all duration-300 group-hover:rotate-45 shadow-md shrink-0">
-                  <ArrowUpRight className="w-5 h-5 text-black stroke-[2.5]" />
+                <div className="absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-amber-500 group-hover:bg-amber-400 text-black flex items-center justify-center transition-all duration-300 group-hover:rotate-45 shadow-md shrink-0">
+                  <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black stroke-[2.5]" />
                 </div>
               </Link>
             </div>
