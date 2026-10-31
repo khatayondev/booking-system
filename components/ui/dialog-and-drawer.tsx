@@ -74,6 +74,7 @@ interface DrawerProps {
   title: string;
   children: React.ReactNode;
   side?: "bottom" | "left" | "right";
+  className?: string;
 }
 
 export function Drawer({
@@ -82,6 +83,7 @@ export function Drawer({
   title,
   children,
   side = "bottom",
+  className,
 }: DrawerProps) {
   if (!isOpen) return null;
 
@@ -91,10 +93,12 @@ export function Drawer({
     right: "top-0 bottom-0 right-0 w-80 rounded-l-3xl h-full",
   };
 
+  const isDark = className?.includes("bg-black") || className?.includes("bg-zinc-950");
+
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -103,16 +107,18 @@ export function Drawer({
         aria-modal="true"
         className={cn(
           "fixed bg-white shadow-2xl border border-[#E4E4E7] p-6 z-10 overflow-y-auto flex flex-col",
-          sideStyles[side]
+          sideStyles[side],
+          className
         )}
       >
-        <div className="flex items-center justify-between pb-4 border-b border-[#F4F4F6]">
-          <h2 className="text-base font-bold text-[#1E1E1E]">{title}</h2>
+        <div className={cn("flex items-center justify-between pb-4 border-b border-[#F4F4F6]", isDark && "border-white/10")}>
+          <h2 className={cn("text-base font-bold text-[#1E1E1E]", isDark && "text-white")}>{title}</h2>
           <Button
             variant="circularIcon"
             size="iconSm"
             onClick={onClose}
             aria-label="Close drawer"
+            className={isDark ? "bg-zinc-900 hover:bg-zinc-800 text-white border-white/10" : undefined}
           >
             <X className="w-4 h-4" />
           </Button>

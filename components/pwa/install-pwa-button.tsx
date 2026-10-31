@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Download, Share2, PlusSquare, Smartphone, Laptop, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog-and-drawer";
 
@@ -113,11 +114,14 @@ export function InstallPwaButton({
     <>
       <button
         onClick={handleInstallClick}
-        className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all text-[#1E1E1E] bg-[#F4F4F6] hover:bg-[#EAEAEF] border border-black/5"
+        className={cn(
+          "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all text-white bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 shadow-xs cursor-pointer",
+          className
+        )}
       >
-        <Download className="w-4 h-4 shrink-0 text-[#D97706]" />
+        <Download className="w-4 h-4 shrink-0 text-amber-400" />
         <span className="flex-1 text-left">Install Studio App</span>
-        <span className="text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-sm bg-black/5 text-[#71717A]">
+        <span className="text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-md bg-white/10 text-zinc-300">
           PWA
         </span>
       </button>

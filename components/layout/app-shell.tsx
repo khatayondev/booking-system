@@ -217,25 +217,28 @@ export function AppShell({
   ];
 
   const sidebarContent = (
-    <div className="flex flex-col h-full justify-between">
+    <div className="flex flex-col h-full justify-between select-none">
       <div>
         {/* Brand */}
-        <div className="flex items-center gap-2.5 px-3 py-4 mb-4">
-          <div className="w-9 h-9 rounded-2xl bg-[#1E1E1E] text-white flex items-center justify-center font-bold text-sm shadow-sm">
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-2.5 px-3 py-3 mb-6 rounded-2xl hover:bg-white/5 transition-colors group"
+        >
+          <div className="w-9 h-9 rounded-2xl bg-zinc-900 border border-white/15 text-white flex items-center justify-center font-bold text-sm shadow-md shrink-0 group-hover:border-amber-400/50 transition-colors">
             <Crown className="w-4 h-4 text-amber-300" />
           </div>
-          <div>
-            <h1 className="text-sm font-extrabold text-[#1E1E1E] tracking-tight leading-tight">BECCA&apos;S CROWN</h1>
-            <p className="text-[10px] text-[#71717A] uppercase tracking-wider">Beauty Vault • Accra</p>
+          <div className="min-w-0">
+            <h1 className="text-sm font-extrabold text-white tracking-tight leading-tight uppercase">BECCA&apos;S CROWN</h1>
+            <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold">Beauty Vault • Accra</p>
           </div>
-        </div>
+        </Link>
 
         {/* Nav Sections */}
         <div className="space-y-6">
           {navSections.map((section, idx) => (
             <div key={idx} className="space-y-1">
               {section.title && (
-                <p className="px-3 text-[10px] font-bold text-[#A1A1AA] uppercase tracking-wider mb-1.5">
+                <p className="px-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5">
                   {section.title}
                 </p>
               )}
@@ -249,8 +252,8 @@ export function AppShell({
                     className={cn(
                       "flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all",
                       isActive
-                        ? "bg-[#1E1E1E] text-white shadow-xs"
-                        : "text-[#71717A] hover:text-[#1E1E1E] hover:bg-[#F4F4F6]"
+                        ? "bg-white text-zinc-950 font-bold shadow-md"
+                        : "text-zinc-300 hover:text-white hover:bg-white/10"
                     )}
                   >
                     <span className="shrink-0">{item.icon}</span>
@@ -264,14 +267,14 @@ export function AppShell({
       </div>
 
       {/* Settings at Bottom */}
-      <div className="pt-4 border-t border-[#F4F4F6] space-y-2">
+      <div className="pt-4 border-t border-white/10 space-y-2 mt-6">
         <InstallPwaButton variant="sidebar" />
         <Link
           href="/settings"
           onClick={() => setMobileDrawerOpen(false)}
           className={cn(
-            "flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all text-[#71717A] hover:text-[#1E1E1E] hover:bg-[#F4F4F6]",
-            activePath === "/settings" && "bg-[#1E1E1E] text-white"
+            "flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all text-zinc-300 hover:text-white hover:bg-white/10",
+            activePath === "/settings" && "bg-white text-zinc-950 font-bold shadow-md"
           )}
         >
           <Settings className="w-4 h-4 shrink-0" />
@@ -284,11 +287,27 @@ export function AppShell({
   const unreadCount = notifications.filter((n) => n.unread).length;
 
   return (
-    <div className="min-h-screen p-3 sm:p-6 lg:p-8 flex items-center justify-center">
-      {/* Outer frosted-glass frame (backdrop blur, 1px translucent border, 32px radius) */}
-      <div className="frosted-frame w-full max-w-[1560px] min-h-[92vh] flex flex-col p-4 sm:p-6 lg:p-8 overflow-hidden">
-        {/* Top Bar */}
-        <header className="flex items-center justify-between pb-6 mb-6 border-b border-black/5 gap-4">
+    <div className="min-h-screen bg-[#F4F4F6] text-[#1E1E1E] flex flex-row antialiased">
+      {/* 1. Desktop Static Full-Height Pure Black Sidebar */}
+      <aside className="hidden lg:flex w-64 h-screen sticky top-0 shrink-0 bg-black text-white border-r border-white/10 p-5 flex-col justify-between overflow-y-auto z-40">
+        {sidebarContent}
+      </aside>
+
+      {/* 2. Mobile Drawer with matching full black background and white content */}
+      <Drawer
+        isOpen={mobileDrawerOpen}
+        onClose={() => setMobileDrawerOpen(false)}
+        title="Becca's Crown Beauty Vault"
+        side="left"
+        className="bg-black text-white border-r border-white/10"
+      >
+        {sidebarContent}
+      </Drawer>
+
+      {/* 3. Main Dashboard Body (Header + Content) */}
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        {/* Top Header */}
+        <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-black/5 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             {/* Mobile menu trigger */}
             <Button
@@ -463,28 +482,10 @@ export function AppShell({
           </div>
         </header>
 
-        {/* Main Body with Floating Sidebar and Content */}
-        <div className="flex-1 flex gap-6 lg:gap-8 items-start">
-          {/* Floating white rounded panel desktop sidebar */}
-          <aside className="hidden lg:block w-64 bg-white/95 rounded-[28px] border border-[#E4E4E7] p-5 shadow-sm shrink-0 min-h-[750px]">
-            {sidebarContent}
-          </aside>
-
-          {/* Mobile Drawer */}
-          <Drawer
-            isOpen={mobileDrawerOpen}
-            onClose={() => setMobileDrawerOpen(false)}
-            title="Becca's Crown Beauty Vault"
-            side="left"
-          >
-            {sidebarContent}
-          </Drawer>
-
-          {/* Content Area */}
-          <main className="flex-1 w-full min-w-0">
-            {children}
-          </main>
-        </div>
+        {/* Page Content */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-[1600px] mx-auto min-w-0">
+          {children}
+        </main>
       </div>
 
       {/* GLOBAL SEARCH DIALOG MODAL */}
