@@ -856,14 +856,14 @@ function BookingWizardContent() {
         <div className="hidden lg:flex lg:col-span-5 flex-col justify-center text-white pr-2 xl:pr-6">
           <div className="flex flex-col gap-6">
             {/* Clear Image of Her (Bigger, borderless, untagged, no transparency, no overlay) */}
-            <div className="relative w-full max-w-[520px] aspect-square rounded-[32px] overflow-hidden shadow-2xl">
+            <div className="relative w-full max-w-[540px] aspect-square rounded-[36px] overflow-hidden shadow-2xl">
               <Image
-                src="/images/good-faces-W7JdftOc10w-unsplash.jpg"
+                src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
                 alt="Becca's Crown Beauty Vault"
                 fill
                 priority
                 className="object-cover object-center"
-                sizes="(max-width: 1024px) 100vw, 520px"
+                sizes="(max-width: 1024px) 100vw, 540px"
               />
             </div>
 
@@ -910,7 +910,7 @@ function BookingWizardContent() {
           <div className="lg:hidden w-full max-w-xl flex items-center gap-4 p-3.5 rounded-2xl bg-zinc-900/90 border border-white/15 mb-3 text-white shadow-xl">
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shrink-0 shadow-md">
               <Image
-                src="/images/good-faces-W7JdftOc10w-unsplash.jpg"
+                src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
                 alt="Becca's Crown Beauty Vault"
                 fill
                 priority
