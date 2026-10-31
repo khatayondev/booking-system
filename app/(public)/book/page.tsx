@@ -741,16 +741,16 @@ function BookingWizardContent() {
   }
 
   return (
-    <div className="relative min-h-[calc(100dvh-5rem)] lg:h-[calc(100dvh-5rem)] w-full py-2 sm:py-4 lg:py-3 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-zinc-950">
+    <div className="relative min-h-[calc(100dvh-5rem)] w-full py-4 sm:py-6 lg:py-8 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-zinc-950">
       {/* =========================================================================
-          DYNAMIC BACKGROUND IMAGES (Changes with each step with smooth cross-fade)
+          DYNAMIC BACKGROUND IMAGES (Subtle atmospheric depth behind the layout)
       ========================================================================= */}
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0 pointer-events-none">
         {([1, 2, 3, 4] as const).map((s) => (
           <div
             key={s}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              step === s ? "opacity-50" : "opacity-0 pointer-events-none"
+              step === s ? "opacity-25" : "opacity-0"
             }`}
           >
             <Image
@@ -763,50 +763,93 @@ function BookingWizardContent() {
           </div>
         ))}
         {/* Soft Vignette Overlay for Text & Glass Contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/90" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/95" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-black/80" />
       </div>
 
-      <div className="relative z-10 max-w-6xl w-full h-full max-h-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+      <div className="relative z-10 max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
         {/* =========================================================================
-            LEFT COLUMN (Minimalist Editorial Typography - Changes with Step)
+            LEFT COLUMN: Clear Portrait on the Left Side + Text Below Her
         ========================================================================= */}
-        <div className="hidden lg:flex lg:col-span-5 flex-col justify-between h-full max-h-[min(650px,calc(100dvh-7rem))] py-4 text-white pr-4">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold text-amber-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              <span>Step 0{step} of 04</span>
+        <div className="hidden lg:flex lg:col-span-5 flex-col justify-center text-white pr-2 xl:pr-6">
+          <div className="flex flex-col gap-5">
+            {/* Clear Image of Her */}
+            <div className="relative w-full max-w-[380px] aspect-square rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 ring-1 ring-white/10 group">
+              <Image
+                src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
+                alt="Becca's Crown Beauty Vault"
+                fill
+                priority
+                className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 1024px) 100vw, 380px"
+              />
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 flex items-center gap-2 shadow-lg">
+                <Crown className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-[10px] font-bold text-amber-200 tracking-wider uppercase">Becca&apos;s Crown Vault</span>
+              </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.06] text-white">
-              {STEP_BACKGROUNDS[step].title}
-            </h1>
-            <p className="text-sm text-zinc-300 font-medium max-w-sm leading-relaxed">
-              {STEP_BACKGROUNDS[step].subtitle}
-            </p>
-          </div>
 
-          <div className="flex items-center gap-6 text-xs text-zinc-400 border-t border-white/10 pt-4">
-            <div className="flex items-center gap-1.5">
-              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span className="font-bold text-white">4.9/5 Rating</span>
-            </div>
-            <span>•</span>
-            <div className="flex items-center gap-1.5">
-              <Lock className="w-4 h-4 text-emerald-400" />
-              <span>Instant Confirmation</span>
-            </div>
-            <span>•</span>
-            <div className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-blue-400" />
-              <span>MoMo & Card</span>
+            {/* The Text Below Her */}
+            <div className="space-y-3.5 max-w-[380px]">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold text-amber-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span>Step 0{step} of 04</span>
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight leading-[1.08] text-white">
+                {STEP_BACKGROUNDS[step].title}
+              </h1>
+
+              <p className="text-xs sm:text-sm text-zinc-300 font-medium leading-relaxed">
+                {STEP_BACKGROUNDS[step].subtitle}
+              </p>
+
+              <div className="flex items-center gap-4 text-xs text-zinc-400 border-t border-white/10 pt-3.5">
+                <div className="flex items-center gap-1.5">
+                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <span className="font-bold text-white">4.9/5 Rating</span>
+                </div>
+                <span>•</span>
+                <div className="flex items-center gap-1.5">
+                  <Lock className="w-4 h-4 text-emerald-400" />
+                  <span>Instant Confirmation</span>
+                </div>
+                <span>•</span>
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-blue-400" />
+                  <span>MoMo & Card</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* =========================================================================
-            RIGHT COLUMN: THE FROSTED GLASS CARD (Fitted to Screen Height)
+            RIGHT COLUMN: THE FROSTED GLASS CARD
         ========================================================================= */}
-        <div className="lg:col-span-7 w-full flex items-center justify-center h-full">
+        <div className="lg:col-span-7 w-full flex flex-col items-center justify-center">
+          {/* Mobile/Tablet Header: Her Portrait & Step Title */}
+          <div className="lg:hidden w-full max-w-xl flex items-center gap-3.5 p-3 rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/15 mb-3 text-white shadow-xl">
+            <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/20 bg-black">
+              <Image
+                src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
+                alt="Becca's Crown Beauty Vault"
+                fill
+                priority
+                className="object-cover object-center"
+                sizes="56px"
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-1.5">
+                <Crown className="w-3 h-3 text-amber-400 shrink-0" />
+                <span className="text-[10px] font-bold text-amber-200 tracking-wider uppercase">Becca&apos;s Crown</span>
+              </div>
+              <h2 className="text-sm font-bold text-white truncate">{STEP_BACKGROUNDS[step].title}</h2>
+              <p className="text-[11px] text-zinc-400 truncate">Step 0{step} of 04 • {STEP_BACKGROUNDS[step].subtitle}</p>
+            </div>
+          </div>
+
           <div className="w-full max-w-xl min-h-[500px] h-[calc(100dvh-7rem)] max-h-[640px] sm:max-h-[660px] lg:max-h-[680px] rounded-[28px] sm:rounded-[36px] bg-zinc-950/90 sm:bg-zinc-950/80 backdrop-blur-3xl border border-white/20 p-4 sm:p-5 lg:p-6 shadow-2xl text-white flex flex-col justify-between overflow-hidden transition-all duration-300">
             {/* Top Bar inside the Glass: Studio Brand Capsule & Step Indicator */}
             <div className="flex items-center justify-between pb-2.5 sm:pb-3.5 border-b border-white/10 shrink-0">

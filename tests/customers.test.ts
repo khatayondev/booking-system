@@ -400,7 +400,7 @@ describe("Prompt 16: Customer Management Module", () => {
       // Add a receipt under duplicate
       const r = await prisma.receipt.create({
         data: {
-          receiptNumber: `RCP-DUP-${Date.now().toString().slice(-4)}`,
+          receiptNumber: `RCP-DUP-${Date.now()}-${Math.floor(Math.random() * 100000)}`,
           customerId: duplicateCustId,
           cashierId: managerUser.userId,
           customerName: "Esi C.",
