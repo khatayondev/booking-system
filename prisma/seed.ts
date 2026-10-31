@@ -37,7 +37,18 @@ async function main() {
     update: {},
     create: {
       name: ROLES.STAFF_RECEPTIONIST,
-      description: "Front-desk receptionist and service staff member",
+      description: "Service staff member and stylist",
+    },
+  });
+
+  const frontDeskRole = await prisma.role.upsert({
+    where: { name: ROLES.FRONT_DESK },
+    update: {
+      description: "Front desk tablet terminal: appointments board, check-in, walk-in POS, and customer contact",
+    },
+    create: {
+      name: ROLES.FRONT_DESK,
+      description: "Front desk tablet terminal: appointments board, check-in, walk-in POS, and customer contact",
     },
   });
 
@@ -101,6 +112,23 @@ async function main() {
         },
       });
     }
+
+    // Front Desk default permissions
+    if (DEFAULT_ROLE_PERMISSIONS[ROLES.FRONT_DESK].includes(permName)) {
+      await prisma.rolePermission.upsert({
+        where: {
+          roleId_permissionId: {
+            roleId: frontDeskRole.id,
+            permissionId: perm.id,
+          },
+        },
+        update: {},
+        create: {
+          roleId: frontDeskRole.id,
+          permissionId: perm.id,
+        },
+      });
+    }
   }
 
   // 3. Seed Users with Argon2id hash
@@ -136,6 +164,27 @@ async function main() {
       name: "Abena Serwaa",
       passwordHash: staffPasswordHash,
       roleId: staffRole.id,
+      mustChangePassword: false,
+      active: true,
+    },
+  });
+
+  const frontDeskPasswordHash = await hash("FrontDesk2026!");
+  await prisma.user.upsert({
+    where: { email: "frontdesk@aurastudio.gh" },
+    update: {
+      passwordHash: frontDeskPasswordHash,
+      phone: "+233240001122",
+      active: true,
+      deletedAt: null,
+      roleId: frontDeskRole.id,
+    },
+    create: {
+      email: "frontdesk@aurastudio.gh",
+      phone: "+233240001122",
+      name: "Front Desk Tablet",
+      passwordHash: frontDeskPasswordHash,
+      roleId: frontDeskRole.id,
       mustChangePassword: false,
       active: true,
     },

@@ -31,6 +31,7 @@ import {
 import { formatPesewas } from "@/lib/money";
 import { cn } from "@/lib/utils";
 import { OwnerOnboardingChecklist } from "@/components/dashboard/onboarding-checklist";
+import { FrontDeskTabletBoard } from "@/components/dashboard/front-desk-tablet-board";
 
 interface DashboardData {
   user: {
@@ -305,10 +306,23 @@ export default function DashboardOverviewPage() {
         {/* Owner Onboarding Checklist */}
         {data?.user?.role === "OWNER_ADMIN" && <OwnerOnboardingChecklist />}
 
-        {/* =========================================================================
-            ROW 1: OVERALL INFORMATION (1), WEEKLY PROGRESS (2), MONTH PROGRESS (3)
-           ========================================================================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        {/* FRONT DESK TABLET BOARD (NO STATCARDS, FUNCTIONAL OPERATIONAL COMMAND CENTER) */}
+        {data?.user?.role === "FRONT_DESK" || data?.user?.role === "STAFF_RECEPTIONIST" ? (
+          <FrontDeskTabletBoard
+            todayChecklist={data?.todayChecklist || []}
+            pendingPayments={data?.pendingPayments || []}
+            latestBookings={data?.latestBookings || []}
+            loading={loading}
+            onToggleComplete={handleToggleComplete}
+            onSendReminder={handleSendReminder}
+            onRefresh={loadDashboard}
+          />
+        ) : (
+          <>
+            {/* =========================================================================
+                ROW 1: OVERALL INFORMATION (1), WEEKLY PROGRESS (2), MONTH PROGRESS (3)
+               ========================================================================= */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* WIDGET 1: DARK 'OVERALL INFORMATION' CARD (5 Cols) */}
           <div className="lg:col-span-5">
             {loading || !data ? (
@@ -867,6 +881,8 @@ export default function DashboardOverviewPage() {
             </div>
           )}
         </div>
+      </>
+    )}
       </div>
 
       {/* DOWNLOAD REPORT MODAL */}

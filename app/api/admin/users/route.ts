@@ -123,14 +123,14 @@ export const POST = withErrorHandler(async (req: Request) => {
       },
     });
 
-    // Auto-create linked Staff record if role is STAFF_RECEPTIONIST or MANAGER
-    if (role.name === ROLES.STAFF_RECEPTIONIST || role.name === ROLES.MANAGER) {
+    // Auto-create linked Staff record if role is STAFF_RECEPTIONIST, FRONT_DESK or MANAGER
+    if (role.name === ROLES.STAFF_RECEPTIONIST || role.name === ROLES.MANAGER || role.name === ROLES.FRONT_DESK) {
       await tx.staff.create({
         data: {
           userId: user.id,
           name: user.name,
           phone: user.phone || "0000000000",
-          bio: role.name === ROLES.MANAGER ? "Manager" : "Beauty Specialist",
+          bio: role.name === ROLES.MANAGER ? "Manager" : role.name === ROLES.FRONT_DESK ? "Front Desk" : "Beauty Specialist",
           active: true,
         },
       });

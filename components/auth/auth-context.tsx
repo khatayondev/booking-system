@@ -22,6 +22,7 @@ interface AuthContextValue {
   isOwner: boolean;
   isManager: boolean;
   isStaff: boolean;
+  isFrontDesk: boolean;
   refreshUser: () => Promise<void>;
 }
 
@@ -103,6 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isOwner = user?.role === ROLES.OWNER_ADMIN;
   const isManager = user?.role === ROLES.MANAGER;
   const isStaff = user?.role === ROLES.STAFF_RECEPTIONIST;
+  const isFrontDesk = user?.role === ROLES.FRONT_DESK || user?.role === ROLES.STAFF_RECEPTIONIST;
 
   const value = React.useMemo<AuthContextValue>(
     () => ({
@@ -115,9 +117,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isOwner,
       isManager,
       isStaff,
+      isFrontDesk,
       refreshUser: fetchUser,
     }),
-    [user, loading, error, hasPermission, hasAnyPermission, hasRole, isOwner, isManager, isStaff, fetchUser]
+    [user, loading, error, hasPermission, hasAnyPermission, hasRole, isOwner, isManager, isStaff, isFrontDesk, fetchUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -136,6 +139,7 @@ export function useAuth(): AuthContextValue {
       isOwner: false,
       isManager: false,
       isStaff: false,
+      isFrontDesk: false,
       refreshUser: async () => {},
     };
   }

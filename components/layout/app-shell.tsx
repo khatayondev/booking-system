@@ -93,7 +93,9 @@ export function AppShell({
   const fullName = user?.name || (userName !== "Akosua" ? userName : "Studio Member");
 
   const roleTitle =
-    user?.role === ROLES.STAFF_RECEPTIONIST
+    user?.role === ROLES.FRONT_DESK
+      ? "Front Desk Tablet"
+      : user?.role === ROLES.STAFF_RECEPTIONIST
       ? "Front Desk • Receptionist"
       : user?.role === ROLES.MANAGER
       ? "Studio Manager"
@@ -102,7 +104,9 @@ export function AppShell({
       : "Studio Member";
 
   const roleSubtitle =
-    user?.role === ROLES.STAFF_RECEPTIONIST
+    user?.role === ROLES.FRONT_DESK
+      ? "Front Desk Tablet • At-A-Glance Operations"
+      : user?.role === ROLES.STAFF_RECEPTIONIST
       ? "Front Desk Operations • Today's Schedule"
       : user?.role === ROLES.MANAGER
       ? "Studio Management & Operations"

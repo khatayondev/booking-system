@@ -601,13 +601,19 @@ export default function UsersAndRolesPage() {
                       {roles.map((role) => (
                         <th key={role.id} className="py-3 px-4 font-bold text-center text-[#1E1E1E]">
                           <div className="flex flex-col items-center">
-                            <span>{role.name}</span>
+                            <span>
+                              {role.name === "FRONT_DESK"
+                                ? "FRONT_DESK (Tablet)"
+                                : role.name}
+                            </span>
                             <span className="text-[10px] font-normal text-[#71717A]">
                               {role.name === "OWNER_ADMIN"
-                                ? "Level 1"
+                                ? "Level 1 (Owner)"
                                 : role.name === "MANAGER"
-                                ? "Level 2"
-                                : "Level 3"}
+                                ? "Level 2 (Manager)"
+                                : role.name === "FRONT_DESK"
+                                ? "Level 3 (Front Desk)"
+                                : "Level 4 (Staff)"}
                             </span>
                           </div>
                         </th>
@@ -737,11 +743,23 @@ export default function UsersAndRolesPage() {
                   onChange={(e) => setNewUserRoleId(e.target.value)}
                   className="w-full h-11 px-4 text-sm bg-white border border-[#E4E4E7] rounded-2xl text-[#1E1E1E] focus:outline-none focus:border-[#1E1E1E]"
                 >
-                  {roles.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.name} - {r.description || "Access level"}
-                    </option>
-                  ))}
+                  {roles.map((r) => {
+                    const friendlyName =
+                      r.name === "FRONT_DESK"
+                        ? "Front Desk Tablet (Operations & POS)"
+                        : r.name === "OWNER_ADMIN"
+                        ? "Studio Owner & Admin"
+                        : r.name === "MANAGER"
+                        ? "Studio Manager"
+                        : r.name === "STAFF_RECEPTIONIST"
+                        ? "Staff / Stylist"
+                        : r.name;
+                    return (
+                      <option key={r.id} value={r.id}>
+                        {friendlyName} &bull; {r.description || "Access level"}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 

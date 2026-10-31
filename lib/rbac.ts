@@ -10,6 +10,7 @@ export const ROLES = {
   OWNER_ADMIN: "OWNER_ADMIN",
   MANAGER: "MANAGER",
   STAFF_RECEPTIONIST: "STAFF_RECEPTIONIST",
+  FRONT_DESK: "FRONT_DESK",
 } as const;
 
 export type UserRole = (typeof ROLES)[keyof typeof ROLES];
@@ -17,7 +18,8 @@ export type UserRole = (typeof ROLES)[keyof typeof ROLES];
 export const ROLE_HIERARCHY_LEVELS: Record<UserRole, number> = {
   [ROLES.OWNER_ADMIN]: 1,
   [ROLES.MANAGER]: 2,
-  [ROLES.STAFF_RECEPTIONIST]: 3,
+  [ROLES.FRONT_DESK]: 3,
+  [ROLES.STAFF_RECEPTIONIST]: 4,
 };
 
 export const PERMISSION_KEYS = {
@@ -61,6 +63,10 @@ export const ROLE_DEFAULT_LIMITS: Record<UserRole, RoleLimits> = {
     maxRefundPesewas: 50000, // GH₵ 500.00 max refund
     maxDiscountPercent: 20, // 20% max discount
   },
+  [ROLES.FRONT_DESK]: {
+    maxRefundPesewas: 5000, // GH₵ 50.00 max refund
+    maxDiscountPercent: 5, // 5% max discount
+  },
   [ROLES.STAFF_RECEPTIONIST]: {
     maxRefundPesewas: 5000, // GH₵ 50.00 max refund
     maxDiscountPercent: 5, // 5% max discount
@@ -91,6 +97,18 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<UserRole, PermissionKey[]> = {
     PERMISSION_KEYS.CUSTOMERS_MERGE,
     PERMISSION_KEYS.CUSTOMERS_EXPORT,
     PERMISSION_KEYS.SETTINGS_MANAGE,
+  ],
+  [ROLES.FRONT_DESK]: [
+    PERMISSION_KEYS.BOOKINGS_VIEW_ALL,
+    PERMISSION_KEYS.BOOKINGS_VIEW_OWN,
+    PERMISSION_KEYS.BOOKINGS_CREATE,
+    PERMISSION_KEYS.BOOKINGS_EDIT,
+    PERMISSION_KEYS.BOOKINGS_CANCEL,
+    PERMISSION_KEYS.PAYMENTS_RECORD,
+    PERMISSION_KEYS.PAYMENTS_REQUEST,
+    PERMISSION_KEYS.CUSTOMERS_VIEW,
+    PERMISSION_KEYS.CUSTOMERS_EDIT,
+    PERMISSION_KEYS.DISCOUNTS_APPLY,
   ],
   [ROLES.STAFF_RECEPTIONIST]: [
     PERMISSION_KEYS.BOOKINGS_VIEW_OWN,
