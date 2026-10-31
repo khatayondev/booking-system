@@ -21,6 +21,9 @@ import {
   ArrowDown,
   Layers,
   ShieldAlert,
+  Search,
+  X,
+  Tag,
 } from "lucide-react";
 
 interface Addon {
@@ -108,6 +111,13 @@ export default function ServicesPage() {
   const [addonName, setAddonName] = React.useState("");
   const [addonDuration, setAddonDuration] = React.useState("15");
   const [addonPriceGhs, setAddonPriceGhs] = React.useState("50");
+
+  // Smart Search & Quick Price Edit states
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [quickPriceModalOpen, setQuickPriceModalOpen] = React.useState(false);
+  const [quickPriceService, setQuickPriceService] = React.useState<ServiceItem | null>(null);
+  const [quickPriceGhs, setQuickPriceGhs] = React.useState("");
+  const [quickPriceSaving, setQuickPriceSaving] = React.useState(false);
 
   const isReadOnly = userRole === "STAFF_RECEPTIONIST";
 
@@ -425,13 +435,86 @@ export default function ServicesPage() {
     }
   };
 
-  // Filtered categories/services
+  // Quick Price Handlers
+  const handleOpenQuickPrice = (svc: ServiceItem) => {
+    if (isReadOnly) return;
+    setQuickPriceService(svc);
+    setQuickPriceGhs((svc.pricePesewas / 100).toFixed(2));
+    setQuickPriceModalOpen(true);
+  };
+
+  const handleSaveQuickPrice = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickPriceService || isReadOnly) return;
+
+    const newPricePesewas = Math.round(Number.parseFloat(quickPriceGhs || "0") * 100);
+    if (isNaN(newPricePesewas) || newPricePesewas < 100) {
+      showNotification("error", "Please enter a valid price of at least GH₵ 1.00");
+      return;
+    }
+
+    try {
+      setQuickPriceSaving(true);
+      const res = await fetch(`/api/admin/catalog/services/${quickPriceService.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pricePesewas: newPricePesewas }),
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error?.message || "Failed to update price");
+      }
+
+      showNotification("success", `Updated price for ${quickPriceService.name} to GH₵ ${Number.parseFloat(quickPriceGhs).toFixed(2)}.`);
+      setQuickPriceModalOpen(false);
+      fetchCatalog();
+    } catch (err: unknown) {
+      showNotification("error", (err as Error).message);
+    } finally {
+      setQuickPriceSaving(false);
+    }
+  };
+
+  // Filtered categories/services with smart multi-attribute search
   const displayedCategories = React.useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+
+    // If searching, search across all categories and services
+    if (q) {
+      return categories
+        .map((cat) => {
+          const matchingServices = cat.services.filter((svc) => {
+            const nameMatch = svc.name.toLowerCase().includes(q);
+            const descMatch = svc.description?.toLowerCase().includes(q);
+            const catMatch = cat.name.toLowerCase().includes(q);
+            const priceGhs = (svc.pricePesewas / 100).toFixed(2);
+            const priceMatch =
+              priceGhs.includes(q) ||
+              svc.pricePesewas.toString().includes(q);
+            const durationMatch = `${svc.durationMin}m`.includes(q) || `${svc.durationMin}`.includes(q);
+            const addonMatch = svc.addons.some((a) =>
+              a.name.toLowerCase().includes(q)
+            );
+
+            return nameMatch || descMatch || catMatch || priceMatch || durationMatch || addonMatch;
+          });
+
+          return {
+            ...cat,
+            services: matchingServices,
+          };
+        })
+        .filter((cat) => cat.services.length > 0);
+    }
+
+    // Standard category filter
     if (selectedCategoryId === "all") return categories;
     return categories.filter((c) => c.id === selectedCategoryId);
-  }, [categories, selectedCategoryId]);
+  }, [categories, selectedCategoryId, searchQuery]);
 
   const totalServicesCount = categories.reduce((acc, c) => acc + c.services.length, 0);
+  const matchingServicesCount = displayedCategories.reduce((acc, c) => acc + c.services.length, 0);
 
   return (
     <AppShell activePath="/services" userName="Services">
@@ -507,6 +590,48 @@ export default function ServicesPage() {
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Service</span>
               </Button>
+            </div>
+          )}
+        </div>
+
+        {/* Smart Search Bar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E4E4E7] shadow-xs">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-[#71717A] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search by name, category, price (e.g. 160 or 550), duration (90m), or keyword..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") setSearchQuery("");
+              }}
+              className="w-full pl-10 pr-10 py-2 rounded-xl bg-[#F4F4F6] hover:bg-[#ECECF0] focus:bg-white border border-transparent focus:border-[#1E1E1E] text-xs font-semibold text-[#1E1E1E] placeholder:text-[#A1A1AA] transition-all focus:outline-none"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full text-[#71717A] hover:text-[#1E1E1E] hover:bg-black/5 transition-colors cursor-pointer"
+                title="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {searchQuery.trim() && (
+            <div className="flex items-center gap-2 px-1 text-xs text-[#71717A] shrink-0">
+              <span className="font-semibold">
+                Found <strong className="text-[#1E1E1E] font-poppins">{matchingServicesCount}</strong> service{matchingServicesCount === 1 ? "" : "s"}
+              </span>
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="text-xs text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 px-2.5 py-1 rounded-full font-bold transition-colors cursor-pointer"
+              >
+                Reset Search
+              </button>
             </div>
           )}
         </div>
@@ -695,11 +820,23 @@ export default function ServicesPage() {
                         </div>
 
                         {/* Bottom Row: Price & Actions */}
-                        <div className="mt-5 pt-4 border-t border-[#F4F4F6] flex items-center justify-between">
+                        <div className="mt-5 pt-4 border-t border-[#F4F4F6] flex items-center justify-between gap-2">
                           <div>
                             <span className="text-[10px] text-[#71717A] block">Price</span>
-                            <div className="text-lg font-black text-[#1E1E1E]">
-                              {formatPesewas(svc.pricePesewas)}
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                              <span className="text-lg font-black font-poppins text-[#1E1E1E]">
+                                {formatPesewas(svc.pricePesewas)}
+                              </span>
+                              {!isReadOnly && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenQuickPrice(svc)}
+                                  className="text-[10px] font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 px-2 py-0.5 rounded-full transition-colors cursor-pointer shrink-0"
+                                  title="Quick edit price"
+                                >
+                                  Edit Price
+                                </button>
+                              )}
                             </div>
                           </div>
 
@@ -1171,6 +1308,81 @@ export default function ServicesPage() {
             </Button>
             <Button type="submit" variant="blackPill" size="sm">
               {editingCategory ? "Update Category" : "Create Category"}
+            </Button>
+          </div>
+        </form>
+      </Dialog>
+
+      {/* =========================================================================
+          DIALOG: QUICK UPDATE SERVICE PRICE
+         ========================================================================= */}
+      <Dialog
+        isOpen={quickPriceModalOpen}
+        onClose={() => setQuickPriceModalOpen(false)}
+        title="Quick Update Price"
+        description={
+          quickPriceService
+            ? `Update the standard studio rate for "${quickPriceService.name}". Changes take effect immediately across online booking, POS, and customer receipts.`
+            : "Update service pricing."
+        }
+      >
+        <form onSubmit={handleSaveQuickPrice} className="space-y-4 pt-2">
+          {quickPriceService && (
+            <div className="p-3.5 rounded-2xl bg-[#F4F4F6] border border-[#E4E4E7] flex items-center justify-between text-xs">
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#71717A] block">Current Rate</span>
+                <span className="font-poppins font-black text-sm text-[#1E1E1E]">
+                  {formatPesewas(quickPriceService.pricePesewas)}
+                </span>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] uppercase font-bold text-[#71717A] block">Duration</span>
+                <span className="font-semibold text-xs text-[#1E1E1E]">
+                  {quickPriceService.durationMin} mins
+                </span>
+              </div>
+            </div>
+          )}
+
+          <div>
+            <Label>New Price in Ghana Cedis (GH₵) *</Label>
+            <div className="relative mt-1">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-[#71717A]">
+                GH₵
+              </span>
+              <Input
+                type="number"
+                step="0.01"
+                min="1"
+                required
+                autoFocus
+                value={quickPriceGhs}
+                onChange={(e) => setQuickPriceGhs(e.target.value)}
+                className="pl-14 text-sm font-poppins font-bold"
+                placeholder="0.00"
+              />
+            </div>
+            <p className="text-[10px] text-[#71717A] mt-1">
+              Entered amount will convert to integer pesewas ({Math.round(Number.parseFloat(quickPriceGhs || "0") * 100)} pesewas).
+            </p>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-[#F4F4F6]">
+            <Button
+              type="button"
+              variant="outlinePill"
+              size="sm"
+              onClick={() => setQuickPriceModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="blackPill"
+              size="sm"
+              disabled={quickPriceSaving}
+            >
+              {quickPriceSaving ? "Updating Price..." : "Save New Price"}
             </Button>
           </div>
         </form>
