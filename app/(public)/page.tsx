@@ -124,7 +124,7 @@ export default function CustomerPublicPage() {
           HERO SECTION (Minimalistic & Modern Studio with Radiant Ghanaian Artistry)
       ========================================================================= */}
       <section className="w-full max-w-full overflow-x-hidden p-0 bg-zinc-950">
-        <div className="relative w-full overflow-hidden shadow-2xl bg-[#18191c] flex flex-col justify-center min-h-[680px] sm:min-h-[760px] lg:min-h-[820px]">
+        <div className="relative w-full overflow-hidden shadow-2xl bg-[#18191c] flex flex-col justify-end sm:justify-center min-h-[720px] sm:min-h-[760px] lg:min-h-[820px]">
           {/* Hero Beauty Background (Radiant Ghanaian bridal glam & lash artistry) */}
           <div className="absolute inset-0 z-0">
             <Image
@@ -132,33 +132,32 @@ export default function CustomerPublicPage() {
               alt="Becca's Crown Beauty Vault Artistry"
               fill
               priority
-              className="object-cover object-[center_35%] scale-100"
+              className="object-cover object-[center_18%] sm:object-[center_35%] scale-100"
               sizes="100vw"
             />
-            {/* Ambient Vignette for Crisp Contrast & Legibility */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/35 to-black/60" />
+            {/* Ambient Vignette for Crisp Contrast & Legibility: sheer at the top on mobile so her face shines, deep at the bottom for typography */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/20 to-black/85 sm:from-black/80 sm:via-black/35 sm:to-black/60" />
           </div>
 
           {/* ===================================================================
               CENTER EDITORIAL TYPOGRAPHY & HERO CTA PILL
           =================================================================== */}
-          <div className="relative z-10 px-4 sm:px-6 py-24 sm:py-32 lg:py-36 text-center max-w-5xl mx-auto">
-            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.04] drop-shadow-md">
-              Our artistry is
-              <br />
-              minimalistic &amp; modern
+          <div className="relative z-10 px-4 sm:px-6 pt-40 pb-12 sm:py-32 lg:py-36 text-center max-w-5xl mx-auto w-full">
+            <h1 className="text-[2.25rem] xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.08] sm:leading-[1.04] drop-shadow-lg">
+              <span className="block">Our artistry is</span>
+              <span className="block mt-1 sm:mt-2">minimalistic &amp; modern</span>
             </h1>
 
-            <p className="mt-5 sm:mt-6 text-sm sm:text-base lg:text-lg text-zinc-200 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-sm">
+            <p className="mt-4 sm:mt-6 text-sm sm:text-base lg:text-lg text-zinc-100 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
               We will be able to provide you with the best beauty experience
               from the master artisans at Becca&apos;s Crown Beauty Vault
             </p>
 
             {/* Hero CTA Pill: Book an Appointment Now */}
-            <div className="mt-8 sm:mt-10 max-w-md sm:max-w-xl mx-auto px-2">
+            <div className="mt-7 sm:mt-10 max-w-md sm:max-w-xl mx-auto px-2">
               <Link
                 href="/book"
-                className="group relative flex items-center justify-center rounded-full border border-white/30 hover:border-white/60 bg-black/40 hover:bg-black/60 backdrop-blur-md shadow-2xl px-12 sm:px-14 py-3 sm:py-3.5 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                className="group relative flex items-center justify-center rounded-full border border-white/30 hover:border-white/60 bg-black/50 hover:bg-black/70 backdrop-blur-md shadow-2xl px-12 sm:px-14 py-3 sm:py-3.5 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
                 <span className="text-center text-xs sm:text-sm md:text-base font-bold text-white group-hover:text-amber-200 transition-colors tracking-wider uppercase">
                   BOOK AN APPOINTMENT NOW
