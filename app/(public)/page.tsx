@@ -507,9 +507,9 @@ export default function CustomerPublicPage() {
           )}
 
           {/* ===================================================================
-              CENTER EDITORIAL TYPOGRAPHY
+              CENTER EDITORIAL TYPOGRAPHY & HERO CTA PILL
           =================================================================== */}
-          <div className="relative z-10 px-4 sm:px-6 pt-16 sm:pt-24 lg:pt-28 pb-32 sm:pb-44 lg:pb-52 text-center max-w-5xl mx-auto">
+          <div className="relative z-10 px-4 sm:px-6 pt-12 sm:pt-16 lg:pt-20 pb-28 sm:pb-36 lg:pb-44 text-center max-w-5xl mx-auto">
             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.04] drop-shadow-md">
               Our artistry is
               <br />
@@ -520,6 +520,22 @@ export default function CustomerPublicPage() {
               We will be able to provide you with the best beauty experience
               from the master artisans at Becca&apos;s Crown Beauty Vault
             </p>
+
+            {/* Hero CTA Pill: Book an Appointment Now */}
+            <div className="mt-8 sm:mt-10 max-w-md sm:max-w-xl mx-auto px-2">
+              <Link
+                href="/book"
+                className="group relative flex items-center justify-between rounded-full border border-white/30 hover:border-white/60 bg-black/40 hover:bg-black/60 backdrop-blur-md shadow-2xl pl-6 sm:pl-8 pr-2.5 py-2.5 sm:py-3 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              >
+                <span className="text-sm sm:text-base font-semibold text-white group-hover:text-amber-200 transition-colors tracking-tight">
+                  Book an Appointment Now
+                </span>
+
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-amber-500 group-hover:bg-amber-400 text-black flex items-center justify-center transition-all duration-300 group-hover:rotate-45 shadow-md shrink-0">
+                  <ArrowUpRight className="w-5 h-5 text-black stroke-[2.5]" />
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
