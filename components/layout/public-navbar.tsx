@@ -16,7 +16,7 @@ interface SearchItem {
 
 const SIGNATURE_TREATMENTS_FALLBACK: SearchItem[] = [
   {
-    id: "a80c50b6-6f94-4aaa-8cff-d7558ffce78d",
+    id: "2b5d4b8d-2578-43bb-b003-a98c98cfe2b5",
     title: "Full Frontal Lace Installation",
     category: "HAIR & INSTALLS",
     rate: "GH₵ 160.00",
@@ -24,7 +24,7 @@ const SIGNATURE_TREATMENTS_FALLBACK: SearchItem[] = [
     description: "Bleaching of knots, hairline customization, melting band press & precision sleek styling.",
   },
   {
-    id: "fbfb4850-4a54-43f1-97ef-f6833a296bc4",
+    id: "d50e6584-a25e-4f8b-b7e7-0168aaa88fa4",
     title: "Bridal Soft Glam Makeup",
     category: "BRIDAL GLAM",
     rate: "GH₵ 550.00",
@@ -32,11 +32,11 @@ const SIGNATURE_TREATMENTS_FALLBACK: SearchItem[] = [
     description: "Camera-ready HD soft contour, skin glaze prep, handcrafted lash fan & 24hr sealing setting spray.",
   },
   {
-    id: "9731e67c-88bf-4124-ac04-3b3a1a1140d4",
+    id: "df8ee128-8912-4ac5-84bf-85aac75b5686",
     title: "Mega Volume Russian Lashes",
     category: "LASHES",
-    rate: "GH₵ 260.00",
-    duration: "120 min",
+    rate: "GH₵ 280.00",
+    duration: "90 min",
     description: "Multi-dimensional fluffy volume fans custom mapped to your natural eye shape for supreme drama.",
   },
   {
@@ -48,7 +48,7 @@ const SIGNATURE_TREATMENTS_FALLBACK: SearchItem[] = [
     description: "Gelatinous thermal soak, callus peel, sugar polish scrub, foot massage and gel color finish.",
   },
   {
-    id: "a0c6bda1-c2bb-45db-a5df-6f527e977f6b",
+    id: "99436d01-56bb-4e23-abce-550f91af5e5a",
     title: "Frontal Sleek High Pony",
     category: "HAIR & INSTALLS",
     rate: "GH₵ 200.00",
@@ -56,7 +56,7 @@ const SIGNATURE_TREATMENTS_FALLBACK: SearchItem[] = [
     description: "High tension sculpted sleek ponytail with customized ear-to-ear lace frontal melting.",
   },
   {
-    id: "834b6107-a2b3-4742-ab1f-fa6e4a6e3d10",
+    id: "07850cc7-ffd1-44f1-9988-874726bc9c7b",
     title: "Goddess Knotless Braids",
     category: "HAIR & INSTALLS",
     rate: "GH₵ 350.00",

@@ -138,6 +138,76 @@ const STEP_BACKGROUNDS: Record<number, { image: string; title: string; subtitle:
   },
 };
 
+function resolveServiceFromCatalog(
+  identifier: string | null | undefined,
+  categories: Category[]
+): Service | null {
+  if (!identifier) return null;
+  const cleanId = identifier.trim().toLowerCase();
+  const allServices: Service[] = categories.flatMap((c) => c.services || []);
+  if (allServices.length === 0) return null;
+
+  // 1. Direct ID match (case-insensitive)
+  const exact = allServices.find((s) => s.id.toLowerCase() === cleanId);
+  if (exact) return exact;
+
+  // 2. Comprehensive legacy UUID & slug aliases
+  const legacyAliases: Record<string, string[]> = {
+    // Frontal / Lace installs
+    "a80c50b6-6f94-4aaa-8cff-d7558ffce78d": ["full frontal", "frontal", "lace"],
+    "svc-frontal": ["full frontal", "frontal", "lace"],
+    "full-frontal": ["full frontal", "frontal", "lace"],
+    // Bridal Soft Glam
+    "fbfb4850-4a54-43f1-97ef-f6833a296bc4": ["bridal soft glam", "bridal", "soft glam", "glam"],
+    "svc-bridal": ["bridal soft glam", "bridal", "soft glam", "glam"],
+    "bridal-glam": ["bridal soft glam", "bridal", "soft glam", "glam"],
+    // Lashes / Volume
+    "9731e67c-88bf-4124-ac04-3b3a1a1140d4": ["hybrid volume", "russian", "lashes", "classic lashes"],
+    "svc-volume-lashes": ["hybrid volume", "russian", "lashes", "classic lashes"],
+    "volume-lashes": ["hybrid volume", "russian", "lashes", "classic lashes"],
+    // Braids
+    "834b6107-a2b3-4742-ab1f-fa6e4a6e3d10": ["knotless", "goddess", "braid"],
+    "svc-goddess-braids": ["knotless", "goddess", "braid"],
+    // Pedicure
+    "c0292917-7f05-4de9-956e-41130a586b7f": ["pedicure", "jelly", "spa"],
+    // Ponytail
+    "a0c6bda1-c2bb-45db-a5df-6f527e977f6b": ["frontal pony", "pony", "ponytail"],
+    // Gown / Dress
+    "svc-emerald-gown": ["gown", "emerald", "velvet", "dress"],
+    // Silk press
+    "svc-silk-press": ["silk press", "press", "treatment"],
+  };
+
+  const aliases = legacyAliases[cleanId];
+  if (aliases) {
+    for (const alias of aliases) {
+      const match = allServices.find((s) => s.name.toLowerCase().includes(alias));
+      if (match) return match;
+    }
+  }
+
+  // 3. Name or substring match
+  const nameMatch = allServices.find(
+    (s) =>
+      s.name.toLowerCase() === cleanId ||
+      cleanId.includes(s.name.toLowerCase()) ||
+      s.name.toLowerCase().includes(cleanId)
+  );
+  if (nameMatch) return nameMatch;
+
+  // 4. Token-level partial match
+  const tokens = cleanId.split(/[-_\s]+/).filter((t) => t.length >= 3);
+  if (tokens.length > 0) {
+    const tokenMatch = allServices.find((s) => {
+      const sName = s.name.toLowerCase();
+      return tokens.some((token) => sName.includes(token));
+    });
+    if (tokenMatch) return tokenMatch;
+  }
+
+  return null;
+}
+
 function BookingWizardContent() {
   const searchParams = useSearchParams();
   const initialServiceId = searchParams.get("serviceId");
@@ -205,18 +275,32 @@ function BookingWizardContent() {
         const res = await fetch("/api/catalog");
         const json = await parseJsonSafely(res);
         if (json.success && json.data) {
-          setCategories(json.data.categories || []);
+          const fetchedCategories: Category[] = json.data.categories || [];
+          setCategories(fetchedCategories);
 
-          // If coming from search bar or card with a pre-selected service, prioritize it
+          const allValidServices: Service[] = fetchedCategories.flatMap((c) => c.services || []);
+
+          // If coming from search bar or card with a pre-selected service, prioritize and resolve it
           if (initialServiceId) {
-            setSelectedServiceIds([initialServiceId]);
-            if (initialDate) {
-              setSelectedDate(initialDate);
-            }
-            setSelectedSlot(null);
-            setSlotsLoading(true);
-            if (initialStep === "2" || !initialStep) {
-              setStep(2);
+            const matched = resolveServiceFromCatalog(initialServiceId, fetchedCategories);
+            if (matched) {
+              setSelectedServiceIds([matched.id]);
+              if (initialDate) {
+                setSelectedDate(initialDate);
+              }
+              setSelectedSlot(null);
+              setSlotsLoading(true);
+              setSlotsError(null);
+              if (initialStep === "2" || !initialStep) {
+                setStep(2);
+              }
+            } else {
+              // Unrecognized serviceId in URL: fallback safely to step 1 so user can select
+              console.warn("Unrecognized serviceId in URL:", initialServiceId);
+              if (allValidServices.length > 0) {
+                setSelectedServiceIds([allValidServices[0].id]);
+              }
+              setStep(1);
             }
           } else {
             // Restore saved state from localStorage
@@ -224,8 +308,18 @@ function BookingWizardContent() {
             if (savedStr) {
               try {
                 const saved = JSON.parse(savedStr);
+                // Sanitize saved service IDs against current database catalog!
                 if (saved.selectedServiceIds?.length) {
-                  setSelectedServiceIds(saved.selectedServiceIds);
+                  const validIds = saved.selectedServiceIds.filter((id: string) =>
+                    allValidServices.some((s) => s.id === id)
+                  );
+                  if (validIds.length > 0) {
+                    setSelectedServiceIds(validIds);
+                  } else {
+                    // Stale cache from another DB: reset cleanly
+                    setSelectedServiceIds(allValidServices.length > 0 ? [allValidServices[0].id] : []);
+                    setStep(1);
+                  }
                 }
                 if (saved.selectedAddonIds) setSelectedAddonIds(saved.selectedAddonIds);
                 if (saved.selectedStaffId) setSelectedStaffId(saved.selectedStaffId);
@@ -237,7 +331,14 @@ function BookingWizardContent() {
                 if (saved.customerBirthdayMonth) setCustomerBirthdayMonth(saved.customerBirthdayMonth);
                 if (saved.customerBirthdayDay) setCustomerBirthdayDay(saved.customerBirthdayDay);
                 if (saved.customerNotes) setCustomerNotes(saved.customerNotes);
-                if (saved.step && saved.step >= 1 && saved.step <= 4) setStep(saved.step as 1 | 2 | 3 | 4);
+                if (saved.step && saved.step >= 1 && saved.step <= 4) {
+                  // Only allow step 2 if valid services exist
+                  if (saved.step === 2 && (!saved.selectedServiceIds?.length || !allValidServices.some((s) => saved.selectedServiceIds.includes(s.id)))) {
+                    setStep(1);
+                  } else {
+                    setStep(saved.step as 1 | 2 | 3 | 4);
+                  }
+                }
 
                 // Check hold validity
                 if (saved.hold?.expiresAt) {
@@ -331,57 +432,7 @@ function BookingWizardContent() {
     return () => clearInterval(timer);
   }, [hold]);
 
-  // Fetch Slots when Date, Services, or Staff changes on Step 2
-  React.useEffect(() => {
-    if (step !== 2 || selectedServiceIds.length === 0 || !selectedDate) {
-      if (step === 2) {
-        setSlotsLoading(true);
-        setAvailableSlots([]);
-        setSlotsError(null);
-      }
-      return;
-    }
-    let cancelled = false;
-
-    setSlotsLoading(true);
-    setAvailableSlots([]);
-    setSlotsError(null);
-
-    const params = new URLSearchParams();
-    selectedServiceIds.forEach((id) => params.append("serviceIds", id));
-    selectedAddonIds.forEach((id) => params.append("addonIds", id));
-    params.set("startDate", selectedDate);
-    params.set("endDate", selectedDate);
-    if (selectedStaffId && selectedStaffId !== "any") {
-      params.set("staffId", selectedStaffId);
-    }
-
-    fetch(`/api/availability?${params.toString()}`)
-      .then((res) => parseJsonSafely(res))
-      .then((json) => {
-        if (!cancelled) {
-          if (json.success && json.data) {
-            setAvailableSlots(json.data.slots || []);
-          } else {
-            setSlotsError(json.error?.message || "Could not fetch slots");
-          }
-          setSlotsLoading(false);
-        }
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          const msg = err instanceof Error ? err.message : "Failed to connect to availability service";
-          setSlotsError(msg);
-          setSlotsLoading(false);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [step, selectedServiceIds, selectedAddonIds, selectedDate, selectedStaffId]);
-
-  // Services lookup & calculations
+  // Services lookup & calculations (declared before slot fetching effect)
   const allServicesList = React.useMemo(() => {
     const list: Service[] = [];
     categories.forEach((c) => {
@@ -421,6 +472,68 @@ function BookingWizardContent() {
   const depositPesewas = React.useMemo(() => {
     return Math.round(subtotalPesewas * 0.5);
   }, [subtotalPesewas]);
+
+  // Fetch Slots when Date, Services, or Staff changes on Step 2
+  React.useEffect(() => {
+    if (step !== 2) {
+      return;
+    }
+
+    if (selectedServices.length === 0) {
+      if (!catalogLoading && allServicesList.length > 0) {
+        // If on step 2 with no valid services, redirect to step 1
+        setStep(1);
+      }
+      setSlotsLoading(false);
+      setAvailableSlots([]);
+      setSlotsError(null);
+      return;
+    }
+
+    if (!selectedDate) {
+      setSlotsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    setSlotsLoading(true);
+    setAvailableSlots([]);
+    setSlotsError(null);
+
+    const params = new URLSearchParams();
+    selectedServices.forEach((s) => params.append("serviceIds", s.id));
+    selectedAddonIds.forEach((id) => params.append("addonIds", id));
+    params.set("startDate", selectedDate);
+    params.set("endDate", selectedDate);
+    if (selectedStaffId && selectedStaffId !== "any") {
+      params.set("staffId", selectedStaffId);
+    }
+
+    fetch(`/api/availability?${params.toString()}`)
+      .then((res) => parseJsonSafely(res))
+      .then((json) => {
+        if (!cancelled) {
+          if (json.success && json.data) {
+            setAvailableSlots(json.data.slots || []);
+          } else {
+            setSlotsError(json.error?.message || "Could not fetch slots");
+          }
+          setSlotsLoading(false);
+        }
+      })
+      .catch((err: unknown) => {
+        if (!cancelled) {
+          const msg = err instanceof Error ? err.message : "Failed to connect to availability service";
+          setSlotsError(msg);
+          setSlotsLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [step, selectedServices, selectedAddonIds, selectedDate, selectedStaffId, catalogLoading, allServicesList.length]);
 
   // Generate 14 Upcoming Days for the Horizontal Day Selector (Matching Reference Design)
   const upcomingDays = React.useMemo(() => {
@@ -774,14 +887,14 @@ function BookingWizardContent() {
         <div className="hidden lg:flex lg:col-span-5 flex-col justify-center text-white pr-2 xl:pr-6">
           <div className="flex flex-col gap-6">
             {/* Clear Image of Her (Slightly larger, borderless, untagged) */}
-            <div className="relative w-full max-w-[450px] aspect-square rounded-3xl overflow-hidden shadow-2xl">
+            <div className="relative w-full max-w-[460px] aspect-square rounded-3xl overflow-hidden shadow-2xl">
               <Image
-                src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
+                src="/images/good-faces-W7JdftOc10w-unsplash.jpg"
                 alt="Becca's Crown Beauty Vault"
                 fill
                 priority
                 className="object-cover object-center"
-                sizes="(max-width: 1024px) 100vw, 450px"
+                sizes="(max-width: 1024px) 100vw, 460px"
               />
             </div>
 
@@ -828,7 +941,7 @@ function BookingWizardContent() {
           <div className="lg:hidden w-full max-w-xl flex items-center gap-4 p-3.5 rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/15 mb-3 text-white shadow-xl">
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shrink-0 shadow-md">
               <Image
-                src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
+                src="/images/good-faces-W7JdftOc10w-unsplash.jpg"
                 alt="Becca's Crown Beauty Vault"
                 fill
                 priority
