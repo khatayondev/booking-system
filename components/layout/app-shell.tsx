@@ -24,6 +24,7 @@ import {
   CalendarPlus,
   Phone,
   UserCheck,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -75,6 +76,8 @@ export function AppShell({
   const [createDropdownOpen, setCreateDropdownOpen] = React.useState(false);
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [searchModalOpen, setSearchModalOpen] = React.useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = React.useState(false);
+  const [loggingOut, setLoggingOut] = React.useState(false);
 
   // Search state
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -181,11 +184,24 @@ export function AppShell({
         setNotificationsOpen(false);
         setSearchModalOpen(false);
         setMobileDrawerOpen(false);
+        setProfileDropdownOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      setLoggingOut(true);
+      await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+      window.location.href = "/login";
+    } catch {
+      window.location.href = "/login";
+    }
+  };
 
   const navSections: NavSection[] = [
     {
@@ -475,9 +491,57 @@ export function AppShell({
               )}
             </div>
 
-            {/* Circular avatar */}
-            <div className="w-9 h-9 rounded-full bg-[#1E1E1E] text-white border-2 border-white shadow-xs flex items-center justify-center text-xs font-bold shrink-0">
-              {userName.charAt(0)}
+            {/* Profile Avatar & Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                aria-expanded={profileDropdownOpen}
+                aria-haspopup="true"
+                aria-label="User profile menu"
+                className="w-9 h-9 rounded-full bg-[#1E1E1E] text-white border-2 border-white shadow-xs flex items-center justify-center text-xs font-bold shrink-0 hover:ring-2 hover:ring-black/10 transition-all cursor-pointer select-none"
+              >
+                {userName.charAt(0)}
+              </button>
+
+              {profileDropdownOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-30"
+                    onClick={() => setProfileDropdownOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#E4E4E7] shadow-2xl p-2 z-40 animate-in fade-in zoom-in-95 text-[#1E1E1E]">
+                    {/* User Info Header */}
+                    <div className="px-3 py-2.5 border-b border-[#F4F4F6]">
+                      <p className="text-xs font-bold text-[#1E1E1E] truncate">{userName}</p>
+                      <p className="text-[10px] text-[#71717A] truncate">Studio Member • Online</p>
+                    </div>
+
+                    <div className="py-1">
+                      <Link
+                        href="/settings"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-xl text-[#1E1E1E] hover:bg-[#F4F4F6] transition-colors"
+                      >
+                        <Settings className="w-4 h-4 text-[#71717A]" />
+                        <span>Account Settings</span>
+                      </Link>
+                    </div>
+
+                    <div className="pt-1 border-t border-[#F4F4F6]">
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        disabled={loggingOut}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-xl text-red-600 hover:bg-red-50 transition-colors cursor-pointer text-left disabled:opacity-60"
+                      >
+                        <LogOut className="w-4 h-4 text-red-500" />
+                        <span>{loggingOut ? "Signing out..." : "Log Out"}</span>
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </header>
