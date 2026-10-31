@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { RoleGuard } from "@/components/auth/role-guard";
+import { ROLES, PERMISSION_KEYS } from "@/lib/rbac";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/controls";
@@ -472,7 +474,13 @@ export default function ServicesPage() {
   const matchingServicesCount = displayedCategories.reduce((acc, c) => acc + c.services.length, 0);
 
   return (
-    <AppShell activePath="/services" userName="Services">
+    <RoleGuard
+      allowedRoles={[ROLES.OWNER_ADMIN, ROLES.MANAGER]}
+      requiredPermission={PERMISSION_KEYS.SERVICES_MANAGE}
+      pageTitle="Services & Pricing Catalogue"
+      activePath="/services"
+    >
+      <AppShell activePath="/services">
       <div className="space-y-6 pb-20">
         {/* Toast Alert */}
         {notification && (
@@ -1258,5 +1266,6 @@ export default function ServicesPage() {
         </form>
       </Dialog>
     </AppShell>
+    </RoleGuard>
   );
 }

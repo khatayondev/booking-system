@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { RoleGuard } from "@/components/auth/role-guard";
+import { ROLES, PERMISSION_KEYS } from "@/lib/rbac";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FormattedAuditLogEntry } from "@/lib/audit/service";
@@ -18,9 +20,16 @@ import {
 
 export default function AuditPage() {
   return (
-    <React.Suspense fallback={<AuditLoadingSkeleton />}>
-      <AuditLogContent />
-    </React.Suspense>
+    <RoleGuard
+      allowedRoles={[ROLES.OWNER_ADMIN]}
+      requiredPermission={PERMISSION_KEYS.AUDIT_VIEW}
+      pageTitle="Studio Audit Logs"
+      activePath="/audit"
+    >
+      <React.Suspense fallback={<AuditLoadingSkeleton />}>
+        <AuditLogContent />
+      </React.Suspense>
+    </RoleGuard>
   );
 }
 

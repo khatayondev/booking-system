@@ -26,6 +26,7 @@ import {
   Check,
   AlertCircle,
   ExternalLink,
+  CreditCard,
 } from "lucide-react";
 import { formatPesewas } from "@/lib/money";
 import { cn } from "@/lib/utils";
@@ -423,13 +424,59 @@ export default function DashboardOverviewPage() {
             )}
           </div>
 
-          {/* WIDGET 3: 'MONTH PROGRESS' RING (3 Cols) */}
+          {/* WIDGET 3: 'MONTH PROGRESS' RING FOR ADMIN / 'TODAY APPOINTMENTS' FOR FRONT DESK (3 Cols) */}
           <div className="lg:col-span-3">
             {loading || !data ? (
               <Card variant="white" className="p-6 h-full flex flex-col justify-between items-center text-center">
                 <Skeleton className="h-6 w-3/4" />
                 <Skeleton className="w-32 h-32 rounded-full my-4" />
                 <Skeleton className="h-8 w-full rounded-full" />
+              </Card>
+            ) : data.user.role === "STAFF_RECEPTIONIST" ? (
+              <Card variant="white" className="p-6 h-full flex flex-col justify-between items-center text-center shadow-sm">
+                <div className="w-full">
+                  <h3 className="text-sm font-bold text-[#1E1E1E]">Today&apos;s Appointments</h3>
+                  <p className="text-[11px] text-[#71717A] mt-0.5">Front desk schedule tracking</p>
+
+                  <div className="my-3 flex justify-center">
+                    {(() => {
+                      const todayTotal = data.overallInfo.todayStats.todayBookingsCount;
+                      const todayDone = data.overallInfo.todayStats.todayCompletedCount;
+                      const pct = todayTotal > 0 ? Math.round((todayDone / todayTotal) * 100) : 100;
+                      return (
+                        <CircularProgressRing
+                          progress={pct}
+                          size={135}
+                          strokeWidth={11}
+                          label={todayTotal > 0 ? `${todayDone}/${todayTotal}` : "0"}
+                          sublabel="completed"
+                        />
+                      );
+                    })()}
+                  </div>
+
+                  <div className="text-xs">
+                    <span className="font-extrabold text-[#1E1E1E]">
+                      {data.overallInfo.todayStats.todayCompletedCount} of {data.overallInfo.todayStats.todayBookingsCount}
+                    </span>
+                    <span className="text-[#71717A]"> bookings finished</span>
+                  </div>
+
+                  <p className="text-[11px] font-semibold text-amber-600 mt-1">
+                    {data.overallInfo.todayStats.todayPendingCount} awaiting payment / check-in
+                  </p>
+                </div>
+
+                <Link href="/pos" className="w-full mt-4">
+                  <Button
+                    variant="blackPill"
+                    size="sm"
+                    className="w-full text-[11px] gap-1.5 cursor-pointer"
+                  >
+                    <CreditCard className="w-3.5 h-3.5" />
+                    <span>Open POS Checkout</span>
+                  </Button>
+                </Link>
               </Card>
             ) : (
               <Card variant="white" className="p-6 h-full flex flex-col justify-between items-center text-center shadow-sm">

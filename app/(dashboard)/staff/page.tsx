@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { RoleGuard } from "@/components/auth/role-guard";
+import { ROLES, PERMISSION_KEYS } from "@/lib/rbac";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/controls";
 import { StatusChip } from "@/components/ui/status-chip";
@@ -639,7 +641,13 @@ export default function StaffAndSchedulesPage() {
   const selectedStaff = staffList.find((s) => s.id === selectedStaffId) || staffList[0];
 
   return (
-    <AppShell activePath="/staff" userName="Staff & Shifts">
+    <RoleGuard
+      allowedRoles={[ROLES.OWNER_ADMIN, ROLES.MANAGER]}
+      requiredPermission={PERMISSION_KEYS.STAFF_MANAGE}
+      pageTitle="Staff & Shift Management"
+      activePath="/staff"
+    >
+      <AppShell activePath="/staff">
       <div className="space-y-6">
         {/* Toast */}
         {toastMessage && (
@@ -1651,5 +1659,6 @@ export default function StaffAndSchedulesPage() {
         </div>
       </Dialog>
     </AppShell>
+    </RoleGuard>
   );
 }

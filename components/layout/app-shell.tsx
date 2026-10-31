@@ -32,11 +32,15 @@ import { Drawer, Dialog } from "@/components/ui/dialog-and-drawer";
 import { Input, Label } from "@/components/ui/controls";
 import { StatusChip } from "@/components/ui/status-chip";
 import { InstallPwaButton } from "@/components/pwa/install-pwa-button";
+import { useAuth } from "@/components/auth/auth-context";
+import { ROLES, UserRole, PERMISSION_KEYS } from "@/lib/rbac";
 
 interface NavItem {
   label: string;
   href: string;
   icon: React.ReactNode;
+  allowedRoles?: UserRole[];
+  requiredPermission?: string;
 }
 
 interface NavSection {
@@ -71,6 +75,7 @@ export function AppShell({
   activePath?: string;
   userName?: string;
 }) {
+  const { user, isOwner, isManager, isStaff, hasPermission, hasRole } = useAuth();
   const router = useRouter();
   const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
   const [createDropdownOpen, setCreateDropdownOpen] = React.useState(false);
@@ -78,6 +83,35 @@ export function AppShell({
   const [searchModalOpen, setSearchModalOpen] = React.useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = React.useState(false);
   const [loggingOut, setLoggingOut] = React.useState(false);
+
+  const displayName = user?.name
+    ? user.name.split(" ")[0]
+    : userName && userName !== "Akosua"
+    ? userName
+    : "Studio";
+
+  const fullName = user?.name || (userName !== "Akosua" ? userName : "Studio Member");
+
+  const roleTitle =
+    user?.role === ROLES.STAFF_RECEPTIONIST
+      ? "Front Desk • Receptionist"
+      : user?.role === ROLES.MANAGER
+      ? "Studio Manager"
+      : user?.role === ROLES.OWNER_ADMIN
+      ? "Studio Owner & Admin"
+      : "Studio Member";
+
+  const roleSubtitle =
+    user?.role === ROLES.STAFF_RECEPTIONIST
+      ? "Front Desk Operations • Today's Schedule"
+      : user?.role === ROLES.MANAGER
+      ? "Studio Management & Operations"
+      : user?.role === ROLES.OWNER_ADMIN
+      ? "Studio Overview • Executive Access"
+      : "Welcome to your studio overview for today.";
+
+  const canAccessSettings =
+    isOwner || isManager || (user ? hasPermission(PERMISSION_KEYS.SETTINGS_MANAGE) : false);
 
   // Search state
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -216,21 +250,72 @@ export function AppShell({
     {
       title: "Management",
       items: [
-        { label: "Users & Roles", href: "/dashboard/users", icon: <ShieldCheck className="w-4 h-4" /> },
-        { label: "Services & Pricing", href: "/services", icon: <Scissors className="w-4 h-4" /> },
-        // Solo direct shop mode: Stylist management hidden for direct operation
-        // { label: "Staff & Shifts", href: "/staff", icon: <Users className="w-4 h-4" /> },
-        { label: "Design System", href: "/design", icon: <Palette className="w-4 h-4" /> },
+        {
+          label: "Users & Roles",
+          href: "/dashboard/users",
+          icon: <ShieldCheck className="w-4 h-4" />,
+          allowedRoles: [ROLES.OWNER_ADMIN],
+          requiredPermission: PERMISSION_KEYS.USERS_MANAGE,
+        },
+        {
+          label: "Services & Pricing",
+          href: "/services",
+          icon: <Scissors className="w-4 h-4" />,
+          allowedRoles: [ROLES.OWNER_ADMIN, ROLES.MANAGER],
+          requiredPermission: PERMISSION_KEYS.SERVICES_MANAGE,
+        },
+        {
+          label: "Staff & Shifts",
+          href: "/staff",
+          icon: <Users className="w-4 h-4" />,
+          allowedRoles: [ROLES.OWNER_ADMIN, ROLES.MANAGER],
+          requiredPermission: PERMISSION_KEYS.STAFF_MANAGE,
+        },
+        {
+          label: "Design System",
+          href: "/design",
+          icon: <Palette className="w-4 h-4" />,
+          allowedRoles: [ROLES.OWNER_ADMIN],
+        },
       ],
     },
     {
       title: "Business",
       items: [
-        { label: "Sales & Reports", href: "/reports", icon: <BarChart3 className="w-4 h-4" /> },
-        { label: "Audit Logs", href: "/audit", icon: <ShieldCheck className="w-4 h-4" /> },
+        {
+          label: "Sales & Reports",
+          href: "/reports",
+          icon: <BarChart3 className="w-4 h-4" />,
+          allowedRoles: [ROLES.OWNER_ADMIN, ROLES.MANAGER],
+          requiredPermission: PERMISSION_KEYS.REPORTS_VIEW,
+        },
+        {
+          label: "Audit Logs",
+          href: "/audit",
+          icon: <ShieldCheck className="w-4 h-4" />,
+          allowedRoles: [ROLES.OWNER_ADMIN],
+          requiredPermission: PERMISSION_KEYS.AUDIT_VIEW,
+        },
       ],
     },
   ];
+
+  const isItemVisible = (item: NavItem) => {
+    // If unrestricted, anyone authenticated can view
+    if (!item.allowedRoles && !item.requiredPermission) return true;
+    if (!user) return false;
+    if (user.role === ROLES.OWNER_ADMIN) return true;
+    if (item.allowedRoles && !hasRole(item.allowedRoles)) return false;
+    if (item.requiredPermission && !hasPermission(item.requiredPermission)) return false;
+    return true;
+  };
+
+  const visibleNavSections = navSections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter(isItemVisible),
+    }))
+    .filter((section) => section.items.length > 0);
 
   const sidebarContent = (
     <div className="flex flex-col h-full justify-between select-none overflow-hidden">
@@ -251,7 +336,7 @@ export function AppShell({
 
         {/* Nav Sections */}
         <div className="space-y-4">
-          {navSections.map((section, idx) => (
+          {visibleNavSections.map((section, idx) => (
             <div key={idx} className="space-y-0.5">
               {section.title && (
                 <p className="px-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">
@@ -282,20 +367,22 @@ export function AppShell({
         </div>
       </div>
 
-      {/* Settings at Bottom */}
+      {/* Settings at Bottom - Only visible to Owner & Managers */}
       <div className="pt-3 border-t border-white/10 space-y-2 mt-4 shrink-0">
         <InstallPwaButton variant="sidebar" />
-        <Link
-          href="/settings"
-          onClick={() => setMobileDrawerOpen(false)}
-          className={cn(
-            "flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all text-zinc-300 hover:text-white hover:bg-white/10",
-            activePath === "/settings" && "bg-white text-zinc-950 font-bold shadow-md"
-          )}
-        >
-          <Settings className="w-4 h-4 shrink-0" />
-          <span>Settings</span>
-        </Link>
+        {canAccessSettings && (
+          <Link
+            href="/settings"
+            onClick={() => setMobileDrawerOpen(false)}
+            className={cn(
+              "flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all text-zinc-300 hover:text-white hover:bg-white/10",
+              activePath === "/settings" && "bg-white text-zinc-950 font-bold shadow-md"
+            )}
+          >
+            <Settings className="w-4 h-4 shrink-0" />
+            <span>Settings</span>
+          </Link>
+        )}
       </div>
     </div>
   );
@@ -337,10 +424,10 @@ export function AppShell({
             </Button>
             <div>
               <h2 className="text-xl sm:text-2xl font-extrabold text-[#1E1E1E] tracking-tight">
-                Hi, {userName}!
+                Hi, {displayName}!
               </h2>
               <p className="text-xs text-[#71717A] hidden sm:block">
-                Welcome to your studio overview for today.
+                {roleSubtitle}
               </p>
             </div>
           </div>
@@ -501,7 +588,7 @@ export function AppShell({
                 aria-label="User profile menu"
                 className="w-9 h-9 rounded-full bg-[#1E1E1E] text-white border-2 border-white shadow-xs flex items-center justify-center text-xs font-bold shrink-0 hover:ring-2 hover:ring-black/10 transition-all cursor-pointer select-none"
               >
-                {userName.charAt(0)}
+                {displayName.charAt(0).toUpperCase()}
               </button>
 
               {profileDropdownOpen && (
@@ -510,23 +597,26 @@ export function AppShell({
                     className="fixed inset-0 z-30"
                     onClick={() => setProfileDropdownOpen(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#E4E4E7] shadow-2xl p-2 z-40 animate-in fade-in zoom-in-95 text-[#1E1E1E]">
+                  <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-white border border-[#E4E4E7] shadow-2xl p-2 z-40 animate-in fade-in zoom-in-95 text-[#1E1E1E]">
                     {/* User Info Header */}
                     <div className="px-3 py-2.5 border-b border-[#F4F4F6]">
-                      <p className="text-xs font-bold text-[#1E1E1E] truncate">{userName}</p>
-                      <p className="text-[10px] text-[#71717A] truncate">Studio Member • Online</p>
+                      <p className="text-xs font-bold text-[#1E1E1E] truncate">{fullName}</p>
+                      <p className="text-[11px] font-semibold text-zinc-600 truncate mt-0.5">{roleTitle}</p>
+                      <p className="text-[10px] text-[#71717A] truncate mt-0.5">{user?.email || "Signed In"}</p>
                     </div>
 
-                    <div className="py-1">
-                      <Link
-                        href="/settings"
-                        onClick={() => setProfileDropdownOpen(false)}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-xl text-[#1E1E1E] hover:bg-[#F4F4F6] transition-colors"
-                      >
-                        <Settings className="w-4 h-4 text-[#71717A]" />
-                        <span>Account Settings</span>
-                      </Link>
-                    </div>
+                    {canAccessSettings && (
+                      <div className="py-1">
+                        <Link
+                          href="/settings"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-xl text-[#1E1E1E] hover:bg-[#F4F4F6] transition-colors"
+                        >
+                          <Settings className="w-4 h-4 text-[#71717A]" />
+                          <span>Account Settings</span>
+                        </Link>
+                      </div>
+                    )}
 
                     <div className="pt-1 border-t border-[#F4F4F6]">
                       <button

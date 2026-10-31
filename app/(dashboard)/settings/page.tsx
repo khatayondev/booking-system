@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { RoleGuard } from "@/components/auth/role-guard";
+import { ROLES, PERMISSION_KEYS } from "@/lib/rbac";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/controls";
@@ -216,7 +218,13 @@ export default function SettingsPage() {
   };
 
   return (
-    <AppShell activePath="/settings" userName="Studio Settings">
+    <RoleGuard
+      allowedRoles={[ROLES.OWNER_ADMIN, ROLES.MANAGER]}
+      requiredPermission={PERMISSION_KEYS.SETTINGS_MANAGE}
+      pageTitle="Studio Business Settings"
+      activePath="/settings"
+    >
+      <AppShell activePath="/settings">
       <div className="space-y-6 pb-20">
         {/* Toast Alert */}
         {notification && (
@@ -823,5 +831,6 @@ export default function SettingsPage() {
         )}
       </div>
     </AppShell>
+    </RoleGuard>
   );
 }

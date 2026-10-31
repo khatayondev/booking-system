@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { RoleGuard } from "@/components/auth/role-guard";
+import { ROLES, PERMISSION_KEYS } from "@/lib/rbac";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs } from "@/components/ui/tabs";
@@ -328,7 +330,13 @@ export default function UsersAndRolesPage() {
   );
 
   return (
-    <AppShell activePath="/dashboard/users" userName="Owner">
+    <RoleGuard
+      allowedRoles={[ROLES.OWNER_ADMIN]}
+      requiredPermission={PERMISSION_KEYS.USERS_MANAGE}
+      pageTitle="Users & Staff Management"
+      activePath="/dashboard/users"
+    >
+      <AppShell activePath="/dashboard/users">
       <div className="space-y-6">
         {/* Page Top Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -804,5 +812,6 @@ export default function UsersAndRolesPage() {
         </Dialog>
       </div>
     </AppShell>
+    </RoleGuard>
   );
 }

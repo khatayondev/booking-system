@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { RoleGuard } from "@/components/auth/role-guard";
+import { ROLES, PERMISSION_KEYS } from "@/lib/rbac";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LineChart, BarChart, DonutRing, ChartDataPoint, BarChartItem, DonutSegment } from "@/components/ui/charts";
@@ -24,9 +26,16 @@ function formatGhs(pesewas: number): string {
 
 export default function ReportsPage() {
   return (
-    <React.Suspense fallback={<ReportsLoadingSkeleton />}>
-      <ReportsContent />
-    </React.Suspense>
+    <RoleGuard
+      allowedRoles={[ROLES.OWNER_ADMIN, ROLES.MANAGER]}
+      requiredPermission={PERMISSION_KEYS.REPORTS_VIEW}
+      pageTitle="Sales & Financial Reports"
+      activePath="/reports"
+    >
+      <React.Suspense fallback={<ReportsLoadingSkeleton />}>
+        <ReportsContent />
+      </React.Suspense>
+    </RoleGuard>
   );
 }
 
