@@ -18,52 +18,9 @@ import {
   Heart,
   ShoppingBag,
   Search,
-  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-
-const HERO_HOTSPOTS = [
-  {
-    id: "bya" as const,
-    name: "Bya",
-    tagline: "Japan style soft knotless",
-    price: "GH₵ 350.00",
-    serviceId: "834b6107-a2b3-4742-ab1f-fa6e4a6e3d10",
-    colors: [
-      { name: "Warm Amber", hex: "#F59E0B" },
-      { name: "Emerald Glaze", hex: "#14B8A6" },
-      { name: "Graphite Noir", hex: "#4B5563" },
-    ],
-    pinStyle: { top: "67%", left: "23%" },
-  },
-  {
-    id: "melt" as const,
-    name: "Melt",
-    tagline: "HD lace frontal installation",
-    price: "GH₵ 200.00",
-    serviceId: "a80c50b6-6f94-4aaa-8cff-d7558ffce78d",
-    colors: [
-      { name: "Natural 1B", hex: "#1F2937" },
-      { name: "Honey Caramel", hex: "#D97706" },
-      { name: "Chestnut", hex: "#78350F" },
-    ],
-    pinStyle: { top: "68%", left: "59%" },
-  },
-  {
-    id: "lashes" as const,
-    name: "Volume",
-    tagline: "Russian fluffy mega fan lashes",
-    price: "GH₵ 260.00",
-    serviceId: "9731e67c-88bf-4124-ac04-3b3a1a1140d4",
-    colors: [
-      { name: "Midnight Black", hex: "#111827" },
-      { name: "Soft Mink", hex: "#4B5563" },
-      { name: "Espresso Tint", hex: "#37271E" },
-    ],
-    pinStyle: { top: "41%", left: "80%" },
-  },
-];
 
 const ALL_SIGNATURE_TREATMENTS = [
   {
@@ -154,13 +111,7 @@ export default function CustomerPublicPage() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [activeHotspotId, setActiveHotspotId] = React.useState<"bya" | "melt" | "lashes">("bya");
-  const [selectedColorIndex, setSelectedColorIndex] = React.useState<number>(0);
   const [liked, setLiked] = React.useState(false);
-
-  const activeHotspot = React.useMemo(() => {
-    return HERO_HOTSPOTS.find((h) => h.id === activeHotspotId) || HERO_HOTSPOTS[0];
-  }, [activeHotspotId]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -418,7 +369,7 @@ export default function CustomerPublicPage() {
           {/* ===================================================================
               CENTER EDITORIAL TYPOGRAPHY & PILL SEARCH BAR
           =================================================================== */}
-          <div className="relative z-10 px-4 sm:px-6 pt-10 sm:pt-14 pb-48 sm:pb-56 text-center max-w-4xl mx-auto">
+          <div className="relative z-10 px-4 sm:px-6 pt-10 sm:pt-14 pb-28 sm:pb-36 lg:pb-44 text-center max-w-4xl mx-auto">
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
               Our artistry is
               <br />
@@ -453,103 +404,6 @@ export default function CustomerPublicPage() {
               </div>
             </form>
           </div>
-
-          {/* ===================================================================
-              FLOATING GLASSMORPHIC PRODUCT CARD & INTERACTIVE HOTSPOTS
-          =================================================================== */}
-          {/* Glassmorphic Product Card (pinned to left sofa side) */}
-          <div className="absolute top-[43%] sm:top-[46%] left-4 sm:left-10 lg:left-16 z-20 w-56 sm:w-64 rounded-2xl bg-black/45 backdrop-blur-xl border border-white/20 p-4 sm:p-5 shadow-2xl text-white transition-all duration-300">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <h3 className="text-base sm:text-lg font-bold text-white tracking-tight leading-tight">
-                  {activeHotspot.name}
-                </h3>
-                <p className="text-[10px] sm:text-xs text-zinc-300 capitalize mt-0.5 font-normal">
-                  {activeHotspot.tagline}
-                </p>
-              </div>
-              <div className="text-right shrink-0">
-                <span className="text-sm sm:text-base font-extrabold text-white">
-                  {activeHotspot.price}
-                </span>
-              </div>
-            </div>
-
-            <div className="my-3 border-t border-white/15" />
-
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-zinc-300 font-medium">Color</span>
-              <div className="flex items-center gap-2">
-                {activeHotspot.colors.map((c, idx) => (
-                  <button
-                    key={c.name}
-                    type="button"
-                    onClick={() => setSelectedColorIndex(idx)}
-                    className={`w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-                      selectedColorIndex === idx
-                        ? "ring-2 ring-white scale-110 shadow-sm"
-                        : "opacity-75 hover:opacity-100"
-                    }`}
-                    style={{ backgroundColor: c.hex }}
-                    title={c.name}
-                    aria-label={c.name}
-                  >
-                    {selectedColorIndex === idx && (
-                      <Check className="w-2.5 h-2.5 text-black stroke-[3.5]" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <Link
-              href={`/book?serviceId=${activeHotspot.serviceId}&step=2`}
-              className="mt-3.5 block"
-            >
-              <button
-                type="button"
-                className="w-full py-2 px-3 rounded-xl bg-white hover:bg-amber-300 text-zinc-950 font-black text-[11px] uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 shadow-md cursor-pointer active:scale-95"
-              >
-                <span>Book This Style</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </Link>
-          </div>
-
-          {/* Interactive Hotspot Pins across the Sofa */}
-          {HERO_HOTSPOTS.map((spot) => {
-            const isActive = activeHotspotId === spot.id;
-            return (
-              <button
-                key={spot.id}
-                type="button"
-                onClick={() => {
-                  setActiveHotspotId(spot.id);
-                  setSelectedColorIndex(0);
-                }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group cursor-pointer focus:outline-none"
-                style={spot.pinStyle}
-                aria-label={`Select ${spot.name}`}
-              >
-                <span className="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9">
-                  <span
-                    className={`absolute inline-flex h-full w-full rounded-full bg-white/40 ${
-                      isActive ? "animate-ping opacity-80" : "opacity-30 group-hover:opacity-75"
-                    }`}
-                  />
-                  <span
-                    className={`relative inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-white/80 backdrop-blur-sm transition-transform duration-200 ${
-                      isActive
-                        ? "bg-white/40 scale-110 shadow-lg ring-2 ring-white/60"
-                        : "bg-white/20 group-hover:scale-110 group-hover:bg-white/30"
-                    }`}
-                  >
-                    <span className="w-2 h-2 rounded-full bg-white shadow-xs" />
-                  </span>
-                </span>
-              </button>
-            );
-          })}
         </div>
       </section>
 
