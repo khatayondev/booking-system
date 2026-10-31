@@ -1,11 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, Poppins } from "next/font/google";
 import "./globals.css";
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-sans",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
 });
 
 export const viewport: Viewport = {
@@ -42,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${jakartaSans.variable} font-sans h-full antialiased`}>
+    <html lang="en" className={`${jakartaSans.variable} ${poppins.variable} font-sans h-full antialiased`}>
       <body className="min-h-full w-full max-w-full overflow-x-hidden bg-swirl text-[#1E1E1E] flex flex-col">
         {children}
         <script

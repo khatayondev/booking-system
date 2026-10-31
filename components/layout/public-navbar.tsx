@@ -253,7 +253,7 @@ export function PublicNavbar() {
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <div className="text-xs font-mono font-bold text-amber-300">
+                            <div className="text-xs font-poppins font-bold text-amber-300">
                               {item.rate}
                             </div>
                             <span className="text-[9px] uppercase font-bold text-emerald-400 group-hover:underline">

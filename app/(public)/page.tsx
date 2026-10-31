@@ -179,7 +179,7 @@ export default function CustomerPublicPage() {
         {/* Section Header with 01 Numeral */}
         <ScrollReveal variant="fade-up">
           <div className="flex items-center gap-6 sm:gap-10">
-            <span className="text-4xl sm:text-6xl font-serif text-zinc-300 font-light select-none">
+            <span className="text-4xl sm:text-6xl font-poppins text-zinc-300 font-light select-none tracking-tight">
               01
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight">
@@ -304,7 +304,7 @@ export default function CustomerPublicPage() {
         {/* Section Header with 02 Numeral */}
         <ScrollReveal variant="fade-up">
           <div className="flex items-center gap-6 sm:gap-10">
-            <span className="text-4xl sm:text-6xl font-serif text-zinc-300 font-light select-none">
+            <span className="text-4xl sm:text-6xl font-poppins text-zinc-300 font-light select-none tracking-tight">
               02
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight">
@@ -350,7 +350,10 @@ export default function CustomerPublicPage() {
                       <h3 className="font-bold text-sm text-zinc-900 group-hover:text-black">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-zinc-500 font-medium">{item.rate} / {item.duration}</p>
+                      <p className="text-xs text-zinc-500 font-medium">
+                        <span className="font-poppins font-bold text-zinc-900 tracking-tight">{item.rate}</span>
+                        {" "}/ <span className="font-poppins text-zinc-500">{item.duration}</span>
+                      </p>
                     </div>
                   </div>
 
@@ -412,7 +415,7 @@ export default function CustomerPublicPage() {
                 <ChevronRight className="w-4 h-4 text-zinc-700" />
               </button>
               <span className="text-xs text-zinc-500 font-medium pl-1">
-                {filteredTreatments.length} treatments available
+                <span className="font-poppins font-bold text-zinc-900">{filteredTreatments.length}</span> treatments available
               </span>
             </div>
 
@@ -435,7 +438,7 @@ export default function CustomerPublicPage() {
           {/* Section Header with 03 Numeral */}
           <ScrollReveal variant="fade-up">
             <div className="flex items-center gap-6 sm:gap-10">
-              <span className="text-4xl sm:text-6xl font-serif text-zinc-600 font-light select-none">
+              <span className="text-4xl sm:text-6xl font-poppins text-zinc-600 font-light select-none tracking-tight">
                 03
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">

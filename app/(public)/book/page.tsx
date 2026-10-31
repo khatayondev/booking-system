@@ -952,7 +952,7 @@ function BookingWizardContent() {
               {/* Step indicator & Return to Home Button */}
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-700">
-                  Step {step} of 4
+                  Step <span className="font-poppins font-bold">{step}</span> of <span className="font-poppins font-bold">4</span>
                 </span>
                 <Link
                   href="/"
@@ -1098,11 +1098,11 @@ function BookingWizardContent() {
                                     {svc.name}
                                   </h3>
                                   <span className="text-[10px] text-zinc-500 font-medium">
-                                    {svc.durationMin} mins
+                                    <span className="font-poppins">{svc.durationMin}</span> mins
                                   </span>
                                 </div>
                               </div>
-                              <span className="text-xs font-black text-zinc-950 shrink-0 font-mono">
+                              <span className="text-xs font-black text-zinc-950 shrink-0 font-poppins">
                                 {formatPesewas(svc.pricePesewas)}
                               </span>
                             </div>
@@ -1183,7 +1183,7 @@ function BookingWizardContent() {
                             <span className="text-[9px] uppercase tracking-wider block opacity-75">
                               {d.weekday}
                             </span>
-                            <span className="text-xs font-extrabold block">
+                            <span className="text-xs font-extrabold block font-poppins">
                               {d.label === "Today" ? "Today" : d.dayNum}
                             </span>
                           </button>
@@ -1237,7 +1237,7 @@ function BookingWizardContent() {
                                 setSelectedSlot(slot);
                                 await createHoldForSlot(slot);
                               }}
-                              className={`h-11 min-h-[44px] rounded-xl text-center text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+                              className={`h-11 min-h-[44px] rounded-xl text-center text-xs font-bold font-poppins transition-all cursor-pointer flex items-center justify-center ${
                                 isSelectedSlot
                                   ? "bg-zinc-950 text-white font-black shadow-md ring-2 ring-zinc-950 scale-102"
                                   : "bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 border border-zinc-200"
@@ -1532,7 +1532,7 @@ function BookingWizardContent() {
                       {selectedServices.map((s) => (
                         <div key={s.id} className="flex justify-between items-center pt-1">
                           <span className="font-bold text-zinc-900">{s.name}</span>
-                          <span className="font-mono font-bold text-zinc-900">{formatPesewas(s.pricePesewas)}</span>
+                          <span className="font-poppins font-bold text-zinc-900">{formatPesewas(s.pricePesewas)}</span>
                         </div>
                       ))}
                     </div>
@@ -1540,7 +1540,7 @@ function BookingWizardContent() {
                     <div className="space-y-1 text-zinc-600 text-[11px]">
                       <div className="flex justify-between">
                         <span>Appointment Time:</span>
-                        <span className="font-bold text-zinc-900">
+                        <span className="font-bold text-zinc-900 font-poppins">
                           {selectedDate} at{" "}
                           {selectedSlot &&
                             new Date(selectedSlot.startUtc).toLocaleTimeString("en-GB", {
@@ -1553,18 +1553,18 @@ function BookingWizardContent() {
                       </div>
                       <div className="flex justify-between">
                         <span>Client:</span>
-                        <span className="font-bold text-zinc-900">{customerName} ({customerPhone})</span>
+                        <span className="font-bold text-zinc-900">{customerName} (<span className="font-poppins">{customerPhone}</span>)</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Duration:</span>
-                        <span className="font-bold text-zinc-900">{totalDurationMin} minutes</span>
+                        <span className="font-bold text-zinc-900"><span className="font-poppins">{totalDurationMin}</span> minutes</span>
                       </div>
                       {customerBirthdayMonth && customerBirthdayDay && (
                         <div className="flex justify-between items-center text-amber-700 font-medium">
                           <span className="flex items-center gap-1">
                             <Gift className="w-3 h-3" /> VIP Birthday Perk:
                           </span>
-                          <span className="font-bold text-zinc-900">
+                          <span className="font-bold text-zinc-900 font-poppins">
                             {MONTH_NAMES[customerBirthdayMonth - 1]} {customerBirthdayDay}
                           </span>
                         </div>
@@ -1573,7 +1573,7 @@ function BookingWizardContent() {
 
                     <div className="border-t border-zinc-200 pt-2 flex justify-between items-center text-sm font-black">
                       <span className="text-zinc-900">Total Amount:</span>
-                      <span className="text-zinc-950 font-black text-base">{formatPesewas(subtotalPesewas)}</span>
+                      <span className="text-zinc-950 font-black text-base font-poppins">{formatPesewas(subtotalPesewas)}</span>
                     </div>
                   </div>
 
@@ -1593,7 +1593,7 @@ function BookingWizardContent() {
                         }`}
                       >
                         <span className="text-[10px] uppercase block opacity-75">Pay 50% Deposit</span>
-                        <span className="text-xs font-black block mt-0.5">
+                        <span className="text-xs font-black block mt-0.5 font-poppins">
                           {formatPesewas(depositPesewas)}
                         </span>
                       </button>
@@ -1608,7 +1608,7 @@ function BookingWizardContent() {
                         }`}
                       >
                         <span className="text-[10px] uppercase block opacity-75">Pay Full Amount</span>
-                        <span className="text-xs font-black block mt-0.5">
+                        <span className="text-xs font-black block mt-0.5 font-poppins">
                           {formatPesewas(subtotalPesewas)}
                         </span>
                       </button>
@@ -1661,9 +1661,14 @@ function BookingWizardContent() {
                   }`}
                 >
                   <span className="font-bold text-[11px] sm:text-xs truncate mr-2">
-                    {selectedServiceIds.length === 0
-                      ? "Select treatment to continue"
-                      : `${selectedServiceIds.length} selected • ${formatPesewas(subtotalPesewas)}`}
+                    {selectedServiceIds.length === 0 ? (
+                      "Select treatment to continue"
+                    ) : (
+                      <>
+                        <span className="font-poppins font-bold">{selectedServiceIds.length}</span> selected •{" "}
+                        <span className="font-poppins font-bold">{formatPesewas(subtotalPesewas)}</span>
+                      </>
+                    )}
                   </span>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <span>Date & Time</span>
@@ -1683,7 +1688,7 @@ function BookingWizardContent() {
                       : "bg-zinc-200 text-zinc-400 cursor-not-allowed opacity-60"
                   }`}
                 >
-                  <span className="font-bold text-[11px] sm:text-xs truncate mr-2">
+                  <span className="font-bold text-[11px] sm:text-xs truncate mr-2 font-poppins">
                     {selectedSlot
                       ? new Date(selectedSlot.startUtc).toLocaleTimeString("en-GB", {
                           timeZone: "Africa/Accra",
@@ -1720,9 +1725,16 @@ function BookingWizardContent() {
                 >
                   <CreditCard className="w-4 h-4" />
                   <span>
-                    {submittingBooking
-                      ? "Locking Slot..."
-                      : `Confirm & Pay ${formatPesewas(paymentType === "DEPOSIT" ? depositPesewas : subtotalPesewas)}`}
+                    {submittingBooking ? (
+                      "Locking Slot..."
+                    ) : (
+                      <>
+                        Confirm &amp; Pay{" "}
+                        <span className="font-poppins font-bold">
+                          {formatPesewas(paymentType === "DEPOSIT" ? depositPesewas : subtotalPesewas)}
+                        </span>
+                      </>
+                    )}
                   </span>
                 </button>
               )}

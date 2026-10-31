@@ -1,6 +1,22 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@theme {
+  --font-sans: var(--font-sans), sans-serif;
+  --font-poppins: var(--font-poppins), sans-serif;
+}
+
+.font-poppins {
+  font-family: var(--font-poppins), sans-serif;
+}
+
+.font-number,
+.price-tag,
+.price-text {
+  font-family: var(--font-poppins), sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Universal Mobile Responsive Anti-Overflow Guard */
 html,
 body {
