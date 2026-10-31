@@ -15,8 +15,6 @@ import {
   Menu,
   X,
   Calendar,
-  Heart,
-  ShoppingBag,
   Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -111,7 +109,6 @@ export default function CustomerPublicPage() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [liked, setLiked] = React.useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,38 +220,22 @@ export default function CustomerPublicPage() {
                 </Link>
               </nav>
 
-              {/* Right Icons: Heart, Bag & Staff Portal */}
-              <div className="flex items-center gap-4 sm:gap-6">
-                {/* Wishlist / Heart */}
-                <button
-                  type="button"
-                  onClick={() => setLiked(!liked)}
-                  className="text-white/80 hover:text-white transition-colors cursor-pointer active:scale-90"
-                  aria-label="Wishlist"
-                >
-                  <Heart
-                    className={`w-5 h-5 transition-all ${
-                      liked ? "fill-red-500 text-red-500 scale-110" : "text-white/80 hover:text-white"
-                    }`}
-                  />
-                </button>
-
-                {/* Shopping Bag / Quick Book */}
-                <Link
-                  href="/book"
-                  className="text-white/80 hover:text-white transition-colors cursor-pointer relative active:scale-95"
-                  aria-label="Book an appointment"
-                >
-                  <ShoppingBag className="w-5 h-5" />
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400" />
-                </Link>
-
+              {/* Right Action: White Capsule "Book Now!" & Staff Portal */}
+              <div className="flex items-center gap-3 sm:gap-4">
                 {/* Staff Subdomain Portal */}
                 <Link
                   href="https://dashboard.beccascrownbeauty.com"
-                  className="hidden lg:inline-flex items-center px-3 py-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white text-[11px] font-semibold transition-all cursor-pointer"
+                  className="hidden sm:inline-flex items-center px-3 py-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white text-[11px] font-semibold transition-all cursor-pointer"
                 >
                   Staff
+                </Link>
+
+                {/* White Background Capsule: Book Now! */}
+                <Link
+                  href="/book"
+                  className="inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-bold text-xs sm:text-sm tracking-tight transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
+                >
+                  Book Now!
                 </Link>
 
                 {/* Mobile Menu Toggle */}
