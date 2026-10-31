@@ -784,49 +784,40 @@ function BookingWizardContent() {
   // CONFIRMATION VIEW
   if (bookingResult) {
     return (
-      <div className="relative min-h-[calc(100dvh-5rem)] w-full py-6 sm:py-10 flex items-center justify-center p-4 sm:p-8 bg-zinc-950">
-        <div className="fixed inset-0 z-0">
-          <Image
-            src="/images/ghanaian_hero_beauty.jpg"
-            alt="Becca's Crown Beauty Vault"
-            fill
-            className="object-cover object-center scale-105 opacity-40 mix-blend-luminosity"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/85" />
-        </div>
-        <div className="relative z-10 w-full max-w-lg rounded-[32px] sm:rounded-[36px] bg-zinc-950/80 backdrop-blur-3xl border border-white/20 p-6 sm:p-10 text-white shadow-2xl space-y-6 text-center">
-          <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto">
+      <div className="relative min-h-[calc(100dvh-5rem)] w-full py-6 sm:py-10 flex items-center justify-center p-4 sm:p-8 bg-[#0B0A09]">
+        <div className="relative z-10 w-full max-w-lg rounded-[32px] sm:rounded-[36px] bg-white border border-zinc-200/90 p-6 sm:p-10 text-zinc-900 shadow-2xl space-y-6 text-center">
+          <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-8 h-8" />
           </div>
 
           <div className="space-y-1">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-400">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600">
               Appointment Reserved
             </span>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950">
               You&apos;re Booked!
             </h1>
-            <p className="text-xs text-zinc-400">
-              Booking Ref: <strong className="text-white font-mono tracking-wider">{bookingResult.reference}</strong>
+            <p className="text-xs text-zinc-500">
+              Booking Ref: <strong className="text-zinc-900 font-mono tracking-wider">{bookingResult.reference}</strong>
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-left text-xs space-y-2">
-            <div className="flex justify-between text-zinc-400">
+          <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 text-left text-xs space-y-2">
+            <div className="flex justify-between text-zinc-500">
               <span>Client Name:</span>
-              <span className="text-white font-bold">{bookingResult.customer.name}</span>
+              <span className="text-zinc-900 font-bold">{bookingResult.customer.name}</span>
             </div>
-            <div className="flex justify-between text-zinc-400">
+            <div className="flex justify-between text-zinc-500">
               <span>Contact Phone:</span>
-              <span className="text-white font-bold">{bookingResult.customer.phone}</span>
+              <span className="text-zinc-900 font-bold">{bookingResult.customer.phone}</span>
             </div>
-            <div className="flex justify-between text-zinc-400">
+            <div className="flex justify-between text-zinc-500">
               <span>Appointment Date:</span>
-              <span className="text-white font-bold">{selectedDate}</span>
+              <span className="text-zinc-900 font-bold">{selectedDate}</span>
             </div>
-            <div className="flex justify-between text-zinc-400">
+            <div className="flex justify-between text-zinc-500">
               <span>Deposit Required:</span>
-              <span className="text-white font-bold">{formatPesewas(bookingResult.depositRequiredPesewas)}</span>
+              <span className="text-zinc-900 font-bold">{formatPesewas(bookingResult.depositRequiredPesewas)}</span>
             </div>
           </div>
 
@@ -834,7 +825,7 @@ function BookingWizardContent() {
             <Link href={`/manage/${bookingResult.manageToken}`}>
               <button
                 type="button"
-                className="w-full h-12 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-extrabold text-xs uppercase tracking-wider transition-all shadow-lg cursor-pointer"
+                className="w-full h-12 rounded-full bg-zinc-950 hover:bg-black text-white font-extrabold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer"
               >
                 Proceed to Pay & Manage Booking
               </button>
@@ -842,7 +833,7 @@ function BookingWizardContent() {
             <Link href="/">
               <button
                 type="button"
-                className="w-full h-11 rounded-full bg-white/10 hover:bg-white/15 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                className="w-full h-11 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-800 border border-zinc-200 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
               >
                 Return to Home
               </button>
@@ -854,31 +845,9 @@ function BookingWizardContent() {
   }
 
   return (
-    <div className="relative min-h-[calc(100dvh-5rem)] w-full py-4 sm:py-6 lg:py-8 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-zinc-950">
-      {/* =========================================================================
-          DYNAMIC BACKGROUND IMAGES (Subtle atmospheric depth behind the layout)
-      ========================================================================= */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        {([1, 2, 3, 4] as const).map((s) => (
-          <div
-            key={s}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              step === s ? "opacity-25" : "opacity-0"
-            }`}
-          >
-            <Image
-              src={STEP_BACKGROUNDS[s].image}
-              alt={STEP_BACKGROUNDS[s].title}
-              fill
-              priority={s === 1}
-              className="object-cover object-center scale-105"
-            />
-          </div>
-        ))}
-        {/* Soft Vignette Overlay for Text & Glass Contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/95" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-black/80" />
-      </div>
+    <div className="relative min-h-[calc(100dvh-5rem)] w-full py-4 sm:py-6 lg:py-8 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-[#0B0A09]">
+      {/* Background canvas (Clean dark luxury contrast without murky overlays) */}
+      <div className="fixed inset-0 z-0 bg-[#0B0A09] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         {/* =========================================================================
@@ -886,26 +855,26 @@ function BookingWizardContent() {
         ========================================================================= */}
         <div className="hidden lg:flex lg:col-span-5 flex-col justify-center text-white pr-2 xl:pr-6">
           <div className="flex flex-col gap-6">
-            {/* Clear Image of Her (Slightly larger, borderless, untagged) */}
-            <div className="relative w-full max-w-[460px] aspect-square rounded-3xl overflow-hidden shadow-2xl">
+            {/* Clear Image of Her (Bigger, borderless, untagged, no transparency, no overlay) */}
+            <div className="relative w-full max-w-[520px] aspect-square rounded-[32px] overflow-hidden shadow-2xl">
               <Image
                 src="/images/good-faces-W7JdftOc10w-unsplash.jpg"
                 alt="Becca's Crown Beauty Vault"
                 fill
                 priority
                 className="object-cover object-center"
-                sizes="(max-width: 1024px) 100vw, 460px"
+                sizes="(max-width: 1024px) 100vw, 520px"
               />
             </div>
 
             {/* The Text Below Her */}
-            <div className="space-y-4 max-w-[450px]">
+            <div className="space-y-4 max-w-[500px]">
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold text-amber-200">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                 <span>Step 0{step} of 04</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight leading-[1.08] text-white">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] text-white">
                 {STEP_BACKGROUNDS[step].title}
               </h1>
 
@@ -934,11 +903,11 @@ function BookingWizardContent() {
         </div>
 
         {/* =========================================================================
-            RIGHT COLUMN: THE FROSTED GLASS CARD
+            RIGHT COLUMN: MINIMALISTIC LUXURY WHITE CARD
         ========================================================================= */}
         <div className="lg:col-span-7 w-full flex flex-col items-center justify-center">
           {/* Mobile/Tablet Header: Her Portrait & Step Title */}
-          <div className="lg:hidden w-full max-w-xl flex items-center gap-4 p-3.5 rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/15 mb-3 text-white shadow-xl">
+          <div className="lg:hidden w-full max-w-xl flex items-center gap-4 p-3.5 rounded-2xl bg-zinc-900/90 border border-white/15 mb-3 text-white shadow-xl">
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shrink-0 shadow-md">
               <Image
                 src="/images/good-faces-W7JdftOc10w-unsplash.jpg"
@@ -959,22 +928,22 @@ function BookingWizardContent() {
             </div>
           </div>
 
-          <div className="w-full max-w-xl min-h-[500px] h-[calc(100dvh-7rem)] max-h-[640px] sm:max-h-[660px] lg:max-h-[680px] rounded-[28px] sm:rounded-[36px] bg-zinc-950/90 sm:bg-zinc-950/80 backdrop-blur-3xl border border-white/20 p-4 sm:p-5 lg:p-6 shadow-2xl text-white flex flex-col justify-between overflow-hidden transition-all duration-300">
-            {/* Top Bar inside the Glass: Studio Brand Capsule & Step Indicator */}
-            <div className="flex items-center justify-between pb-2.5 sm:pb-3.5 border-b border-white/10 shrink-0">
+          <div className="w-full max-w-xl min-h-[500px] h-[calc(100dvh-7rem)] max-h-[640px] sm:max-h-[660px] lg:max-h-[680px] rounded-[28px] sm:rounded-[36px] bg-white border border-zinc-200/90 p-4 sm:p-5 lg:p-6 shadow-2xl text-zinc-900 flex flex-col justify-between overflow-hidden transition-all duration-300">
+            {/* Top Bar inside the Card: Studio Brand Capsule & Step Indicator */}
+            <div className="flex items-center justify-between pb-2.5 sm:pb-3.5 border-b border-zinc-200/80 shrink-0">
               {/* Studio Capsule */}
               <Link
                 href="/"
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 pl-1.5 pr-3 py-1 rounded-full backdrop-blur-md transition-colors"
+                className="flex items-center gap-2 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200/80 pl-1.5 pr-3 py-1 rounded-full transition-colors"
               >
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 text-zinc-950 font-black text-[10px] sm:text-[11px] flex items-center justify-center shadow-xs">
                   BC
                 </div>
                 <div>
-                  <span className="text-[10px] sm:text-[11px] font-bold block leading-none text-white">
+                  <span className="text-[10px] sm:text-[11px] font-bold block leading-none text-zinc-900">
                     Becca&apos;s Crown
                   </span>
-                  <span className="text-[8px] sm:text-[9px] text-amber-200 block leading-tight">
+                  <span className="text-[8px] sm:text-[9px] text-zinc-500 block leading-tight font-medium">
                     Beauty Vault
                   </span>
                 </div>
@@ -982,28 +951,28 @@ function BookingWizardContent() {
 
               {/* Step indicator & Return to Home Button */}
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-white/10 border border-white/10 text-zinc-300">
+                <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-700">
                   Step {step} of 4
                 </span>
                 <Link
                   href="/"
                   title="Return to Home"
-                  className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                  className="w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-zinc-900 transition-colors cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Dynamic Step Header inside Glass */}
+            {/* Dynamic Step Header inside Card */}
             <div className="pt-2 sm:pt-3 pb-1 space-y-0.5 sm:space-y-1 shrink-0">
-              <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight leading-snug">
+              <h2 className="text-lg sm:text-2xl font-black text-zinc-950 tracking-tight leading-snug">
                 {step === 1 && "Book Your Crown Experience"}
                 {step === 2 && "Choose Your Date & Time"}
                 {step === 3 && "Your Contact Details"}
                 {step === 4 && "Review & Confirm Slot"}
               </h2>
-              <p className="text-[11px] sm:text-xs text-zinc-400 line-clamp-1 sm:line-clamp-2">
+              <p className="text-[11px] sm:text-xs text-zinc-500 line-clamp-1 sm:line-clamp-2 font-medium">
                 {step === 1 && "Select the signature treatments you wish to reserve today."}
                 {step === 2 && "Pick your day and live time slot. Instant 10-minute calendar lock."}
                 {step === 3 && "No password needed. SMS confirmations sent straight to your phone."}
@@ -1023,13 +992,13 @@ function BookingWizardContent() {
                       setSearchQuery(e.target.value);
                     }}
                     placeholder="Smart Search treatments (e.g. frontal, soft glam, lashes)..."
-                    className="w-full h-9 sm:h-10 pl-9 pr-8 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 text-xs text-white placeholder-zinc-400 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all backdrop-blur-md"
+                    className="w-full h-9 sm:h-10 pl-9 pr-8 rounded-xl sm:rounded-2xl bg-zinc-50 border border-zinc-200 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 focus:bg-white transition-all"
                   />
                   {searchQuery && (
                     <button
                       type="button"
                       onClick={() => setSearchQuery("")}
-                      className="absolute right-2.5 text-zinc-400 hover:text-white p-0.5 rounded-full cursor-pointer"
+                      className="absolute right-2.5 text-zinc-400 hover:text-zinc-900 p-0.5 rounded-full cursor-pointer"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
@@ -1041,13 +1010,13 @@ function BookingWizardContent() {
             {/* =====================================================================
                 STEP CONTENT CONTAINER (Dynamically fits available height)
             ===================================================================== */}
-            <div className="flex-1 min-h-0 overflow-y-auto pr-1 my-2 scrollbar-thin scrollbar-thumb-white/20">
+            <div className="flex-1 min-h-0 overflow-y-auto pr-1 my-2 scrollbar-thin scrollbar-thumb-zinc-300">
               {/* ---------------------------------------------------------------
                   STEP 1: TREATMENT SELECTOR
               --------------------------------------------------------------- */}
               {step === 1 && (
                 <div className="space-y-4 animate-in fade-in duration-300">
-                  {/* Category Filter Pills inside Glass */}
+                  {/* Category Filter Pills */}
                   <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
                     {["ALL", "hair", "bridal", "lashes", "pedicure", "facials"].map((slug) => (
                       <button
@@ -1056,8 +1025,8 @@ function BookingWizardContent() {
                         onClick={() => setActiveCategoryFilter(slug)}
                         className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
                           activeCategoryFilter === slug
-                            ? "bg-white text-zinc-950 font-black shadow-xs"
-                            : "bg-white/10 hover:bg-white/15 text-zinc-300 border border-white/10"
+                            ? "bg-zinc-950 text-white font-black shadow-xs"
+                            : "bg-zinc-100 hover:bg-zinc-200/80 text-zinc-700 border border-zinc-200"
                         }`}
                       >
                         {slug === "ALL" ? "All Services" : slug}
@@ -1068,18 +1037,18 @@ function BookingWizardContent() {
                   {catalogLoading ? (
                     <div className="space-y-2.5">
                       {[1, 2, 3].map((n) => (
-                        <div key={n} className="h-16 rounded-2xl bg-white/10 animate-pulse" />
+                        <div key={n} className="h-16 rounded-2xl bg-zinc-100 animate-pulse" />
                       ))}
                     </div>
                   ) : catalogError ? (
-                    <div className="p-4 rounded-2xl bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs">
+                    <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
                       {catalogError}
                     </div>
                   ) : filteredCategories.length === 0 ? (
-                    <div className="p-6 rounded-2xl border border-dashed border-white/15 bg-white/5 text-center space-y-2">
-                      <Search className="w-6 h-6 text-zinc-500 mx-auto" />
-                      <p className="text-xs font-bold text-white">No treatments found</p>
-                      <p className="text-[10px] text-zinc-400">
+                    <div className="p-6 rounded-2xl border border-dashed border-zinc-200 bg-zinc-50 text-center space-y-2">
+                      <Search className="w-6 h-6 text-zinc-400 mx-auto" />
+                      <p className="text-xs font-bold text-zinc-900">No treatments found</p>
+                      <p className="text-[10px] text-zinc-500">
                         No treatments match &ldquo;{searchQuery}&rdquo;. Try another term or clear filter.
                       </p>
                       <button
@@ -1088,7 +1057,7 @@ function BookingWizardContent() {
                           setSearchQuery("");
                           setActiveCategoryFilter("ALL");
                         }}
-                        className="mt-1 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[10px] text-amber-200 font-bold transition-colors cursor-pointer"
+                        className="mt-1 px-3 py-1 rounded-full bg-zinc-200 hover:bg-zinc-300 text-[10px] text-zinc-800 font-bold transition-colors cursor-pointer"
                       >
                         Clear Search & Filters
                       </button>
@@ -1110,30 +1079,30 @@ function BookingWizardContent() {
                               }}
                               className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                                 isSelected
-                                  ? "bg-white/20 border-white/50 ring-1 ring-white/60 shadow-lg"
-                                  : "bg-white/5 hover:bg-white/10 border-white/10"
+                                  ? "bg-amber-50/70 border-zinc-950 ring-1 ring-zinc-950 shadow-sm"
+                                  : "bg-zinc-50/70 hover:bg-zinc-100/80 border-zinc-200/80"
                               }`}
                             >
                               <div className="flex items-center gap-3 min-w-0">
                                 <div
                                   className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
                                     isSelected
-                                      ? "bg-white text-zinc-950 border-white"
-                                      : "border-white/30 bg-white/5"
+                                      ? "bg-zinc-950 text-white border-zinc-950"
+                                      : "border-zinc-300 bg-white"
                                   }`}
                                 >
                                   {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                                 </div>
                                 <div className="min-w-0">
-                                  <h3 className="text-xs font-bold text-white truncate">
+                                  <h3 className="text-xs font-bold text-zinc-900 truncate">
                                     {svc.name}
                                   </h3>
-                                  <span className="text-[10px] text-zinc-400">
+                                  <span className="text-[10px] text-zinc-500 font-medium">
                                     {svc.durationMin} mins
                                   </span>
                                 </div>
                               </div>
-                              <span className="text-xs font-black text-amber-200 shrink-0">
+                              <span className="text-xs font-black text-zinc-950 shrink-0 font-mono">
                                 {formatPesewas(svc.pricePesewas)}
                               </span>
                             </div>
@@ -1146,34 +1115,34 @@ function BookingWizardContent() {
               )}
 
               {/* ---------------------------------------------------------------
-                  STEP 2: DATE & TIME (Matches Reference Screenshot Exactly!)
+                  STEP 2: DATE & TIME
               --------------------------------------------------------------- */}
               {step === 2 && (
                 <div className="space-y-4 animate-in fade-in duration-300">
                   {/* Selected service preview tag */}
                   {selectedServices.length > 0 && (
-                    <div className="flex items-center justify-between p-2.5 bg-white/5 border border-white/10 rounded-2xl text-[11px]">
+                    <div className="flex items-center justify-between p-2.5 bg-zinc-50 border border-zinc-200 rounded-2xl text-[11px]">
                       <div className="flex items-center gap-2 truncate">
-                        <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-                        <span className="truncate font-semibold text-zinc-200">
+                        <Crown className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        <span className="truncate font-semibold text-zinc-800">
                           {selectedServices.map((s) => s.name).join(", ")}
                         </span>
                       </div>
                       <button
                         type="button"
                         onClick={() => setStep(1)}
-                        className="text-[10px] text-amber-200 hover:underline shrink-0 font-bold ml-2 cursor-pointer"
+                        className="text-[10px] text-zinc-900 hover:underline shrink-0 font-bold ml-2 cursor-pointer"
                       >
                         Change
                       </button>
                     </div>
                   )}
 
-                  {/* Horizontal Day Selector (Matches [Tue Today] [Wed 26] [Thu 27] in Screenshot) */}
+                  {/* Horizontal Day Selector */}
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-xs font-bold text-zinc-300 px-1">
+                    <div className="flex items-center justify-between text-xs font-bold text-zinc-900 px-1">
                       <span>{monthYearLabel}</span>
-                      <label className="text-[10px] text-zinc-400 flex items-center gap-1 cursor-pointer hover:text-white">
+                      <label className="text-[10px] text-zinc-500 flex items-center gap-1 cursor-pointer hover:text-zinc-900">
                         <CalendarIcon className="w-3 h-3" />
                         <span>Other Date</span>
                         <input
@@ -1207,8 +1176,8 @@ function BookingWizardContent() {
                             }}
                             className={`py-2 px-1 rounded-2xl text-center transition-all cursor-pointer ${
                               isSelectedDay
-                                ? "bg-white text-zinc-950 font-black shadow-lg scale-102"
-                                : "bg-white/10 hover:bg-white/15 text-zinc-300 border border-white/10"
+                                ? "bg-zinc-950 text-white font-black shadow-md scale-102"
+                                : "bg-zinc-100 hover:bg-zinc-200/80 text-zinc-700 border border-zinc-200"
                             }`}
                           >
                             <span className="text-[9px] uppercase tracking-wider block opacity-75">
@@ -1223,9 +1192,9 @@ function BookingWizardContent() {
                     </div>
                   </div>
 
-                  {/* Time Slots 4-Column Grid (Matches Screenshot: 9:00, 9:30, 10:00, 10:30...) */}
+                  {/* Time Slots 4-Column Grid */}
                   <div className="space-y-2 pt-1">
-                    <div className="flex items-center justify-between text-[11px] text-zinc-400 px-1">
+                    <div className="flex items-center justify-between text-[11px] text-zinc-500 px-1 font-medium">
                       <span>Available Time Slots</span>
                       <span>{totalDurationMin} min appointment</span>
                     </div>
@@ -1233,18 +1202,18 @@ function BookingWizardContent() {
                     {slotsLoading ? (
                       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => (
-                          <div key={n} className="h-11 rounded-xl bg-white/10 animate-pulse" />
+                          <div key={n} className="h-11 rounded-xl bg-zinc-100 animate-pulse" />
                         ))}
                       </div>
                     ) : slotsError ? (
-                      <div className="p-4 rounded-2xl bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs text-center">
+                      <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs text-center font-medium">
                         {slotsError}
                       </div>
                     ) : availableSlots.length === 0 ? (
-                      <div className="p-6 rounded-2xl border border-dashed border-white/15 bg-white/5 text-center space-y-1">
-                        <Clock className="w-6 h-6 text-zinc-500 mx-auto" />
-                        <p className="text-xs font-bold text-white">No slots open on this date</p>
-                        <p className="text-[10px] text-zinc-400">Please choose another day above.</p>
+                      <div className="p-6 rounded-2xl border border-dashed border-zinc-200 bg-zinc-50 text-center space-y-1">
+                        <Clock className="w-6 h-6 text-zinc-400 mx-auto" />
+                        <p className="text-xs font-bold text-zinc-900">No slots open on this date</p>
+                        <p className="text-[10px] text-zinc-500">Please choose another day above.</p>
                       </div>
                     ) : (
                       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
@@ -1270,8 +1239,8 @@ function BookingWizardContent() {
                               }}
                               className={`h-11 min-h-[44px] rounded-xl text-center text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
                                 isSelectedSlot
-                                  ? "bg-white text-zinc-950 font-black shadow-lg ring-2 ring-white scale-102"
-                                  : "bg-white/10 hover:bg-white/20 text-white/90 border border-white/10"
+                                  ? "bg-zinc-950 text-white font-black shadow-md ring-2 ring-zinc-950 scale-102"
+                                  : "bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 border border-zinc-200"
                               }`}
                             >
                               {slotTime}
@@ -1291,11 +1260,11 @@ function BookingWizardContent() {
                 <div className="space-y-3 animate-in fade-in duration-300">
                   {/* Full Name */}
                   <div className="space-y-1">
-                    <label className="text-[11px] font-semibold tracking-wide text-zinc-300 flex items-center justify-between">
+                    <label className="text-[11px] font-semibold tracking-wide text-zinc-700 flex items-center justify-between">
                       <span>Full Name</span>
-                      <span className="text-[10px] text-zinc-500 font-normal">Required</span>
+                      <span className="text-[10px] text-zinc-400 font-normal">Required</span>
                     </label>
-                    <div className="relative flex items-center rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 focus-within:border-amber-400/80 focus-within:bg-zinc-900/90 focus-within:ring-2 focus-within:ring-amber-400/20 transition-all">
+                    <div className="relative flex items-center rounded-xl bg-zinc-50 border border-zinc-200 hover:border-zinc-300 focus-within:border-zinc-950 focus-within:bg-white focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all">
                       <User className="w-4 h-4 text-zinc-400 shrink-0 ml-3.5" />
                       <input
                         type="text"
@@ -1303,24 +1272,24 @@ function BookingWizardContent() {
                         placeholder="Ama Mensah"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
-                        className="w-full h-11 pl-2.5 pr-4 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none"
+                        className="w-full h-11 pl-2.5 pr-4 bg-transparent text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none"
                       />
                     </div>
                   </div>
 
                   {/* Ghana Phone Number */}
                   <div className="space-y-1">
-                    <label className="text-[11px] font-semibold tracking-wide text-zinc-300 flex items-center justify-between">
+                    <label className="text-[11px] font-semibold tracking-wide text-zinc-700 flex items-center justify-between">
                       <span>Ghana Mobile Number</span>
-                      <span className="text-[10px] text-zinc-500 font-normal">MTN • Telecel • AT</span>
+                      <span className="text-[10px] text-zinc-400 font-normal">MTN • Telecel • AT</span>
                     </label>
-                    <div className={`relative flex items-center rounded-xl bg-white/[0.04] border transition-all ${
+                    <div className={`relative flex items-center rounded-xl bg-zinc-50 border transition-all ${
                       phoneError
-                        ? "border-rose-500 bg-rose-500/5 focus-within:ring-2 focus-within:ring-rose-500/20"
-                        : "border-white/10 hover:border-white/20 focus-within:border-amber-400/80 focus-within:bg-zinc-900/90 focus-within:ring-2 focus-within:ring-amber-400/20"
+                        ? "border-rose-400 bg-rose-50/50 focus-within:ring-2 focus-within:ring-rose-500/20"
+                        : "border-zinc-200 hover:border-zinc-300 focus-within:border-zinc-950 focus-within:bg-white focus-within:ring-2 focus-within:ring-zinc-950/10"
                     }`}>
                       <Phone className="w-4 h-4 text-zinc-400 shrink-0 ml-3.5" />
-                      <span className="text-xs font-semibold text-zinc-400 pl-2 shrink-0 select-none">🇬🇭</span>
+                      <span className="text-xs font-semibold text-zinc-500 pl-2 shrink-0 select-none">🇬🇭</span>
                       <input
                         type="tel"
                         required
@@ -1331,14 +1300,14 @@ function BookingWizardContent() {
                           if (phoneError) validatePhone(e.target.value);
                         }}
                         onBlur={() => validatePhone(customerPhone)}
-                        className="w-full h-11 pl-2 pr-4 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none"
+                        className="w-full h-11 pl-2 pr-4 bg-transparent text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none"
                       />
                     </div>
                     {phoneError ? (
-                      <p className="text-[10px] text-rose-400 font-medium pl-1">{phoneError}</p>
+                      <p className="text-[10px] text-rose-600 font-medium pl-1">{phoneError}</p>
                     ) : (
-                      <p className="text-[10px] text-zinc-400 flex items-center gap-1.5 pl-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                      <p className="text-[10px] text-zinc-500 flex items-center gap-1.5 pl-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                         <span>Instant SMS appointment reminder sent here</span>
                       </p>
                     )}
@@ -1346,37 +1315,37 @@ function BookingWizardContent() {
 
                   {/* Email Address */}
                   <div className="space-y-1">
-                    <label className="text-[11px] font-semibold tracking-wide text-zinc-300 flex items-center justify-between">
+                    <label className="text-[11px] font-semibold tracking-wide text-zinc-700 flex items-center justify-between">
                       <span>Email Address</span>
-                      <span className="text-[10px] text-zinc-500 font-normal">Optional</span>
+                      <span className="text-[10px] text-zinc-400 font-normal">Optional</span>
                     </label>
-                    <div className="relative flex items-center rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 focus-within:border-amber-400/80 focus-within:bg-zinc-900/90 focus-within:ring-2 focus-within:ring-amber-400/20 transition-all">
+                    <div className="relative flex items-center rounded-xl bg-zinc-50 border border-zinc-200 hover:border-zinc-300 focus-within:border-zinc-950 focus-within:bg-white focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all">
                       <Mail className="w-4 h-4 text-zinc-400 shrink-0 ml-3.5" />
                       <input
                         type="email"
                         placeholder="ama@example.com (for calendar pass)"
                         value={customerEmail}
                         onChange={(e) => setCustomerEmail(e.target.value)}
-                        className="w-full h-11 pl-2.5 pr-4 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none"
+                        className="w-full h-11 pl-2.5 pr-4 bg-transparent text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none"
                       />
                     </div>
                   </div>
 
                   {/* Luxury VIP Birthday Crown Perk Card */}
-                  <div className="rounded-2xl bg-gradient-to-b from-white/[0.05] to-white/[0.02] border border-white/10 p-3.5 space-y-2.5 transition-all">
+                  <div className="rounded-2xl bg-amber-50/60 border border-amber-200/80 p-3.5 space-y-2.5 transition-all">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-xl bg-amber-400/15 border border-amber-400/30 flex items-center justify-center text-amber-300 shrink-0 shadow-xs">
-                          <Gift className="w-4 h-4 text-amber-300" />
+                        <div className="w-8 h-8 rounded-xl bg-amber-200/60 border border-amber-300 flex items-center justify-center text-amber-700 shrink-0 shadow-xs">
+                          <Gift className="w-4 h-4 text-amber-700" />
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-white">VIP Birthday Perk</span>
-                            <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                            <span className="text-xs font-bold text-zinc-900">VIP Birthday Perk</span>
+                            <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-200/80 text-amber-800 border border-amber-300/80">
                               Optional
                             </span>
                           </div>
-                          <p className="text-[11px] text-zinc-400 leading-tight">
+                          <p className="text-[11px] text-zinc-600 leading-tight">
                             Unlock complimentary birthday styling perks and gifts.
                           </p>
                         </div>
@@ -1389,7 +1358,7 @@ function BookingWizardContent() {
                             setCustomerBirthdayMonth("");
                             setCustomerBirthdayDay("");
                           }}
-                          className="text-[10px] text-zinc-400 hover:text-rose-400 underline cursor-pointer shrink-0"
+                          className="text-[10px] text-zinc-500 hover:text-rose-600 underline cursor-pointer shrink-0 font-medium"
                         >
                           Clear
                         </button>
@@ -1398,18 +1367,18 @@ function BookingWizardContent() {
 
                     {/* Active Selected Birthday Pill */}
                     {customerBirthdayMonth && customerBirthdayDay && !showBirthdayPicker && (
-                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-amber-400/10 border border-amber-400/25 text-xs">
+                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-amber-100/70 border border-amber-300/80 text-xs">
                         <div className="flex items-center gap-2">
-                          <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-                          <span className="font-bold text-amber-200">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                          <span className="font-bold text-zinc-900">
                             {MONTH_NAMES[customerBirthdayMonth - 1]} {customerBirthdayDay}
                           </span>
-                          <span className="text-[10px] text-amber-300/80">• Birthday Perk Active 👑</span>
+                          <span className="text-[10px] text-amber-700 font-semibold">• Birthday Perk Active 👑</span>
                         </div>
                         <button
                           type="button"
                           onClick={() => setShowBirthdayPicker(true)}
-                          className="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer"
+                          className="text-[10px] font-bold text-zinc-900 hover:underline cursor-pointer"
                         >
                           Change
                         </button>
@@ -1421,24 +1390,24 @@ function BookingWizardContent() {
                       <button
                         type="button"
                         onClick={() => setShowBirthdayPicker(true)}
-                        className="w-full h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-amber-200 hover:text-white flex items-center justify-center gap-2 transition-all cursor-pointer"
+                        className="w-full h-9 rounded-xl bg-white hover:bg-zinc-50 border border-amber-200 text-xs font-semibold text-zinc-800 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs"
                       >
-                        <CalendarIcon className="w-3.5 h-3.5 text-amber-300" />
+                        <CalendarIcon className="w-3.5 h-3.5 text-amber-600" />
                         <span>Tap to Pick Birthday Month &amp; Day</span>
                       </button>
                     )}
 
                     {/* Interactive Visual UI Picker */}
                     {showBirthdayPicker && (
-                      <div className="pt-2 border-t border-white/10 space-y-3 animate-in fade-in duration-200">
+                      <div className="pt-2 border-t border-amber-200/60 space-y-3 animate-in fade-in duration-200">
                         {/* Step A: Month Pills */}
                         <div>
                           <div className="flex items-center justify-between pb-1.5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
                               1. Birth Month:
                             </span>
                             {customerBirthdayMonth ? (
-                              <span className="text-[10px] font-bold text-amber-300">
+                              <span className="text-[10px] font-bold text-amber-700">
                                 {MONTH_NAMES[customerBirthdayMonth - 1]}
                               </span>
                             ) : null}
@@ -1460,8 +1429,8 @@ function BookingWizardContent() {
                                   }}
                                   className={`h-8 rounded-lg text-[11px] font-semibold transition-all cursor-pointer flex items-center justify-center ${
                                     isSelected
-                                      ? "bg-amber-400 text-zinc-950 font-bold shadow-sm"
-                                      : "bg-zinc-900/80 hover:bg-white/10 text-zinc-300 border border-white/10"
+                                      ? "bg-zinc-950 text-white font-bold shadow-xs"
+                                      : "bg-white hover:bg-zinc-100 text-zinc-700 border border-zinc-200"
                                   }`}
                                 >
                                   {name.slice(0, 3)}
@@ -1474,11 +1443,11 @@ function BookingWizardContent() {
                         {/* Step B: Day Grid */}
                         <div>
                           <div className="flex items-center justify-between pb-1.5">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
                               2. Day:
                             </span>
                             {customerBirthdayDay ? (
-                              <span className="text-[10px] font-bold text-amber-300">
+                              <span className="text-[10px] font-bold text-amber-700">
                                 Day {customerBirthdayDay}
                               </span>
                             ) : null}
@@ -1498,8 +1467,8 @@ function BookingWizardContent() {
                                   }}
                                   className={`h-7 rounded-md text-[10px] font-medium transition-all cursor-pointer flex items-center justify-center ${
                                     isSelected
-                                      ? "bg-amber-400 text-zinc-950 font-bold shadow-xs scale-105"
-                                      : "bg-zinc-900/60 hover:bg-white/10 text-zinc-300 border border-white/5"
+                                      ? "bg-zinc-950 text-white font-bold shadow-xs scale-105"
+                                      : "bg-white hover:bg-zinc-100 text-zinc-700 border border-zinc-200"
                                   }`}
                                 >
                                   {d}
@@ -1510,11 +1479,11 @@ function BookingWizardContent() {
                         </div>
 
                         {/* Done / Collapse Action */}
-                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-white/5">
+                        <div className="flex items-center justify-end gap-2 pt-1 border-t border-amber-200/60">
                           <button
                             type="button"
                             onClick={() => setShowBirthdayPicker(false)}
-                            className="px-3.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-xs font-bold text-white transition-all cursor-pointer"
+                            className="px-3.5 py-1.5 rounded-full bg-zinc-900 hover:bg-black text-xs font-bold text-white transition-all cursor-pointer"
                           >
                             {customerBirthdayMonth && customerBirthdayDay ? "Save & Close" : "Cancel"}
                           </button>
@@ -1525,18 +1494,18 @@ function BookingWizardContent() {
 
                   {/* Styling Notes */}
                   <div className="space-y-1">
-                    <label className="text-[11px] font-semibold tracking-wide text-zinc-300 flex items-center justify-between">
+                    <label className="text-[11px] font-semibold tracking-wide text-zinc-700 flex items-center justify-between">
                       <span>Styling Notes &amp; Special Requests</span>
-                      <span className="text-[10px] text-zinc-500 font-normal">Optional</span>
+                      <span className="text-[10px] text-zinc-400 font-normal">Optional</span>
                     </label>
-                    <div className="relative flex items-start rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 focus-within:border-amber-400/80 focus-within:bg-zinc-900/90 focus-within:ring-2 focus-within:ring-amber-400/20 transition-all">
+                    <div className="relative flex items-start rounded-xl bg-zinc-50 border border-zinc-200 hover:border-zinc-300 focus-within:border-zinc-950 focus-within:bg-white focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all">
                       <FileText className="w-4 h-4 text-zinc-400 shrink-0 mt-3 ml-3.5" />
                       <textarea
                         rows={2}
                         placeholder="Hair texture, lash length, allergies, or styling preferences..."
                         value={customerNotes}
                         onChange={(e) => setCustomerNotes(e.target.value)}
-                        className="w-full p-2.5 pl-2.5 pr-4 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none resize-none"
+                        className="w-full p-2.5 pl-2.5 pr-4 bg-transparent text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none resize-none"
                       />
                     </div>
                   </div>
@@ -1549,29 +1518,29 @@ function BookingWizardContent() {
               {step === 4 && (
                 <div className="space-y-4 animate-in fade-in duration-300">
                   {bookingError && (
-                    <div className="p-3 rounded-2xl bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs">
+                    <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
                       {bookingError}
                     </div>
                   )}
 
-                  {/* Glass Receipt Summary */}
-                  <div className="p-4 rounded-2xl bg-white/10 border border-white/15 space-y-2.5 text-xs">
-                    <div className="border-b border-white/10 pb-2">
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                  {/* Receipt Summary */}
+                  <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-2.5 text-xs text-zinc-900">
+                    <div className="border-b border-zinc-200 pb-2">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
                         Selected Treatments
                       </p>
                       {selectedServices.map((s) => (
                         <div key={s.id} className="flex justify-between items-center pt-1">
-                          <span className="font-bold text-white">{s.name}</span>
-                          <span className="font-mono text-amber-200">{formatPesewas(s.pricePesewas)}</span>
+                          <span className="font-bold text-zinc-900">{s.name}</span>
+                          <span className="font-mono font-bold text-zinc-900">{formatPesewas(s.pricePesewas)}</span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="space-y-1 text-zinc-300 text-[11px]">
+                    <div className="space-y-1 text-zinc-600 text-[11px]">
                       <div className="flex justify-between">
                         <span>Appointment Time:</span>
-                        <span className="font-bold text-white">
+                        <span className="font-bold text-zinc-900">
                           {selectedDate} at{" "}
                           {selectedSlot &&
                             new Date(selectedSlot.startUtc).toLocaleTimeString("en-GB", {
@@ -1584,33 +1553,33 @@ function BookingWizardContent() {
                       </div>
                       <div className="flex justify-between">
                         <span>Client:</span>
-                        <span className="font-bold text-white">{customerName} ({customerPhone})</span>
+                        <span className="font-bold text-zinc-900">{customerName} ({customerPhone})</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Duration:</span>
-                        <span className="font-bold text-white">{totalDurationMin} minutes</span>
+                        <span className="font-bold text-zinc-900">{totalDurationMin} minutes</span>
                       </div>
                       {customerBirthdayMonth && customerBirthdayDay && (
-                        <div className="flex justify-between items-center text-amber-300">
+                        <div className="flex justify-between items-center text-amber-700 font-medium">
                           <span className="flex items-center gap-1">
                             <Gift className="w-3 h-3" /> VIP Birthday Perk:
                           </span>
-                          <span className="font-bold">
+                          <span className="font-bold text-zinc-900">
                             {MONTH_NAMES[customerBirthdayMonth - 1]} {customerBirthdayDay}
                           </span>
                         </div>
                       )}
                     </div>
 
-                    <div className="border-t border-white/15 pt-2 flex justify-between items-center text-sm font-black">
-                      <span>Total Amount:</span>
-                      <span className="text-amber-300 text-base">{formatPesewas(subtotalPesewas)}</span>
+                    <div className="border-t border-zinc-200 pt-2 flex justify-between items-center text-sm font-black">
+                      <span className="text-zinc-900">Total Amount:</span>
+                      <span className="text-zinc-950 font-black text-base">{formatPesewas(subtotalPesewas)}</span>
                     </div>
                   </div>
 
                   {/* Payment Type Selection (50% Deposit vs Full) */}
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
                       Choose Payment Amount
                     </label>
                     <div className="grid grid-cols-2 gap-2">
@@ -1619,8 +1588,8 @@ function BookingWizardContent() {
                         onClick={() => setPaymentType("DEPOSIT")}
                         className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
                           paymentType === "DEPOSIT"
-                            ? "bg-white text-zinc-950 border-white shadow-md font-bold"
-                            : "bg-white/10 text-white border-white/10"
+                            ? "bg-zinc-950 text-white border-zinc-950 shadow-md font-bold"
+                            : "bg-zinc-100 text-zinc-800 border-zinc-200 hover:bg-zinc-200/80"
                         }`}
                       >
                         <span className="text-[10px] uppercase block opacity-75">Pay 50% Deposit</span>
@@ -1634,8 +1603,8 @@ function BookingWizardContent() {
                         onClick={() => setPaymentType("FULL")}
                         className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
                           paymentType === "FULL"
-                            ? "bg-white text-zinc-950 border-white shadow-md font-bold"
-                            : "bg-white/10 text-white border-white/10"
+                            ? "bg-zinc-950 text-white border-zinc-950 shadow-md font-bold"
+                            : "bg-zinc-100 text-zinc-800 border-zinc-200 hover:bg-zinc-200/80"
                         }`}
                       >
                         <span className="text-[10px] uppercase block opacity-75">Pay Full Amount</span>
@@ -1647,16 +1616,16 @@ function BookingWizardContent() {
                   </div>
 
                   {/* Cancellation Policy Checkbox */}
-                  <label className="flex items-start gap-2.5 cursor-pointer text-[11px] text-zinc-300 pt-1">
+                  <label className="flex items-start gap-2.5 cursor-pointer text-[11px] text-zinc-600 pt-1">
                     <input
                       type="checkbox"
                       checked={policyAgreed}
                       onChange={(e) => setPolicyAgreed(e.target.checked)}
-                      className="mt-0.5 rounded border-white/30 bg-white/10 text-zinc-950 focus:ring-0 cursor-pointer"
+                      className="mt-0.5 rounded border-zinc-300 text-zinc-950 focus:ring-zinc-950 cursor-pointer"
                     />
                     <span>
                       I agree to the{" "}
-                      <Link href="/policies" target="_blank" className="text-amber-200 underline font-bold">
+                      <Link href="/policies" target="_blank" className="text-zinc-950 underline font-bold">
                         Studio Policies
                       </Link>
                       , including the 24-hr reschedule window and 15-min grace period.
@@ -1669,12 +1638,12 @@ function BookingWizardContent() {
             {/* =====================================================================
                 BOTTOM ACTION BAR (Sticky & Visible at all times with Live Cart Total)
             ===================================================================== */}
-            <div className="pt-2.5 sm:pt-3 border-t border-white/10 flex items-center gap-2 shrink-0 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
+            <div className="pt-2.5 sm:pt-3 border-t border-zinc-200/80 flex items-center gap-2 shrink-0 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
               {step > 1 && (
                 <button
                   type="button"
                   onClick={() => setStep((step - 1) as 1 | 2 | 3 | 4)}
-                  className="h-11 sm:h-12 px-4 rounded-full bg-white/10 hover:bg-white/15 text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer shrink-0"
+                  className="h-11 sm:h-12 px-4 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer shrink-0 border border-zinc-200"
                 >
                   Back
                 </button>
@@ -1685,10 +1654,10 @@ function BookingWizardContent() {
                   type="button"
                   onClick={handleNext}
                   disabled={selectedServiceIds.length === 0}
-                  className={`flex-1 h-11 sm:h-12 rounded-full font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-between px-4 sm:px-5 cursor-pointer ${
+                  className={`flex-1 h-11 sm:h-12 rounded-full font-black text-xs uppercase tracking-wider transition-all shadow-md active:scale-98 flex items-center justify-between px-4 sm:px-5 cursor-pointer ${
                     selectedServiceIds.length > 0
-                      ? "bg-white text-zinc-950 hover:bg-zinc-100"
-                      : "bg-white/15 text-zinc-400 cursor-not-allowed opacity-60"
+                      ? "bg-zinc-950 text-white hover:bg-black"
+                      : "bg-zinc-200 text-zinc-400 cursor-not-allowed opacity-60"
                   }`}
                 >
                   <span className="font-bold text-[11px] sm:text-xs truncate mr-2">
@@ -1708,10 +1677,10 @@ function BookingWizardContent() {
                   type="button"
                   onClick={handleNext}
                   disabled={!selectedSlot}
-                  className={`flex-1 h-11 sm:h-12 rounded-full font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-between px-4 sm:px-5 cursor-pointer ${
+                  className={`flex-1 h-11 sm:h-12 rounded-full font-black text-xs uppercase tracking-wider transition-all shadow-md active:scale-98 flex items-center justify-between px-4 sm:px-5 cursor-pointer ${
                     selectedSlot
-                      ? "bg-white text-zinc-950 hover:bg-zinc-100"
-                      : "bg-white/15 text-zinc-400 cursor-not-allowed opacity-60"
+                      ? "bg-zinc-950 text-white hover:bg-black"
+                      : "bg-zinc-200 text-zinc-400 cursor-not-allowed opacity-60"
                   }`}
                 >
                   <span className="font-bold text-[11px] sm:text-xs truncate mr-2">
@@ -1735,7 +1704,7 @@ function BookingWizardContent() {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="flex-1 h-11 sm:h-12 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+                  className="flex-1 h-11 sm:h-12 rounded-full bg-zinc-950 hover:bg-black text-white font-black text-xs uppercase tracking-wider transition-all shadow-md active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Review Booking</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -1747,7 +1716,7 @@ function BookingWizardContent() {
                   type="button"
                   disabled={submittingBooking || !policyAgreed}
                   onClick={handleFinalSubmit}
-                  className="flex-1 h-11 sm:h-12 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-black text-xs uppercase tracking-wider transition-all shadow-xl active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 h-11 sm:h-12 rounded-full bg-zinc-950 hover:bg-black text-white font-black text-xs uppercase tracking-wider transition-all shadow-md active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <CreditCard className="w-4 h-4" />
                   <span>
