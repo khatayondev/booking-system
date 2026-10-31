@@ -160,17 +160,18 @@ export default function CustomerPublicPage() {
       ========================================================================= */}
       <section className="w-full max-w-full overflow-x-hidden p-0 bg-zinc-950">
         <div className="relative w-full overflow-hidden shadow-2xl bg-[#18191c] flex flex-col justify-between min-h-[740px] sm:min-h-[820px] lg:min-h-[880px]">
-          {/* Minimalist Studio Interior Background (Deep graphite wall with amber sofa) */}
+          {/* Hero Beauty Background (Radiant Ghanaian bridal glam & lash artistry) */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/minimalist_studio_hero.jpg"
-              alt="Becca's Crown Beauty Vault Minimalist Studio"
+              src="/images/william-boateng-YE8pmhb_swo-unsplash.jpg"
+              alt="Becca's Crown Beauty Vault Artistry"
               fill
               priority
-              className="object-cover object-bottom scale-100"
+              className="object-cover object-[center_35%] scale-100"
+              sizes="100vw"
             />
-            {/* Ambient Vignette for Crisp Contrast */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/25 to-black/35" />
+            {/* Ambient Vignette for Crisp Contrast & Legibility */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/35 to-black/60" />
           </div>
 
           {/* ===================================================================
