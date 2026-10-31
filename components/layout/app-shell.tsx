@@ -217,12 +217,12 @@ export function AppShell({
   ];
 
   const sidebarContent = (
-    <div className="flex flex-col h-full justify-between select-none">
+    <div className="flex flex-col h-full justify-between select-none overflow-hidden">
       <div>
         {/* Brand */}
         <Link
           href="/dashboard"
-          className="flex items-center gap-2.5 px-3 py-3 mb-6 rounded-2xl hover:bg-white/5 transition-colors group"
+          className="flex items-center gap-2.5 px-3 py-2.5 mb-4 rounded-2xl hover:bg-white/5 transition-colors group"
         >
           <div className="w-9 h-9 rounded-2xl bg-zinc-900 border border-white/15 text-white flex items-center justify-center font-bold text-sm shadow-md shrink-0 group-hover:border-amber-400/50 transition-colors">
             <Crown className="w-4 h-4 text-amber-300" />
@@ -234,11 +234,11 @@ export function AppShell({
         </Link>
 
         {/* Nav Sections */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {navSections.map((section, idx) => (
-            <div key={idx} className="space-y-1">
+            <div key={idx} className="space-y-0.5">
               {section.title && (
-                <p className="px-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5">
+                <p className="px-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">
                   {section.title}
                 </p>
               )}
@@ -250,7 +250,7 @@ export function AppShell({
                     href={item.href}
                     onClick={() => setMobileDrawerOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all",
+                      "flex items-center gap-3 px-3.5 py-2 rounded-full text-xs font-semibold transition-all",
                       isActive
                         ? "bg-white text-zinc-950 font-bold shadow-md"
                         : "text-zinc-300 hover:text-white hover:bg-white/10"
@@ -267,7 +267,7 @@ export function AppShell({
       </div>
 
       {/* Settings at Bottom */}
-      <div className="pt-4 border-t border-white/10 space-y-2 mt-6">
+      <div className="pt-3 border-t border-white/10 space-y-2 mt-4 shrink-0">
         <InstallPwaButton variant="sidebar" />
         <Link
           href="/settings"
@@ -288,8 +288,8 @@ export function AppShell({
 
   return (
     <div className="min-h-screen bg-[#F4F4F6] text-[#1E1E1E] flex flex-row antialiased">
-      {/* 1. Desktop Static Full-Height Pure Black Sidebar */}
-      <aside className="hidden lg:flex w-64 h-screen sticky top-0 shrink-0 bg-black text-white border-r border-white/10 p-5 flex-col justify-between overflow-y-auto z-40">
+      {/* 1. Desktop Fixed Full-Screen Pure Black Sidebar (Never scrolls) */}
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 h-screen bg-black text-white border-r border-white/10 p-5 flex-col justify-between overflow-hidden z-40 select-none">
         {sidebarContent}
       </aside>
 
@@ -304,8 +304,8 @@ export function AppShell({
         {sidebarContent}
       </Drawer>
 
-      {/* 3. Main Dashboard Body (Header + Content) */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+      {/* 3. Main Dashboard Body (Offset by fixed sidebar width on desktop) */}
+      <div className="flex-1 lg:pl-64 flex flex-col min-w-0 min-h-screen">
         {/* Top Header */}
         <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-black/5 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
