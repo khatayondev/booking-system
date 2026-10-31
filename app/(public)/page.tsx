@@ -370,14 +370,14 @@ export default function CustomerPublicPage() {
           {/* ===================================================================
               CENTER EDITORIAL TYPOGRAPHY & PILL SEARCH BAR
           =================================================================== */}
-          <div className="relative z-10 px-4 sm:px-6 pt-10 sm:pt-14 pb-28 sm:pb-36 lg:pb-44 text-center max-w-4xl mx-auto">
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
+          <div className="relative z-10 px-4 sm:px-6 pt-12 sm:pt-16 lg:pt-20 pb-28 sm:pb-36 lg:pb-44 text-center max-w-5xl mx-auto">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.04] drop-shadow-md">
               Our artistry is
               <br />
               minimalistic &amp; modern
             </h1>
 
-            <p className="mt-4 sm:mt-5 text-xs sm:text-sm lg:text-base text-zinc-300 max-w-xl mx-auto font-normal leading-relaxed">
+            <p className="mt-5 sm:mt-6 text-sm sm:text-base lg:text-lg text-zinc-200 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-sm">
               We will be able to provide you with the best beauty experience
               from the master artisans at Becca&apos;s Crown Beauty Vault
             </p>
@@ -385,22 +385,22 @@ export default function CustomerPublicPage() {
             {/* Pill Search Bar matching reference */}
             <form
               onSubmit={handleSearchSubmit}
-              className="mt-6 sm:mt-8 max-w-md sm:max-w-lg mx-auto relative px-2"
+              className="mt-8 sm:mt-10 max-w-md sm:max-w-xl mx-auto relative px-2"
             >
-              <div className="relative flex items-center rounded-full border border-white/25 bg-black/35 backdrop-blur-md shadow-2xl px-5 py-3 transition-all focus-within:border-white/50 focus-within:bg-black/55">
+              <div className="relative flex items-center rounded-full border border-white/30 bg-black/40 backdrop-blur-md shadow-2xl px-5 sm:px-6 py-3.5 transition-all focus-within:border-white/60 focus-within:bg-black/60">
                 <input
                   type="text"
                   placeholder="Search for materials, styles, braids, lashes..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent text-xs sm:text-sm text-white placeholder-zinc-400 focus:outline-none pr-12"
+                  className="w-full bg-transparent text-xs sm:text-sm text-white placeholder-zinc-300 focus:outline-none pr-12 font-medium"
                 />
                 <button
                   type="submit"
                   aria-label="Search"
-                  className="absolute right-2.5 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-500 hover:bg-amber-400 text-black flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-md cursor-pointer"
+                  className="absolute right-2.5 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-black flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-md cursor-pointer"
                 >
-                  <Search className="w-4 h-4 text-black stroke-[2.5]" />
+                  <Search className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-black stroke-[2.5]" />
                 </button>
               </div>
             </form>
