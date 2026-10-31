@@ -2,17 +2,122 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Crown, Calendar, Menu, X, ArrowRight } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Search, Menu, X, ArrowRight, Calendar } from "lucide-react";
+
+interface SearchItem {
+  id: string;
+  title: string;
+  category: string;
+  rate: string;
+  duration?: string;
+  description?: string;
+}
+
+const SIGNATURE_TREATMENTS_FALLBACK: SearchItem[] = [
+  {
+    id: "a80c50b6-6f94-4aaa-8cff-d7558ffce78d",
+    title: "Full Frontal Lace Installation",
+    category: "HAIR & INSTALLS",
+    rate: "GH₵ 160.00",
+    duration: "90 min",
+    description: "Bleaching of knots, hairline customization, melting band press & precision sleek styling.",
+  },
+  {
+    id: "fbfb4850-4a54-43f1-97ef-f6833a296bc4",
+    title: "Bridal Soft Glam Makeup",
+    category: "BRIDAL GLAM",
+    rate: "GH₵ 550.00",
+    duration: "90 min",
+    description: "Camera-ready HD soft contour, skin glaze prep, handcrafted lash fan & 24hr sealing setting spray.",
+  },
+  {
+    id: "9731e67c-88bf-4124-ac04-3b3a1a1140d4",
+    title: "Mega Volume Russian Lashes",
+    category: "LASHES",
+    rate: "GH₵ 260.00",
+    duration: "120 min",
+    description: "Multi-dimensional fluffy volume fans custom mapped to your natural eye shape for supreme drama.",
+  },
+  {
+    id: "c0292917-7f05-4de9-956e-41130a586b7f",
+    title: "Luxury Jelly Spa Pedicure",
+    category: "PEDICURE & SPA",
+    rate: "GH₵ 160.00",
+    duration: "90 min",
+    description: "Gelatinous thermal soak, callus peel, sugar polish scrub, foot massage and gel color finish.",
+  },
+  {
+    id: "a0c6bda1-c2bb-45db-a5df-6f527e977f6b",
+    title: "Frontal Sleek High Pony",
+    category: "HAIR & INSTALLS",
+    rate: "GH₵ 200.00",
+    duration: "150 min",
+    description: "High tension sculpted sleek ponytail with customized ear-to-ear lace frontal melting.",
+  },
+  {
+    id: "834b6107-a2b3-4742-ab1f-fa6e4a6e3d10",
+    title: "Goddess Knotless Braids",
+    category: "HAIR & INSTALLS",
+    rate: "GH₵ 350.00",
+    duration: "180 min",
+    description: "Pain-free root feeding with human hair curls woven throughout for a full, lightweight silhouette.",
+  },
+];
 
 export function PublicNavbar() {
   const pathname = usePathname();
+  const router = useRouter();
+
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchOpen, setSearchOpen] = React.useState(false);
+  const [catalogItems, setCatalogItems] = React.useState<SearchItem[]>(SIGNATURE_TREATMENTS_FALLBACK);
+  const searchContainerRef = React.useRef<HTMLDivElement>(null);
+
+  // Load public catalog to power smart live search
+  React.useEffect(() => {
+    fetch("/api/catalog")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.data?.categories)) {
+          const items: SearchItem[] = [];
+          for (const cat of data.data.categories) {
+            for (const s of cat.services || []) {
+              items.push({
+                id: s.id,
+                title: s.name,
+                category: cat.name,
+                rate: `GH₵ ${(s.pricePesewas / 100).toFixed(2)}`,
+                duration: `${s.durationMin} min`,
+                description: s.description || "",
+              });
+            }
+          }
+          if (items.length > 0) {
+            setCatalogItems(items);
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Close mobile menu on route change
   React.useEffect(() => {
     setMobileMenuOpen(false);
+    setSearchOpen(false);
   }, [pathname]);
+
+  // Click outside to close smart search dropdown
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setSearchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Lock body scroll when mobile menu is open
   React.useEffect(() => {
@@ -26,52 +131,58 @@ export function PublicNavbar() {
     };
   }, [mobileMenuOpen]);
 
-  // On the homepage (integrated hero navbar), hide the global navbar
-  if (pathname === "/") {
-    return null;
-  }
+  const filteredSearch = React.useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const q = searchQuery.toLowerCase().trim();
+    return catalogItems
+      .filter(
+        (item) =>
+          item.title.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q) ||
+          (item.description && item.description.toLowerCase().includes(q))
+      )
+      .slice(0, 5);
+  }, [searchQuery, catalogItems]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchOpen(false);
+    if (searchQuery.trim()) {
+      router.push(`/our-services?q=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      router.push("/our-services");
+    }
+  };
 
   const navLinks = [
-    { href: "/our-services", label: "Services & Menu" },
+    { href: "/our-services", label: "Treatments" },
     { href: "/gallery", label: "Lookbook" },
+    { href: "/contact", label: "About Us" },
     { href: "/policies", label: "Policies" },
     { href: "/contact", label: "Contact" },
   ];
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-transparent transition-all pointer-events-none">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-3 sm:py-4 flex items-center justify-between gap-4 pointer-events-auto">
-          {/* Brand Logo in Apple Liquid Glass Capsule */}
-          <Link
-            href="/"
-            className="apple-glass-pill-light flex items-center gap-2.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full group cursor-pointer hover:scale-105 active:scale-95"
-          >
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-black/5 border border-black/10 flex items-center justify-center text-zinc-900 group-hover:scale-105 transition-transform">
-              <Crown className="w-3.5 h-3.5 text-amber-500" />
-            </div>
-            <div>
-              <span className="text-zinc-900 text-xs sm:text-sm font-black tracking-widest uppercase block leading-none">
-                BECCA&apos;S CROWN
-              </span>
-              <span className="text-[8px] sm:text-[9px] text-amber-600 font-bold tracking-wider block uppercase mt-0.5">
-                Beauty Vault
-              </span>
-            </div>
+      <header className="sticky top-0 z-50 w-full bg-zinc-950/90 backdrop-blur-xl border-b border-white/10 text-white shadow-xl transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex items-center justify-between gap-4 lg:gap-6">
+          {/* Brand Logo in Clean Modern Sans-Serif */}
+          <Link href="/" className="flex items-center gap-2 group cursor-pointer shrink-0">
+            <span className="text-white text-lg sm:text-2xl font-black tracking-tight group-hover:text-zinc-200 transition-colors">
+              Becca&apos;s Crown
+            </span>
           </Link>
 
-          {/* Center Desktop Navigation Links in Apple Liquid Glass Capsules */}
-          <nav className="hidden md:flex items-center gap-2 lg:gap-3 text-xs font-semibold">
-            {navLinks.map((link) => {
+          {/* Center Navigation Links matching reference */}
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs sm:text-sm font-medium">
+            {navLinks.map((link, idx) => {
               const isActive = pathname === link.href;
               return (
                 <Link
-                  key={link.href}
+                  key={`${link.href}-${idx}`}
                   href={link.href}
-                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-center ${
-                    isActive
-                      ? "apple-glass-pill-light-active scale-105"
-                      : "apple-glass-pill-light hover:scale-105 active:scale-95 text-zinc-800"
+                  className={`transition-colors cursor-pointer ${
+                    isActive ? "text-white font-bold" : "text-white/75 hover:text-white"
                   }`}
                 >
                   {link.label}
@@ -80,138 +191,225 @@ export function PublicNavbar() {
             })}
           </nav>
 
-          {/* Right Side: Currency, Book Button & Staff Portal */}
+          {/* Right Action: Smart Search Bar, Staff Portal & White Capsule "Book Now!" */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="apple-glass-pill-light hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-extrabold text-zinc-800">
-              <span>🇬🇭</span>
-              <span>GHS (GH₵)</span>
+            {/* Smart Search Bar (Compact in Navbar) */}
+            <div ref={searchContainerRef} className="relative">
+              <form onSubmit={handleSearchSubmit} className="relative">
+                <div className="flex items-center rounded-full border border-white/20 bg-white/10 hover:bg-white/15 focus-within:bg-zinc-950/95 focus-within:border-white/50 focus-within:ring-1 focus-within:ring-white/30 backdrop-blur-md px-3 py-1.5 transition-all w-28 sm:w-44 md:w-52 lg:w-60 focus-within:w-52 sm:focus-within:w-64 md:focus-within:w-72">
+                  <Search className="w-3.5 h-3.5 text-zinc-300 mr-1.5 sm:mr-2 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="Search services..."
+                    value={searchQuery}
+                    onFocus={() => setSearchOpen(true)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setSearchOpen(true);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Escape") setSearchOpen(false);
+                    }}
+                    className="w-full bg-transparent text-xs text-white placeholder-zinc-400 focus:outline-none"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery("");
+                        setSearchOpen(false);
+                      }}
+                      className="text-zinc-400 hover:text-white p-0.5 shrink-0"
+                      aria-label="Clear search"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+              </form>
+
+              {/* Smart Dropdown Autocomplete */}
+              {searchOpen && searchQuery.trim().length > 0 && (
+                <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 max-h-80 overflow-y-auto rounded-2xl bg-zinc-950/95 backdrop-blur-2xl border border-white/20 shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                    {filteredSearch.length > 0 ? "Matching Treatments" : "No exact match"}
+                  </div>
+
+                  {filteredSearch.length > 0 ? (
+                    <div className="space-y-1">
+                      {filteredSearch.map((item) => (
+                        <Link
+                          key={item.id}
+                          href={`/book?serviceId=${item.id}&step=2`}
+                          onClick={() => setSearchOpen(false)}
+                          className="flex items-center justify-between p-2 rounded-xl hover:bg-white/10 transition-colors group cursor-pointer"
+                        >
+                          <div className="min-w-0 pr-2">
+                            <div className="text-xs font-bold text-white group-hover:text-amber-300 transition-colors truncate">
+                              {item.title}
+                            </div>
+                            <div className="text-[10px] text-zinc-400">
+                              {item.category} • {item.duration}
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <div className="text-xs font-mono font-bold text-amber-300">
+                              {item.rate}
+                            </div>
+                            <span className="text-[9px] uppercase font-bold text-emerald-400 group-hover:underline">
+                              Book →
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+
+                      <Link
+                        href={`/our-services?q=${encodeURIComponent(searchQuery.trim())}`}
+                        onClick={() => setSearchOpen(false)}
+                        className="block text-center pt-2 pb-1 border-t border-white/10 text-[11px] font-bold text-zinc-300 hover:text-white transition-colors"
+                      >
+                        View all results for &ldquo;{searchQuery}&rdquo; →
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="p-3 text-center space-y-2">
+                      <p className="text-xs text-zinc-400">No services matching &ldquo;{searchQuery}&rdquo;</p>
+                      <Link
+                        href="/our-services"
+                        onClick={() => setSearchOpen(false)}
+                        className="inline-block text-[11px] text-amber-300 font-bold hover:underline"
+                      >
+                        Browse All Catalog Services →
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
-            <Link href="/book" className="hidden sm:inline-block">
-              <button
-                type="button"
-                className="apple-glass-pill-light-active inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full font-black text-xs uppercase tracking-wider transition-all active:scale-95 cursor-pointer hover:scale-105"
-              >
-                <Calendar className="w-3.5 h-3.5 text-amber-400" />
-                <span>Book Now</span>
-              </button>
+            {/* Staff Subdomain Portal */}
+            <Link
+              href="https://dashboard.beccascrownbeauty.com"
+              className="hidden md:inline-flex items-center px-3 py-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white text-[11px] font-semibold transition-all cursor-pointer shrink-0"
+            >
+              Staff
             </Link>
 
-            <Link href="/login" className="hidden lg:inline-block">
-              <button
-                type="button"
-                className="apple-glass-pill-light px-3.5 py-1.5 rounded-full text-zinc-700 hover:text-black text-[11px] font-bold transition-all cursor-pointer hover:scale-105 active:scale-95"
-              >
-                Staff Portal
-              </button>
+            {/* White Background Capsule: Book Now! */}
+            <Link
+              href="/book"
+              className="inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-bold text-xs sm:text-sm tracking-tight transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 cursor-pointer shrink-0"
+            >
+              Book Now!
             </Link>
 
-            {/* Mobile Regular Burger Icon Button */}
+            {/* Mobile Menu Toggle */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden apple-glass-pill-light w-10 h-10 rounded-full flex items-center justify-center text-zinc-900 hover:text-black active:scale-90 transition-all cursor-pointer"
+              className="lg:hidden text-white/90 hover:text-white transition-colors cursor-pointer p-1"
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Navigation Drawer / Dropdown Menu */}
+      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-50 flex flex-col justify-start">
-          {/* Backdrop */}
+        <div className="lg:hidden fixed inset-0 z-50 flex flex-col justify-start">
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
-
-          {/* Sliding Menu Panel */}
-          <div className="relative z-10 bg-white/95 backdrop-blur-xl border-b border-zinc-200/80 shadow-2xl rounded-b-3xl p-5 pt-4 space-y-5 animate-in slide-in-from-top-4 duration-200">
-            {/* Top Bar inside Menu */}
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
+          <div className="relative z-10 bg-[#141210]/95 backdrop-blur-2xl border-b border-white/15 shadow-2xl rounded-b-3xl p-5 pt-5 space-y-5 animate-in slide-in-from-top-4 duration-200 text-white">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2.5"
+                className="flex items-center gap-2"
               >
-                <div className="w-7 h-7 rounded-full bg-black/5 border border-black/10 flex items-center justify-center text-zinc-900">
-                  <Crown className="w-3.5 h-3.5 text-amber-500" />
-                </div>
-                <div>
-                  <span className="text-zinc-900 text-xs font-black tracking-widest uppercase block leading-none">
-                    BECCA&apos;S CROWN
-                  </span>
-                  <span className="text-[8px] text-amber-600 font-bold tracking-wider block uppercase mt-0.5">
-                    Beauty Vault
-                  </span>
-                </div>
+                <span className="text-white text-base font-bold tracking-tight">
+                  Becca&apos;s Crown
+                </span>
               </Link>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 flex items-center justify-center text-zinc-700 active:scale-90 transition-all"
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white active:scale-90 transition-all"
                 aria-label="Close menu"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Navigation Links */}
+            {/* Mobile Search */}
+            <form
+              onSubmit={(e) => {
+                setMobileMenuOpen(false);
+                handleSearchSubmit(e);
+              }}
+              className="relative"
+            >
+              <div className="flex items-center rounded-2xl border border-white/20 bg-white/10 px-3.5 py-2.5">
+                <Search className="w-4 h-4 text-zinc-400 mr-2 shrink-0" />
+                <input
+                  type="text"
+                  placeholder="Search braids, lashes, installs..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-transparent text-xs text-white placeholder-zinc-400 focus:outline-none"
+                />
+              </div>
+            </form>
+
             <nav className="flex flex-col gap-1.5">
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between ${
-                  pathname === "/"
-                    ? "bg-[#1E1E1E] text-white shadow-sm"
-                    : "hover:bg-zinc-100 text-zinc-800"
+                className={`px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between ${
+                  pathname === "/" ? "bg-white/15 text-white" : "hover:bg-white/10 text-zinc-200 hover:text-white"
                 }`}
               >
                 <span>Home</span>
-                <ArrowRight className="w-4 h-4 opacity-40" />
+                <ArrowRight className="w-4 h-4 opacity-50" />
               </Link>
-              {navLinks.map((link) => {
+              {navLinks.map((link, idx) => {
                 const isActive = pathname === link.href;
                 return (
                   <Link
-                    key={link.href}
+                    key={`mobile-${link.href}-${idx}`}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-4 py-3 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center justify-between ${
-                      isActive
-                        ? "bg-[#1E1E1E] text-white shadow-sm"
-                        : "hover:bg-zinc-100 text-zinc-800"
+                    className={`px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between ${
+                      isActive ? "bg-white/15 text-white" : "hover:bg-white/10 text-zinc-200 hover:text-white"
                     }`}
                   >
                     <span>{link.label}</span>
-                    <ArrowRight className="w-4 h-4 opacity-40" />
+                    <ArrowRight className="w-4 h-4 opacity-50" />
                   </Link>
                 );
               })}
             </nav>
 
-            {/* Actions: Book Now & Staff Portal */}
-            <div className="pt-2 border-t border-zinc-100 space-y-2.5">
+            <div className="pt-2 border-t border-white/10 space-y-2.5">
               <Link href="/book" onClick={() => setMobileMenuOpen(false)}>
                 <button
                   type="button"
-                  className="w-full bg-[#FACC15] hover:bg-[#EAB308] text-black font-extrabold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-95 transition-transform"
+                  className="w-full bg-white hover:bg-zinc-100 text-zinc-950 font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg cursor-pointer active:scale-95 transition-transform"
                 >
                   <Calendar className="w-4 h-4" />
-                  <span>Book Appointment</span>
+                  <span>Book Now!</span>
                 </button>
               </Link>
-
-              <div className="flex items-center justify-between text-xs text-zinc-500 pt-1 px-1">
+              <div className="flex items-center justify-between text-xs text-zinc-400 pt-1 px-1">
                 <span className="font-semibold text-[11px]">🇬🇭 Ghana • GHS (GH₵)</span>
                 <Link
-                  href="/login"
+                  href="https://dashboard.beccascrownbeauty.com"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="font-bold text-[11px] text-zinc-800 hover:text-black"
+                  className="font-bold text-[11px] text-zinc-300 hover:text-white"
                 >
                   Staff Portal →
                 </Link>

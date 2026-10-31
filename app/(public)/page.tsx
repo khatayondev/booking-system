@@ -3,19 +3,12 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import {
   ArrowRight,
-  ArrowDownRight,
   ArrowUpRight,
   ChevronLeft,
   ChevronRight,
   Star,
-  Crown,
-  Menu,
-  X,
-  Calendar,
-  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -105,96 +98,7 @@ const VAULT_SUITES = [
   },
 ];
 
-interface SearchItem {
-  id: string;
-  title: string;
-  category: string;
-  rate: string;
-  duration?: string;
-  description?: string;
-}
-
 export default function CustomerPublicPage() {
-  const router = useRouter();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [searchOpen, setSearchOpen] = React.useState(false);
-  const [catalogItems, setCatalogItems] = React.useState<SearchItem[]>(ALL_SIGNATURE_TREATMENTS);
-  const searchContainerRef = React.useRef<HTMLDivElement>(null);
-
-  // Load public catalog to power smart live search
-  React.useEffect(() => {
-    fetch("/api/catalog")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.data?.categories)) {
-          const items: SearchItem[] = [];
-          for (const cat of data.data.categories) {
-            for (const s of cat.services || []) {
-              items.push({
-                id: s.id,
-                title: s.name,
-                category: cat.name,
-                rate: `GH₵ ${(s.pricePesewas / 100).toFixed(2)}`,
-                duration: `${s.durationMin} min`,
-                description: s.description || "",
-              });
-            }
-          }
-          if (items.length > 0) {
-            setCatalogItems(items);
-          }
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  // Close smart dropdown on click outside
-  React.useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
-        setSearchOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const filteredSearch = React.useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    const q = searchQuery.toLowerCase().trim();
-    return catalogItems
-      .filter(
-        (item) =>
-          item.title.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q) ||
-          (item.description && item.description.toLowerCase().includes(q))
-      )
-      .slice(0, 5);
-  }, [searchQuery, catalogItems]);
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearchOpen(false);
-    if (searchQuery.trim()) {
-      router.push(`/our-services?q=${encodeURIComponent(searchQuery.trim())}`);
-    } else {
-      router.push("/our-services");
-    }
-  };
-
-  // Lock body scroll when mobile menu is open
-  React.useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileMenuOpen]);
-
   // Section 02 Category Filter State
   const [activeFilter, setActiveFilter] = React.useState<string>("ALL");
   const [carouselIndex, setCarouselIndex] = React.useState<number>(0);
@@ -217,10 +121,10 @@ export default function CustomerPublicPage() {
   return (
     <div className="w-full max-w-full overflow-x-hidden bg-white text-[#18181B] selection:bg-black selection:text-white pb-12">
       {/* =========================================================================
-          HERO SECTION (Minimalistic & Modern Minimalist Studio with Hotspots & Glass Card)
+          HERO SECTION (Minimalistic & Modern Studio with Radiant Ghanaian Artistry)
       ========================================================================= */}
       <section className="w-full max-w-full overflow-x-hidden p-0 bg-zinc-950">
-        <div className="relative w-full overflow-hidden shadow-2xl bg-[#18191c] flex flex-col justify-between min-h-[740px] sm:min-h-[820px] lg:min-h-[880px]">
+        <div className="relative w-full overflow-hidden shadow-2xl bg-[#18191c] flex flex-col justify-center min-h-[680px] sm:min-h-[760px] lg:min-h-[820px]">
           {/* Hero Beauty Background (Radiant Ghanaian bridal glam & lash artistry) */}
           <div className="absolute inset-0 z-0">
             <Image
@@ -236,280 +140,9 @@ export default function CustomerPublicPage() {
           </div>
 
           {/* ===================================================================
-              NAVBAR (Sleek, Minimalist, Floating at Top matching reference)
-          =================================================================== */}
-          <header className="relative z-30 w-full px-5 sm:px-10 lg:px-14 pt-6 sm:pt-8 pb-3">
-            <div className="flex items-center justify-between gap-6 max-w-7xl mx-auto">
-              {/* Brand Logo in Clean Modern Sans-Serif */}
-              <Link
-                href="/"
-                className="flex items-center gap-2 group cursor-pointer"
-              >
-                <span className="text-white text-xl sm:text-2xl font-black tracking-tight group-hover:text-zinc-200 transition-colors">
-                  Becca&apos;s Crown
-                </span>
-              </Link>
-
-              {/* Center Navigation Links matching reference */}
-              <nav className="hidden md:flex items-center gap-7 lg:gap-10 text-xs sm:text-sm font-medium">
-                <Link
-                  href="/our-services"
-                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
-                >
-                  Treatments
-                </Link>
-                <Link
-                  href="/gallery"
-                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
-                >
-                  Lookbook
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
-                >
-                  About Us
-                </Link>
-                <Link
-                  href="/policies"
-                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
-                >
-                  Policies
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-white/75 hover:text-white transition-colors cursor-pointer"
-                >
-                  Contact
-                </Link>
-              </nav>
-
-              {/* Right Action: Smart Search Bar, Staff Portal & White Capsule "Book Now!" */}
-              <div className="flex items-center gap-2 sm:gap-3">
-                {/* Smart Search Bar (Compact in Navbar) */}
-                <div ref={searchContainerRef} className="relative">
-                  <form onSubmit={handleSearchSubmit} className="relative">
-                    <div className="flex items-center rounded-full border border-white/20 bg-white/10 hover:bg-white/15 focus-within:bg-zinc-950/95 focus-within:border-white/50 focus-within:ring-1 focus-within:ring-white/30 backdrop-blur-md px-3 py-1.5 transition-all w-28 sm:w-44 md:w-52 lg:w-60 focus-within:w-52 sm:focus-within:w-64 md:focus-within:w-72">
-                      <Search className="w-3.5 h-3.5 text-zinc-300 mr-1.5 sm:mr-2 shrink-0" />
-                      <input
-                        type="text"
-                        placeholder="Search services..."
-                        value={searchQuery}
-                        onFocus={() => setSearchOpen(true)}
-                        onChange={(e) => {
-                          setSearchQuery(e.target.value);
-                          setSearchOpen(true);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Escape") setSearchOpen(false);
-                        }}
-                        className="w-full bg-transparent text-xs text-white placeholder-zinc-400 focus:outline-none"
-                      />
-                      {searchQuery && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSearchQuery("");
-                            setSearchOpen(false);
-                          }}
-                          className="text-zinc-400 hover:text-white p-0.5 shrink-0"
-                          aria-label="Clear search"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      )}
-                    </div>
-                  </form>
-
-                  {/* Smart Dropdown Autocomplete */}
-                  {searchOpen && searchQuery.trim().length > 0 && (
-                    <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 max-h-80 overflow-y-auto rounded-2xl bg-zinc-950/95 backdrop-blur-2xl border border-white/20 shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150">
-                      <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-                        {filteredSearch.length > 0 ? "Matching Treatments" : "No exact match"}
-                      </div>
-
-                      {filteredSearch.length > 0 ? (
-                        <div className="space-y-1">
-                          {filteredSearch.map((item) => (
-                            <Link
-                              key={item.id}
-                              href={`/book?serviceId=${item.id}&step=2`}
-                              onClick={() => setSearchOpen(false)}
-                              className="flex items-center justify-between p-2 rounded-xl hover:bg-white/10 transition-colors group cursor-pointer"
-                            >
-                              <div className="min-w-0 pr-2">
-                                <div className="text-xs font-bold text-white group-hover:text-amber-300 transition-colors truncate">
-                                  {item.title}
-                                </div>
-                                <div className="text-[10px] text-zinc-400">
-                                  {item.category} • {item.duration}
-                                </div>
-                              </div>
-                              <div className="text-right shrink-0">
-                                <div className="text-xs font-mono font-bold text-amber-300">
-                                  {item.rate}
-                                </div>
-                                <span className="text-[9px] uppercase font-bold text-emerald-400 group-hover:underline">
-                                  Book →
-                                </span>
-                              </div>
-                            </Link>
-                          ))}
-
-                          <Link
-                            href={`/our-services?q=${encodeURIComponent(searchQuery.trim())}`}
-                            onClick={() => setSearchOpen(false)}
-                            className="block text-center pt-2 pb-1 border-t border-white/10 text-[11px] font-bold text-zinc-300 hover:text-white transition-colors"
-                          >
-                            View all results for &ldquo;{searchQuery}&rdquo; →
-                          </Link>
-                        </div>
-                      ) : (
-                        <div className="p-3 text-center space-y-2">
-                          <p className="text-xs text-zinc-400">No services matching &ldquo;{searchQuery}&rdquo;</p>
-                          <Link
-                            href="/our-services"
-                            onClick={() => setSearchOpen(false)}
-                            className="inline-block text-[11px] text-amber-300 font-bold hover:underline"
-                          >
-                            Browse All Catalog Services →
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Staff Subdomain Portal */}
-                <Link
-                  href="https://dashboard.beccascrownbeauty.com"
-                  className="hidden md:inline-flex items-center px-3 py-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white text-[11px] font-semibold transition-all cursor-pointer shrink-0"
-                >
-                  Staff
-                </Link>
-
-                {/* White Background Capsule: Book Now! */}
-                <Link
-                  href="/book"
-                  className="inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-bold text-xs sm:text-sm tracking-tight transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 cursor-pointer shrink-0"
-                >
-                  Book Now!
-                </Link>
-
-                {/* Mobile Menu Toggle */}
-                <button
-                  type="button"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="lg:hidden text-white/90 hover:text-white transition-colors cursor-pointer p-1"
-                  aria-label="Toggle navigation menu"
-                >
-                  {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </button>
-              </div>
-            </div>
-          </header>
-
-          {/* Mobile Drawer Menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden fixed inset-0 z-50 flex flex-col justify-start">
-              <div
-                className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
-                onClick={() => setMobileMenuOpen(false)}
-                aria-hidden="true"
-              />
-              <div className="relative z-10 bg-[#141210]/95 backdrop-blur-2xl border-b border-white/15 shadow-2xl rounded-b-3xl p-5 pt-5 space-y-5 animate-in slide-in-from-top-4 duration-200 text-white">
-                <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                  <Link
-                    href="/"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2"
-                  >
-                    <span className="text-white text-base font-bold tracking-tight">
-                      Becca&apos;s Crown
-                    </span>
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white active:scale-90 transition-all"
-                    aria-label="Close menu"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <nav className="flex flex-col gap-1.5">
-                  <Link
-                    href="/"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between bg-white/10 text-white shadow-xs"
-                  >
-                    <span>Home</span>
-                    <ArrowRight className="w-4 h-4 opacity-50" />
-                  </Link>
-                  <Link
-                    href="/our-services"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
-                  >
-                    <span>Treatments</span>
-                    <ArrowRight className="w-4 h-4 opacity-50" />
-                  </Link>
-                  <Link
-                    href="/gallery"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
-                  >
-                    <span>Lookbook</span>
-                    <ArrowRight className="w-4 h-4 opacity-50" />
-                  </Link>
-                  <Link
-                    href="/policies"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
-                  >
-                    <span>Policies</span>
-                    <ArrowRight className="w-4 h-4 opacity-50" />
-                  </Link>
-                  <Link
-                    href="/contact"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between hover:bg-white/10 text-zinc-200 hover:text-white"
-                  >
-                    <span>Contact</span>
-                    <ArrowRight className="w-4 h-4 opacity-50" />
-                  </Link>
-                </nav>
-
-                <div className="pt-2 border-t border-white/10 space-y-2.5">
-                  <Link href="/book" onClick={() => setMobileMenuOpen(false)}>
-                    <button
-                      type="button"
-                      className="w-full bg-amber-400 hover:bg-amber-300 text-black font-extrabold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg cursor-pointer active:scale-95 transition-transform"
-                    >
-                      <Calendar className="w-4 h-4" />
-                      <span>Book Appointment</span>
-                    </button>
-                  </Link>
-                  <div className="flex items-center justify-between text-xs text-zinc-400 pt-1 px-1">
-                    <span className="font-semibold text-[11px]">🇬🇭 Ghana • GHS (GH₵)</span>
-                    <Link
-                      href="https://dashboard.beccascrownbeauty.com"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="font-bold text-[11px] text-zinc-300 hover:text-white"
-                    >
-                      Staff Portal →
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ===================================================================
               CENTER EDITORIAL TYPOGRAPHY & HERO CTA PILL
           =================================================================== */}
-          <div className="relative z-10 px-4 sm:px-6 pt-12 sm:pt-16 lg:pt-20 pb-28 sm:pb-36 lg:pb-44 text-center max-w-5xl mx-auto">
+          <div className="relative z-10 px-4 sm:px-6 py-24 sm:py-32 lg:py-36 text-center max-w-5xl mx-auto">
             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.04] drop-shadow-md">
               Our artistry is
               <br />
