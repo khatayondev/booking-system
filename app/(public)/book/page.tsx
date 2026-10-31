@@ -869,11 +869,6 @@ function BookingWizardContent() {
 
             {/* The Text Below Her */}
             <div className="space-y-4 max-w-[500px]">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold text-amber-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                <span>Step 0{step} of 04</span>
-              </div>
-
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.08] text-white">
                 {STEP_BACKGROUNDS[step].title}
               </h1>
@@ -924,7 +919,7 @@ function BookingWizardContent() {
                 <span className="text-[10px] font-bold text-amber-200 tracking-wider uppercase">Becca&apos;s Crown</span>
               </div>
               <h2 className="text-sm font-bold text-white truncate">{STEP_BACKGROUNDS[step].title}</h2>
-              <p className="text-[11px] text-zinc-400 truncate">Step 0{step} of 04 • {STEP_BACKGROUNDS[step].subtitle}</p>
+              <p className="text-[11px] text-zinc-400 truncate">{STEP_BACKGROUNDS[step].subtitle}</p>
             </div>
           </div>
 
@@ -1341,9 +1336,6 @@ function BookingWizardContent() {
                         <div>
                           <div className="flex items-center gap-1.5">
                             <span className="text-xs font-bold text-zinc-900">VIP Birthday Perk</span>
-                            <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-200/80 text-amber-800 border border-amber-300/80">
-                              Optional
-                            </span>
                           </div>
                           <p className="text-[11px] text-zinc-600 leading-tight">
                             Unlock complimentary birthday styling perks and gifts.

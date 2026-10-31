@@ -200,11 +200,6 @@ export default function CustomerPublicPage() {
                 className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 rounded-full bg-white/95 text-black text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                  Lace Installs & Ponies
-                </span>
-              </div>
               <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
                 <div>
                   <p className="text-xs text-amber-200 uppercase font-semibold tracking-wider">Precision Melting</p>
@@ -229,11 +224,6 @@ export default function CustomerPublicPage() {
                 className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 rounded-full bg-white/95 text-black text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                  Bridal & Soft Glam
-                </span>
-              </div>
               <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
                 <div>
                   <p className="text-xs text-amber-200 uppercase font-semibold tracking-wider">High Definition</p>
@@ -258,11 +248,6 @@ export default function CustomerPublicPage() {
                 className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 rounded-full bg-white/95 text-black text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                  Lashes & Pedicure
-                </span>
-              </div>
               <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
                 <div>
                   <p className="text-xs text-amber-200 uppercase font-semibold tracking-wider">Russian & Jelly Spa</p>
@@ -366,9 +351,6 @@ export default function CustomerPublicPage() {
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
-                    <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-white/95 text-[10px] font-bold text-zinc-800 shadow-xs">
-                      {item.category}
-                    </div>
                   </div>
 
                   {/* Description */}
@@ -480,12 +462,6 @@ export default function CustomerPublicPage() {
                       sizes="(max-width: 768px) 50vw, 20vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/35" />
-                    {/* Top Pill Tag */}
-                    <div className="absolute top-2.5 left-2.5 right-2.5">
-                      <span className="block text-center px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-[9px] font-bold text-white border border-white/25">
-                        {suite.title}
-                      </span>
-                    </div>
                     {/* Bottom Label */}
                     <div className="absolute bottom-2.5 left-2 right-2 text-center text-white">
                       <p className="text-[10px] font-bold text-amber-300">{suite.subtitle}</p>

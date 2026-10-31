@@ -96,9 +96,6 @@ export default function GalleryPage() {
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 640px) 100vw, 50vw"
                 />
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs text-[11px] font-bold text-[#1E1E1E] shadow-sm">
-                  {item.category}
-                </div>
               </div>
 
               <div className="p-6 space-y-4">
