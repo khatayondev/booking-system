@@ -434,7 +434,6 @@ export function AppShell({
 
           {/* Top Bar Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <InstallPwaButton variant="header" />
             {/* Search Trigger Button */}
             <Button
               variant="circularIcon"
