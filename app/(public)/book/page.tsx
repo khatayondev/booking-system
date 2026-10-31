@@ -773,20 +773,16 @@ function BookingWizardContent() {
         ========================================================================= */}
         <div className="hidden lg:flex lg:col-span-5 flex-col justify-center text-white pr-2 xl:pr-6">
           <div className="flex flex-col gap-5">
-            {/* Clear Image of Her */}
-            <div className="relative w-full max-w-[380px] aspect-square rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 ring-1 ring-white/10 group">
+            {/* Clear Image of Her (Clean, borderless, untagged) */}
+            <div className="relative w-full max-w-[380px] aspect-square rounded-3xl overflow-hidden">
               <Image
                 src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
                 alt="Becca's Crown Beauty Vault"
                 fill
                 priority
-                className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                className="object-cover object-center"
                 sizes="(max-width: 1024px) 100vw, 380px"
               />
-              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 flex items-center gap-2 shadow-lg">
-                <Crown className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-[10px] font-bold text-amber-200 tracking-wider uppercase">Becca&apos;s Crown Vault</span>
-              </div>
             </div>
 
             {/* The Text Below Her */}
@@ -830,7 +826,7 @@ function BookingWizardContent() {
         <div className="lg:col-span-7 w-full flex flex-col items-center justify-center">
           {/* Mobile/Tablet Header: Her Portrait & Step Title */}
           <div className="lg:hidden w-full max-w-xl flex items-center gap-3.5 p-3 rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/15 mb-3 text-white shadow-xl">
-            <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/20 bg-black">
+            <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0">
               <Image
                 src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
                 alt="Becca's Crown Beauty Vault"
