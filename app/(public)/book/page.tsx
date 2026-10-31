@@ -845,7 +845,7 @@ function BookingWizardContent() {
   }
 
   return (
-    <div className="relative min-h-[calc(100dvh-5rem)] w-full py-4 sm:py-6 lg:py-8 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-[#0B0A09]">
+    <div className="relative min-h-[calc(100dvh-2rem)] w-full pt-20 sm:pt-24 lg:pt-24 pb-6 sm:pb-8 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-[#0B0A09]">
       {/* Background canvas (Clean dark luxury contrast without murky overlays) */}
       <div className="fixed inset-0 z-0 bg-[#0B0A09] pointer-events-none" />
 

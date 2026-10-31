@@ -164,8 +164,8 @@ export function PublicNavbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-zinc-950/90 backdrop-blur-xl border-b border-white/10 text-white shadow-xl transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex items-center justify-between gap-4 lg:gap-6">
+      <header className="absolute top-0 left-0 right-0 z-50 w-full bg-transparent text-white transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-3.5 sm:py-5 flex items-center justify-between gap-4 lg:gap-6">
           {/* Brand Logo in Clean Modern Sans-Serif */}
           <Link href="/" className="flex items-center gap-2 group cursor-pointer shrink-0">
             <span className="text-white text-lg sm:text-2xl font-black tracking-tight group-hover:text-zinc-200 transition-colors">
