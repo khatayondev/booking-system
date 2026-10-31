@@ -13,9 +13,11 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function InstallPwaButton({
   variant = "sidebar",
+  collapsed = false,
   className,
 }: {
   variant?: "sidebar" | "header" | "mobile";
+  collapsed?: boolean;
   className?: string;
 }) {
   const [deferredPrompt, setDeferredPrompt] = React.useState<BeforeInstallPromptEvent | null>(null);
@@ -114,16 +116,24 @@ export function InstallPwaButton({
     <>
       <button
         onClick={handleInstallClick}
+        title="Install Studio App (PWA)"
         className={cn(
-          "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all text-white bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 shadow-xs cursor-pointer",
+          "transition-all text-white bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 shadow-xs cursor-pointer flex items-center justify-center",
+          collapsed
+            ? "w-10 h-10 mx-auto rounded-full"
+            : "w-full gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold",
           className
         )}
       >
         <Download className="w-4 h-4 shrink-0 text-amber-400" />
-        <span className="flex-1 text-left">Install Studio App</span>
-        <span className="text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-md bg-white/10 text-zinc-300">
-          PWA
-        </span>
+        {!collapsed && (
+          <>
+            <span className="flex-1 text-left">Install Studio App</span>
+            <span className="text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-md bg-white/10 text-zinc-300">
+              PWA
+            </span>
+          </>
+        )}
       </button>
 
       <IosInstallDialog

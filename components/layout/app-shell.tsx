@@ -25,6 +25,8 @@ import {
   Phone,
   UserCheck,
   LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -78,11 +80,35 @@ export function AppShell({
   const { user, isOwner, isManager, isStaff, hasPermission, hasRole } = useAuth();
   const router = useRouter();
   const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
   const [createDropdownOpen, setCreateDropdownOpen] = React.useState(false);
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [searchModalOpen, setSearchModalOpen] = React.useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = React.useState(false);
   const [loggingOut, setLoggingOut] = React.useState(false);
+
+  React.useEffect(() => {
+    try {
+      const saved = localStorage.getItem("beccas_sidebar_collapsed");
+      if (saved !== null) {
+        setSidebarCollapsed(saved === "true");
+      }
+    } catch {
+      // quiet
+    }
+  }, []);
+
+  const toggleSidebarCollapse = () => {
+    setSidebarCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem("beccas_sidebar_collapsed", String(next));
+      } catch {
+        // quiet
+      }
+      return next;
+    });
+  };
 
   const displayName = user?.name
     ? user.name.split(" ")[0]
@@ -321,31 +347,72 @@ export function AppShell({
     }))
     .filter((section) => section.items.length > 0);
 
-  const sidebarContent = (
+  const renderSidebarContent = (isCollapsed: boolean) => (
     <div className="flex flex-col h-full justify-between select-none overflow-hidden">
       <div>
-        {/* Brand */}
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2.5 px-3 py-2.5 mb-4 rounded-2xl hover:bg-white/5 transition-colors group"
-        >
-          <div className="w-9 h-9 rounded-2xl bg-zinc-900 border border-white/15 text-white flex items-center justify-center font-bold text-sm shadow-md shrink-0 group-hover:border-amber-400/50 transition-colors">
-            <Crown className="w-4 h-4 text-amber-300" />
+        {/* Brand & Collapse Toggle */}
+        {!isCollapsed ? (
+          <div className="flex items-center justify-between mb-4">
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2.5 px-2 py-1.5 rounded-2xl hover:bg-white/5 transition-colors group min-w-0"
+            >
+              <div className="w-9 h-9 rounded-2xl bg-zinc-900 border border-white/15 text-white flex items-center justify-center font-bold text-sm shadow-md shrink-0 group-hover:border-amber-400/50 transition-colors">
+                <Crown className="w-4 h-4 text-amber-300" />
+              </div>
+              <div className="min-w-0">
+                <h1 className="text-sm font-extrabold text-white tracking-tight leading-tight uppercase truncate">
+                  BECCA&apos;S CROWN
+                </h1>
+                <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold truncate">
+                  Beauty Vault • Accra
+                </p>
+              </div>
+            </Link>
+
+            <button
+              type="button"
+              onClick={toggleSidebarCollapse}
+              className="hidden lg:flex w-8 h-8 rounded-full items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors shrink-0 cursor-pointer"
+              title="Collapse sidebar"
+              aria-label="Collapse sidebar"
+            >
+              <PanelLeftClose className="w-4 h-4" />
+            </button>
           </div>
-          <div className="min-w-0">
-            <h1 className="text-sm font-extrabold text-white tracking-tight leading-tight uppercase">BECCA&apos;S CROWN</h1>
-            <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold">Beauty Vault • Accra</p>
+        ) : (
+          <div className="flex flex-col items-center gap-2.5 mb-4">
+            <Link
+              href="/dashboard"
+              className="w-10 h-10 rounded-2xl bg-zinc-900 border border-white/15 text-white flex items-center justify-center font-bold text-sm shadow-md hover:border-amber-400/50 transition-colors"
+              title="Becca's Crown Beauty Vault"
+            >
+              <Crown className="w-4 h-4 text-amber-300" />
+            </Link>
+            <button
+              type="button"
+              onClick={toggleSidebarCollapse}
+              className="hidden lg:flex w-8 h-8 rounded-full items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              title="Expand sidebar"
+              aria-label="Expand sidebar"
+            >
+              <PanelLeftOpen className="w-4 h-4" />
+            </button>
           </div>
-        </Link>
+        )}
 
         {/* Nav Sections */}
-        <div className="space-y-4">
+        <div className={cn("space-y-4", isCollapsed && "space-y-2")}>
           {visibleNavSections.map((section, idx) => (
-            <div key={idx} className="space-y-0.5">
+            <div key={idx} className="space-y-1">
               {section.title && (
-                <p className="px-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">
-                  {section.title}
-                </p>
+                !isCollapsed ? (
+                  <p className="px-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">
+                    {section.title}
+                  </p>
+                ) : (
+                  idx > 0 && <div className="w-6 h-px bg-white/10 mx-auto my-2" />
+                )
               )}
               {section.items.map((item) => {
                 const isActive = activePath === item.href;
@@ -354,15 +421,19 @@ export function AppShell({
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileDrawerOpen(false)}
+                    title={item.label}
                     className={cn(
-                      "flex items-center gap-3 px-3.5 py-2 rounded-full text-xs font-semibold transition-all",
+                      "flex items-center transition-all",
+                      isCollapsed
+                        ? "justify-center w-10 h-10 mx-auto rounded-full text-sm"
+                        : "gap-3 px-3.5 py-2 rounded-full text-xs font-semibold",
                       isActive
                         ? "bg-white text-zinc-950 font-bold shadow-md"
                         : "text-zinc-300 hover:text-white hover:bg-white/10"
                     )}
                   >
                     <span className="shrink-0">{item.icon}</span>
-                    <span>{item.label}</span>
+                    {!isCollapsed && <span>{item.label}</span>}
                   </Link>
                 );
               })}
@@ -371,20 +442,26 @@ export function AppShell({
         </div>
       </div>
 
-      {/* Settings at Bottom - Only visible to Owner & Managers */}
-      <div className="pt-3 border-t border-white/10 space-y-2 mt-4 shrink-0">
-        <InstallPwaButton variant="sidebar" />
+      {/* Settings at Bottom */}
+      <div className={cn("pt-3 border-t border-white/10 space-y-2 mt-4 shrink-0", isCollapsed && "space-y-1.5")}>
+        <InstallPwaButton variant="sidebar" collapsed={isCollapsed} />
         {canAccessSettings && (
           <Link
             href="/settings"
             onClick={() => setMobileDrawerOpen(false)}
+            title="Settings"
             className={cn(
-              "flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all text-zinc-300 hover:text-white hover:bg-white/10",
-              activePath === "/settings" && "bg-white text-zinc-950 font-bold shadow-md"
+              "flex items-center transition-all",
+              isCollapsed
+                ? "justify-center w-10 h-10 mx-auto rounded-full text-sm"
+                : "gap-3 px-3.5 py-2.5 rounded-full text-xs font-semibold",
+              activePath === "/settings"
+                ? "bg-white text-zinc-950 font-bold shadow-md"
+                : "text-zinc-300 hover:text-white hover:bg-white/10"
             )}
           >
             <Settings className="w-4 h-4 shrink-0" />
-            <span>Settings</span>
+            {!isCollapsed && <span>Settings</span>}
           </Link>
         )}
       </div>
@@ -395,12 +472,17 @@ export function AppShell({
 
   return (
     <div className="min-h-screen bg-[#F4F4F6] text-[#1E1E1E] flex flex-row antialiased">
-      {/* 1. Desktop Fixed Full-Screen Pure Black Sidebar (Never scrolls) */}
-      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 h-screen bg-black text-white border-r border-white/10 p-5 flex-col justify-between overflow-hidden z-40 select-none">
-        {sidebarContent}
+      {/* 1. Desktop Fixed Full-Screen Pure Black Sidebar (Collapsible, never scrolls) */}
+      <aside
+        className={cn(
+          "hidden lg:flex fixed inset-y-0 left-0 h-screen bg-black text-white border-r border-white/10 flex-col justify-between overflow-hidden z-40 select-none transition-all duration-300 ease-in-out",
+          sidebarCollapsed ? "w-20 p-3.5" : "w-64 p-5"
+        )}
+      >
+        {renderSidebarContent(sidebarCollapsed)}
       </aside>
 
-      {/* 2. Mobile Drawer with matching full black background and white content */}
+      {/* 2. Mobile Drawer with matching full black background and white content (Always full view) */}
       <Drawer
         isOpen={mobileDrawerOpen}
         onClose={() => setMobileDrawerOpen(false)}
@@ -408,11 +490,16 @@ export function AppShell({
         side="left"
         className="bg-black text-white border-r border-white/10"
       >
-        {sidebarContent}
+        {renderSidebarContent(false)}
       </Drawer>
 
-      {/* 3. Main Dashboard Body (Offset by fixed sidebar width on desktop) */}
-      <div className="flex-1 lg:pl-64 flex flex-col min-w-0 min-h-screen">
+      {/* 3. Main Dashboard Body (Offset by dynamic sidebar width on desktop with smooth transition) */}
+      <div
+        className={cn(
+          "flex-1 flex flex-col min-w-0 min-h-screen transition-all duration-300 ease-in-out",
+          sidebarCollapsed ? "lg:pl-20" : "lg:pl-64"
+        )}
+      >
         {/* Top Header */}
         <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-black/5 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -426,6 +513,23 @@ export function AppShell({
             >
               <Menu className="w-4 h-4" />
             </Button>
+
+            {/* Desktop collapse toggle trigger */}
+            <Button
+              variant="circularIcon"
+              size="iconSm"
+              className="hidden lg:flex cursor-pointer text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100"
+              onClick={toggleSidebarCollapse}
+              title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {sidebarCollapsed ? (
+                <PanelLeftOpen className="w-4 h-4" />
+              ) : (
+                <PanelLeftClose className="w-4 h-4" />
+              )}
+            </Button>
+
             <div>
               <h2 className="text-xl sm:text-2xl font-extrabold text-[#1E1E1E] tracking-tight">
                 Hi, {displayName}!
