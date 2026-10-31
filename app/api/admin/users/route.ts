@@ -178,7 +178,15 @@ export const POST = withErrorHandler(async (req: Request) => {
   });
 
   // Dispatch Welcome Email containing the email and generated temporary password
-  const loginUrl = `${env.APP_URL}/login`;
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  const proto = req.headers.get("x-forwarded-proto") || (host?.includes("localhost") ? "http" : "https");
+  const baseUrl = host && !host.includes("localhost")
+    ? `${proto}://${host}`
+    : env.APP_URL && !env.APP_URL.includes("localhost")
+    ? env.APP_URL
+    : "https://www.beccascrownbeauty.com";
+
+  const loginUrl = `${baseUrl}/login`;
   const roleFriendlyName =
     role.name === ROLES.FRONT_DESK
       ? "Front Desk Tablet (Operations & POS)"

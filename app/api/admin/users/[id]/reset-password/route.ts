@@ -42,9 +42,18 @@ export async function POST(
 
   const { action, newPassword } = parsed.data;
 
+  // Resolve base URL from incoming request host or production URL (never fall back to localhost on live domain)
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  const proto = req.headers.get("x-forwarded-proto") || (host?.includes("localhost") ? "http" : "https");
+  const baseUrl = host && !host.includes("localhost")
+    ? `${proto}://${host}`
+    : env.APP_URL && !env.APP_URL.includes("localhost")
+    ? env.APP_URL
+    : "https://www.beccascrownbeauty.com";
+
   if (action === "generate_link") {
     const rawToken = await createPasswordResetToken(targetUser.id, 24);
-    const resetUrl = `${env.APP_URL}/reset-password?token=${rawToken}`;
+    const resetUrl = `${baseUrl}/reset-password?token=${rawToken}`;
 
     await prisma.auditLog.create({
       data: {
@@ -100,7 +109,7 @@ export async function POST(
       });
     });
 
-    const loginUrl = `${env.APP_URL}/login`;
+    const loginUrl = `${baseUrl}/login`;
     const roleFriendlyName =
       targetUser.role.name === ROLES.FRONT_DESK
         ? "Front Desk Tablet (Operations & POS)"

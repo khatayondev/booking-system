@@ -357,7 +357,11 @@ export default function UsersAndRolesPage() {
 
       const json = await res.json();
       if (res.ok) {
-        setGeneratedResetLink(json.data.resetUrl);
+        let url = json.data.resetUrl;
+        if (typeof window !== "undefined" && window.location.origin && !window.location.origin.includes("localhost")) {
+          url = url.replace(/https?:\/\/localhost(:\d+)?/, window.location.origin);
+        }
+        setGeneratedResetLink(url);
       } else {
         showNotification("error", json.error?.message || "Failed to generate link.");
       }

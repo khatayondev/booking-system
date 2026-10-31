@@ -31,13 +31,22 @@ function parseEnv(): Env {
       ? `https://${process.env.VERCEL_URL}`
       : undefined;
 
+  let resolvedAppUrl = process.env.APP_URL || vercelAppUrl || "https://www.beccascrownbeauty.com";
+  // If in production or on Vercel, never allow localhost fallback
+  if (
+    (process.env.NODE_ENV === "production" || process.env.VERCEL) &&
+    resolvedAppUrl.includes("localhost")
+  ) {
+    resolvedAppUrl = vercelAppUrl || "https://www.beccascrownbeauty.com";
+  }
+
   const raw = {
     DATABASE_URL: process.env.DATABASE_URL || "postgresql://localhost:5432/booking_system_db?schema=public",
     AUTH_SECRET: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "dev-super-secret-key-32-chars-minimum-needed-for-security",
     PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY || "sk_test_demo_gh_paystack_secret_key",
     PAYSTACK_PUBLIC_KEY: process.env.PAYSTACK_PUBLIC_KEY || "pk_test_demo_gh_paystack_public_key",
     SMS_API_KEY: process.env.SMS_API_KEY || "test_sms_api_key_arkesel_mnotify",
-    APP_URL: process.env.APP_URL || vercelAppUrl || "http://localhost:3000",
+    APP_URL: resolvedAppUrl,
     NODE_ENV: (process.env.NODE_ENV as "development" | "test" | "production") || "development",
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
