@@ -4,6 +4,30 @@ import { requirePermission, PERMISSION_KEYS, UserRole, ROLES } from "@/lib/rbac"
 import { prisma } from "@/lib/db";
 import { errorResponse, successResponse, withErrorHandler } from "@/lib/api-response";
 import { normalizeGhanaPhone } from "@/lib/sms";
+import { sendResendEmail } from "@/lib/email/resend";
+import { buildUserWelcomeEmail } from "@/lib/email/templates";
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
+
+function generateSecureTemporaryPassword(): string {
+  const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // exclude easily confused I, O
+  const lower = "abcdefghijkmnpqrstuvwxyz"; // exclude l, o
+  const numbers = "23456789"; // exclude 0, 1
+  const symbols = "!@#$*";
+
+  let pwd = "";
+  pwd += upper[Math.floor(Math.random() * upper.length)];
+  pwd += lower[Math.floor(Math.random() * lower.length)];
+  pwd += numbers[Math.floor(Math.random() * numbers.length)];
+  pwd += symbols[Math.floor(Math.random() * symbols.length)];
+
+  const all = upper + lower + numbers + symbols;
+  for (let i = 0; i < 6; i++) {
+    pwd += all[Math.floor(Math.random() * all.length)];
+  }
+
+  return pwd.split("").sort(() => 0.5 - Math.random()).join("");
+}
 
 const createUserSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -104,7 +128,7 @@ export const POST = withErrorHandler(async (req: Request) => {
     }
   }
 
-  const tempPassword = temporaryPassword || Math.random().toString(36).slice(-10) + "Aa1!";
+  const tempPassword = temporaryPassword || generateSecureTemporaryPassword();
   const passwordHash = await hashPassword(tempPassword);
 
   const newUser = await prisma.$transaction(async (tx) => {
@@ -153,6 +177,48 @@ export const POST = withErrorHandler(async (req: Request) => {
     return user;
   });
 
+  // Dispatch Welcome Email containing the email and generated temporary password
+  const loginUrl = `${env.APP_URL}/login`;
+  const roleFriendlyName =
+    role.name === ROLES.FRONT_DESK
+      ? "Front Desk Tablet (Operations & POS)"
+      : role.name === ROLES.OWNER_ADMIN
+      ? "Studio Owner & Admin"
+      : role.name === ROLES.MANAGER
+      ? "Studio Manager"
+      : role.name === ROLES.STAFF_RECEPTIONIST
+      ? "Staff Specialist & Stylist"
+      : role.name;
+
+  const emailPayload = buildUserWelcomeEmail({
+    name: newUser.name,
+    email: newUser.email,
+    temporaryPassword: tempPassword,
+    roleName: roleFriendlyName,
+    loginUrl,
+  });
+
+  let emailSent = false;
+  let emailError: string | null = null;
+
+  try {
+    const emailResult = await sendResendEmail({
+      to: newUser.email,
+      subject: emailPayload.subject,
+      html: emailPayload.html,
+      text: emailPayload.text,
+    });
+    emailSent = emailResult.success;
+    if (!emailResult.success) {
+      emailError = emailResult.error || "Failed to deliver welcome email via Resend.";
+      logger.warn(`[Users] Welcome email delivery to ${newUser.email} notice:`, { error: emailResult.error });
+    }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Failed to send welcome email.";
+    emailError = message;
+    logger.error(`[Users] Error dispatching welcome email to ${newUser.email}:`, err);
+  }
+
   return successResponse(
     {
       user: {
@@ -163,8 +229,12 @@ export const POST = withErrorHandler(async (req: Request) => {
         role: newUser.role.name,
       },
       temporaryPassword: tempPassword,
+      emailSent,
+      emailError,
     },
-    "User created successfully with temporary password.",
+    emailSent
+      ? `User created successfully! Welcome email with temporary login password has been sent to ${newUser.email}.`
+      : `User created successfully with temporary password. (Email notice: ${emailError || "Resend not configured"}).`,
     201
   );
 });

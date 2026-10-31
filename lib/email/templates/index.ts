@@ -320,3 +320,71 @@ Book your next session early: ${params.rebookUrl || "https://www.beccascrownbeau
   return { subject, html, text };
 }
 
+export interface UserWelcomeEmailParams {
+  name: string;
+  email: string;
+  temporaryPassword: string;
+  roleName: string;
+  loginUrl: string;
+}
+
+export function buildUserWelcomeEmail(params: UserWelcomeEmailParams): {
+  subject: string;
+  html: string;
+  text: string;
+} {
+  const subject = `Welcome to Becca's Crown Beauty Vault • Your Staff Account Credentials`;
+
+  const bodyHtml = `
+    <p style="margin: 0 0 14px 0;">Dear <strong>${params.name}</strong>,</p>
+    <p style="margin: 0 0 14px 0;">
+      A staff account has been created for you on the <strong>Becca&apos;s Crown Beauty Vault</strong> Studio Management System.
+    </p>
+    <p style="margin: 0 0 14px 0;">
+      Below are your login credentials. You can use these details to access the studio dashboard, manage client appointments, and perform your studio duties.
+    </p>
+    <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin: 18px 0;">
+      <p style="margin: 0 0 8px 0; font-size: 13px; color: #4b5563;"><strong>Email Address:</strong> <span style="font-family: monospace; font-size: 14px; font-weight: bold; color: #111827;">${params.email}</span></p>
+      <p style="margin: 0 0 8px 0; font-size: 13px; color: #4b5563;"><strong>Temporary Password:</strong> <span style="font-family: monospace; font-size: 15px; font-weight: 800; color: #b45309; background-color: #fef3c7; padding: 3px 10px; border-radius: 6px; letter-spacing: 0.5px;">${params.temporaryPassword}</span></p>
+      <p style="margin: 0; font-size: 13px; color: #4b5563;"><strong>Assigned Role:</strong> <span style="font-weight: 600; color: #111827;">${params.roleName}</span></p>
+    </div>
+    <p style="margin: 0 0 14px 0; font-size: 12px; color: #6b7280; line-height: 1.5;">
+      <em>Security Notice: When you log in for the first time using this temporary password, you will be prompted to choose your own secure permanent password. Please keep your credentials confidential.</em>
+    </p>
+  `;
+
+  const metaFields = [
+    { label: "Account Email", value: params.email },
+    { label: "Assigned Role", value: params.roleName },
+    { label: "Studio Portal", value: "Becca's Crown Beauty Vault" },
+  ];
+
+  const html = wrapLuxuryEmailHtml({
+    title: "Welcome to Becca's Crown",
+    badge: "Staff Account Activated",
+    preheader: `Your Becca's Crown staff credentials: ${params.email}`,
+    bodyHtml,
+    metaFields,
+    ctaText: "Log In to Studio Portal ↗",
+    ctaUrl: params.loginUrl,
+  });
+
+  const text = `
+BECCA'S CROWN • BEAUTY VAULT
+STAFF ACCOUNT ACTIVATED
+
+Dear ${params.name},
+Your staff account has been created on the Becca's Crown Studio Management System.
+
+Email: ${params.email}
+Temporary Password: ${params.temporaryPassword}
+Role: ${params.roleName}
+
+Log in here: ${params.loginUrl}
+
+Security Note: When you log in for the first time using this temporary password, you will be prompted to choose your own secure permanent password.
+  `.trim();
+
+  return { subject, html, text };
+}
+

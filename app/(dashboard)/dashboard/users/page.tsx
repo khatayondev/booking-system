@@ -23,6 +23,8 @@ import {
   UserCheck,
   UserX,
   SlidersHorizontal,
+  Mail,
+  Send,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -83,7 +85,11 @@ export default function UsersAndRolesPage() {
   const [newUserPhone, setNewUserPhone] = React.useState("");
   const [newUserRoleId, setNewUserRoleId] = React.useState("");
   const [createdTempPassword, setCreatedTempPassword] = React.useState<string | null>(null);
+  const [createdUserEmail, setCreatedUserEmail] = React.useState<string | null>(null);
+  const [createdEmailSent, setCreatedEmailSent] = React.useState<boolean>(false);
+  const [copiedPassword, setCopiedPassword] = React.useState(false);
   const [isSubmittingUser, setIsSubmittingUser] = React.useState(false);
+  const [isEmailingReset, setIsEmailingReset] = React.useState(false);
 
   // Fetch users and roles
   const refreshData = React.useCallback(async () => {
@@ -280,13 +286,58 @@ export default function UsersAndRolesPage() {
         showNotification("error", json.error?.message || "Failed to create user.");
       } else {
         setCreatedTempPassword(json.data.temporaryPassword);
-        showNotification("success", "User created successfully!");
+        setCreatedUserEmail(newUserEmail);
+        setCreatedEmailSent(Boolean(json.data.emailSent));
+        showNotification("success", json.message || "User created successfully! Credentials emailed.");
         refreshData();
       }
     } catch {
       showNotification("error", "Network error creating user.");
     } finally {
       setIsSubmittingUser(false);
+    }
+  };
+
+  const handleCloseAddUser = () => {
+    setIsAddUserOpen(false);
+    setCreatedTempPassword(null);
+    setCreatedUserEmail(null);
+    setCreatedEmailSent(false);
+    setCopiedPassword(false);
+    setNewUserName("");
+    setNewUserEmail("");
+    setNewUserPhone("");
+  };
+
+  const copyCredentials = () => {
+    if (!createdTempPassword || !createdUserEmail) return;
+    const text = `Becca's Crown Beauty Vault Login Credentials:\nEmail: ${createdUserEmail}\nTemporary Password: ${createdTempPassword}\nLogin URL: https://beccascrownbeauty.com/login`;
+    navigator.clipboard.writeText(text);
+    setCopiedPassword(true);
+    setTimeout(() => setCopiedPassword(false), 2500);
+  };
+
+  // Email new temporary password directly to user
+  const handleEmailCredentials = async () => {
+    if (!selectedUserForReset) return;
+    setIsEmailingReset(true);
+    try {
+      const res = await fetch(`/api/admin/users/${selectedUserForReset.id}/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "send_email" }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        showNotification("success", json.data?.message || `Credentials emailed to ${selectedUserForReset.email}`);
+        setIsResetPasswordOpen(false);
+      } else {
+        showNotification("error", json.error?.message || "Failed to email credentials.");
+      }
+    } catch {
+      showNotification("error", "Network error sending credentials email.");
+    } finally {
+      setIsEmailingReset(false);
     }
   };
 
@@ -674,35 +725,71 @@ export default function UsersAndRolesPage() {
         {/* MODAL: ADD STAFF USER */}
         <Dialog
           isOpen={isAddUserOpen}
-          onClose={() => setIsAddUserOpen(false)}
+          onClose={handleCloseAddUser}
           title="Add New Staff Member"
-          description="Create a team account. User will be prompted to change their password on first login."
+          description="Create a team account. User will receive their login email and temporary password automatically."
         >
           {createdTempPassword ? (
             <div className="space-y-4">
-              <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-emerald-900 text-xs space-y-2">
-                <p className="font-bold flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  Staff Account Created Successfully
-                </p>
-                <p>
-                  Share this temporary password with the staff member. They will be required to change it immediately upon login:
-                </p>
-                <div className="p-2.5 bg-white rounded-xl border border-emerald-300 font-mono text-sm font-bold text-[#1E1E1E] select-all">
-                  {createdTempPassword}
+              <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-emerald-900 text-xs space-y-3">
+                <div className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-bold text-sm text-emerald-950">
+                      Account Created Successfully!
+                    </p>
+                    <p className="text-emerald-800 text-xs mt-0.5">
+                      {createdEmailSent ? (
+                        <>
+                          A welcome email with login instructions and this temporary password has been delivered to{" "}
+                          <strong className="underline">{createdUserEmail}</strong>.
+                        </>
+                      ) : (
+                        <>
+                          Account created for <strong>{createdUserEmail}</strong>. (Note: Email delivery failed or Resend is not configured; please provide credentials directly).
+                        </>
+                      )}
+                    </p>
+                  </div>
                 </div>
+
+                <div className="bg-white p-3 rounded-xl border border-emerald-200 space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px] text-[#71717A]">
+                    <span>Login Email:</span>
+                    <strong className="text-[#1E1E1E] font-mono">{createdUserEmail}</strong>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-[#71717A]">
+                    <span>Temporary Password:</span>
+                    <strong className="text-[#1E1E1E] font-mono font-bold text-sm tracking-wide bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                      {createdTempPassword}
+                    </strong>
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-emerald-800">
+                  The staff member will be required to create a new personal password immediately upon first sign-in.
+                </p>
               </div>
 
-              <Button
-                variant="blackPill"
-                className="w-full"
-                onClick={() => {
-                  setIsAddUserOpen(false);
-                  setCreatedTempPassword(null);
-                }}
-              >
-                Done
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outlinePill"
+                  className="flex-1 flex items-center justify-center gap-1.5 text-xs"
+                  onClick={copyCredentials}
+                >
+                  {copiedPassword ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                  <span>{copiedPassword ? "Copied Credentials!" : "Copy Credentials"}</span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="blackPill"
+                  className="flex-1"
+                  onClick={handleCloseAddUser}
+                >
+                  Done
+                </Button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleCreateUser} className="space-y-4">
@@ -767,7 +854,7 @@ export default function UsersAndRolesPage() {
                 <Button
                   type="button"
                   variant="outlinePill"
-                  onClick={() => setIsAddUserOpen(false)}
+                  onClick={handleCloseAddUser}
                 >
                   Cancel
                 </Button>
@@ -776,7 +863,7 @@ export default function UsersAndRolesPage() {
                   variant="blackPill"
                   disabled={isSubmittingUser}
                 >
-                  {isSubmittingUser ? "Creating..." : "Create Account"}
+                  {isSubmittingUser ? "Creating & Emailing..." : "Create Account & Email Credentials"}
                 </Button>
               </div>
             </form>
@@ -787,8 +874,8 @@ export default function UsersAndRolesPage() {
         <Dialog
           isOpen={isResetPasswordOpen}
           onClose={() => setIsResetPasswordOpen(false)}
-          title="Staff Password Reset Link"
-          description={`Single-use, 24-hour reset link for ${selectedUserForReset?.name}`}
+          title="Staff Password Reset"
+          description={`Generate a secure reset link or email credentials directly to ${selectedUserForReset?.name}`}
         >
           <div className="space-y-4">
             {generatedResetLink ? (
@@ -817,7 +904,17 @@ export default function UsersAndRolesPage() {
               <p className="text-xs text-[#71717A]">Generating secure token...</p>
             )}
 
-            <div className="pt-2 flex justify-end">
+            <div className="pt-2 flex items-center justify-between gap-2 border-t border-[#F4F4F6]">
+              <Button
+                variant="outlinePill"
+                size="sm"
+                onClick={handleEmailCredentials}
+                disabled={isEmailingReset}
+                className="gap-1.5 text-xs text-[#1E1E1E]"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span>{isEmailingReset ? "Emailing..." : "Email New Temp Password"}</span>
+              </Button>
               <Button
                 variant="outlinePill"
                 size="sm"
