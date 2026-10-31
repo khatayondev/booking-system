@@ -112,12 +112,8 @@ export default function ServicesPage() {
   const [addonDuration, setAddonDuration] = React.useState("15");
   const [addonPriceGhs, setAddonPriceGhs] = React.useState("50");
 
-  // Smart Search & Quick Price Edit states
+  // Smart Search state
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [quickPriceModalOpen, setQuickPriceModalOpen] = React.useState(false);
-  const [quickPriceService, setQuickPriceService] = React.useState<ServiceItem | null>(null);
-  const [quickPriceGhs, setQuickPriceGhs] = React.useState("");
-  const [quickPriceSaving, setQuickPriceSaving] = React.useState(false);
 
   const isReadOnly = userRole === "STAFF_RECEPTIONIST";
 
@@ -432,47 +428,6 @@ export default function ServicesPage() {
       fetchCatalog();
     } catch (err: unknown) {
       showNotification("error", (err as Error).message);
-    }
-  };
-
-  // Quick Price Handlers
-  const handleOpenQuickPrice = (svc: ServiceItem) => {
-    if (isReadOnly) return;
-    setQuickPriceService(svc);
-    setQuickPriceGhs((svc.pricePesewas / 100).toFixed(2));
-    setQuickPriceModalOpen(true);
-  };
-
-  const handleSaveQuickPrice = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!quickPriceService || isReadOnly) return;
-
-    const newPricePesewas = Math.round(Number.parseFloat(quickPriceGhs || "0") * 100);
-    if (isNaN(newPricePesewas) || newPricePesewas < 100) {
-      showNotification("error", "Please enter a valid price of at least GH₵ 1.00");
-      return;
-    }
-
-    try {
-      setQuickPriceSaving(true);
-      const res = await fetch(`/api/admin/catalog/services/${quickPriceService.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pricePesewas: newPricePesewas }),
-      });
-
-      if (!res.ok) {
-        const errJson = await res.json().catch(() => ({}));
-        throw new Error(errJson.error?.message || "Failed to update price");
-      }
-
-      showNotification("success", `Updated price for ${quickPriceService.name} to GH₵ ${Number.parseFloat(quickPriceGhs).toFixed(2)}.`);
-      setQuickPriceModalOpen(false);
-      fetchCatalog();
-    } catch (err: unknown) {
-      showNotification("error", (err as Error).message);
-    } finally {
-      setQuickPriceSaving(false);
     }
   };
 
@@ -823,20 +778,10 @@ export default function ServicesPage() {
                         <div className="mt-5 pt-4 border-t border-[#F4F4F6] flex items-center justify-between gap-2">
                           <div>
                             <span className="text-[10px] text-[#71717A] block">Price</span>
-                            <div className="flex items-center gap-1.5 mt-0.5">
+                            <div className="mt-0.5">
                               <span className="text-lg font-black font-poppins text-[#1E1E1E]">
                                 {formatPesewas(svc.pricePesewas)}
                               </span>
-                              {!isReadOnly && (
-                                <button
-                                  type="button"
-                                  onClick={() => handleOpenQuickPrice(svc)}
-                                  className="text-[10px] font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 px-2 py-0.5 rounded-full transition-colors cursor-pointer shrink-0"
-                                  title="Quick edit price"
-                                >
-                                  Edit Price
-                                </button>
-                              )}
                             </div>
                           </div>
 
@@ -1308,81 +1253,6 @@ export default function ServicesPage() {
             </Button>
             <Button type="submit" variant="blackPill" size="sm">
               {editingCategory ? "Update Category" : "Create Category"}
-            </Button>
-          </div>
-        </form>
-      </Dialog>
-
-      {/* =========================================================================
-          DIALOG: QUICK UPDATE SERVICE PRICE
-         ========================================================================= */}
-      <Dialog
-        isOpen={quickPriceModalOpen}
-        onClose={() => setQuickPriceModalOpen(false)}
-        title="Quick Update Price"
-        description={
-          quickPriceService
-            ? `Update the standard studio rate for "${quickPriceService.name}". Changes take effect immediately across online booking, POS, and customer receipts.`
-            : "Update service pricing."
-        }
-      >
-        <form onSubmit={handleSaveQuickPrice} className="space-y-4 pt-2">
-          {quickPriceService && (
-            <div className="p-3.5 rounded-2xl bg-[#F4F4F6] border border-[#E4E4E7] flex items-center justify-between text-xs">
-              <div>
-                <span className="text-[10px] uppercase font-bold text-[#71717A] block">Current Rate</span>
-                <span className="font-poppins font-black text-sm text-[#1E1E1E]">
-                  {formatPesewas(quickPriceService.pricePesewas)}
-                </span>
-              </div>
-              <div className="text-right">
-                <span className="text-[10px] uppercase font-bold text-[#71717A] block">Duration</span>
-                <span className="font-semibold text-xs text-[#1E1E1E]">
-                  {quickPriceService.durationMin} mins
-                </span>
-              </div>
-            </div>
-          )}
-
-          <div>
-            <Label>New Price in Ghana Cedis (GH₵) *</Label>
-            <div className="relative mt-1">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-[#71717A]">
-                GH₵
-              </span>
-              <Input
-                type="number"
-                step="0.01"
-                min="1"
-                required
-                autoFocus
-                value={quickPriceGhs}
-                onChange={(e) => setQuickPriceGhs(e.target.value)}
-                className="pl-14 text-sm font-poppins font-bold"
-                placeholder="0.00"
-              />
-            </div>
-            <p className="text-[10px] text-[#71717A] mt-1">
-              Entered amount will convert to integer pesewas ({Math.round(Number.parseFloat(quickPriceGhs || "0") * 100)} pesewas).
-            </p>
-          </div>
-
-          <div className="flex justify-end gap-2 pt-3 border-t border-[#F4F4F6]">
-            <Button
-              type="button"
-              variant="outlinePill"
-              size="sm"
-              onClick={() => setQuickPriceModalOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="blackPill"
-              size="sm"
-              disabled={quickPriceSaving}
-            >
-              {quickPriceSaving ? "Updating Price..." : "Save New Price"}
             </Button>
           </div>
         </form>
