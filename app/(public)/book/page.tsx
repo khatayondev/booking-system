@@ -767,27 +767,27 @@ function BookingWizardContent() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-black/80" />
       </div>
 
-      <div className="relative z-10 max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+      <div className="relative z-10 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         {/* =========================================================================
             LEFT COLUMN: Clear Portrait on the Left Side + Text Below Her
         ========================================================================= */}
         <div className="hidden lg:flex lg:col-span-5 flex-col justify-center text-white pr-2 xl:pr-6">
-          <div className="flex flex-col gap-5">
-            {/* Clear Image of Her (Clean, borderless, untagged) */}
-            <div className="relative w-full max-w-[380px] aspect-square rounded-3xl overflow-hidden">
+          <div className="flex flex-col gap-6">
+            {/* Clear Image of Her (Slightly larger, borderless, untagged) */}
+            <div className="relative w-full max-w-[450px] aspect-square rounded-3xl overflow-hidden shadow-2xl">
               <Image
                 src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
                 alt="Becca's Crown Beauty Vault"
                 fill
                 priority
                 className="object-cover object-center"
-                sizes="(max-width: 1024px) 100vw, 380px"
+                sizes="(max-width: 1024px) 100vw, 450px"
               />
             </div>
 
             {/* The Text Below Her */}
-            <div className="space-y-3.5 max-w-[380px]">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold text-amber-200">
+            <div className="space-y-4 max-w-[450px]">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-bold text-amber-200">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                 <span>Step 0{step} of 04</span>
               </div>
@@ -800,7 +800,7 @@ function BookingWizardContent() {
                 {STEP_BACKGROUNDS[step].subtitle}
               </p>
 
-              <div className="flex items-center gap-4 text-xs text-zinc-400 border-t border-white/10 pt-3.5">
+              <div className="flex items-center gap-4 text-xs text-zinc-400 border-t border-white/10 pt-4">
                 <div className="flex items-center gap-1.5">
                   <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                   <span className="font-bold text-white">4.9/5 Rating</span>
@@ -825,15 +825,15 @@ function BookingWizardContent() {
         ========================================================================= */}
         <div className="lg:col-span-7 w-full flex flex-col items-center justify-center">
           {/* Mobile/Tablet Header: Her Portrait & Step Title */}
-          <div className="lg:hidden w-full max-w-xl flex items-center gap-3.5 p-3 rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/15 mb-3 text-white shadow-xl">
-            <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0">
+          <div className="lg:hidden w-full max-w-xl flex items-center gap-4 p-3.5 rounded-2xl bg-zinc-900/80 backdrop-blur-xl border border-white/15 mb-3 text-white shadow-xl">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shrink-0 shadow-md">
               <Image
                 src="/images/alcock-muller-B6G9C0kxVVc-unsplash.jpg"
                 alt="Becca's Crown Beauty Vault"
                 fill
                 priority
                 className="object-cover object-center"
-                sizes="56px"
+                sizes="(max-width: 640px) 64px, 80px"
               />
             </div>
             <div className="flex-1 min-w-0">
